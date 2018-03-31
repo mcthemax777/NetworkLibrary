@@ -29,10 +29,9 @@
 #endif
 
 #include "WorkerThread.h"
-#include "Log.h"
+#include "Log/Log.h"
 #include "Connector.h"
 #include "ConnectorInfo.h"
-#include "CustomUtil.h"
 #include "Define.h"
 #include "Server.h"
 #include "Client.h"
@@ -139,20 +138,27 @@ namespace NetworkFramework
 
 	bool Network::processReceiveData(ConnectorInfo* connectorInfo, char* receiveBuffer, int bufferSize)
 	{
-		int dataSize = recv(connectorInfo->getHostId(), receiveBuffer, bufferSize, 0);
+		Buffer* buffer = bufferPool->getObject();
+		char* poolBuffer = buffer->buffer;
+
+		int dataSize = recv(connectorInfo->getHostId(), poolBuffer, RECV_BUF, 0);
 
 		if (dataSize > 0)
 		{
 			char* data = new char[dataSize];
 
-			memcpy(data, receiveBuffer, dataSize);
+			memcpy(data, poolBuffer, dataSize);
 
 			sendDataToWorkerThreadWithConverting(connectorInfo, data, dataSize);
+
+			bufferPool->returnObject(buffer);
 
 			return true;
 		}
 		else
 		{
+			bufferPool->returnObject(buffer);
+
 			disconnectWithConnectorInfo(connectorInfo);
 
 			if (dataSize != -1)
@@ -198,7 +204,9 @@ namespace NetworkFramework
 				break;
 			}
 
-			ConnectorInfo* connectorInfo = createConnectorInfo(server, clientSocket);
+			ConnectorInfo* connectorInfo = connectorInfoPool->getObject();
+
+			initConnectorInfo(connectorInfo, server, clientSocket);
 
 
 			server->connectorInfoMap.insert(std::pair<int, ConnectorInfo*>(connectorInfo->hostId, connectorInfo));
@@ -273,14 +281,21 @@ namespace NetworkFramework
 		return NULL;
 	}
 
-	ConnectorInfo* Network::createConnectorInfo(Connector* connector, HostId hostId)
+	void Network::initConnectorInfo(ConnectorInfo* connectorInfo, Connector* connector, HostId hostId)
 	{
-		ConnectorInfo* connectorInfo = new ConnectorInfo();
 		connectorInfo->hostId = hostId;
 		connectorInfo->dataConvertor = connector->connectorInfo->dataConvertor;
 		connectorInfo->connector = connector;
+	}
 
-		return connectorInfo;
+	void Network::resetConnectorInfo(ConnectorInfo* connectorInfo)
+	{
+		connectorInfo->hostId = 0;
+
+		connectorInfo->dataConvertor = nullptr;
+		connectorInfo->connector = nullptr;
+		connectorInfo->storageData = nullptr;
+		connectorInfo->storageDataSize = 0;
 	}
 
 	Network::Network()
@@ -309,6 +324,15 @@ namespace NetworkFramework
 		clientList = new std::vector<Client*>();
 		serverList = new std::vector<Server*>();
 		eventFunctionList = new std::vector<EventFunction*>();
+
+#if OS_PLATFORM == PLATFORM_WINDOWS
+		bufferPool = new Util::ObjectPool<Buffer>(100, true);
+		connectorInfoPool = new Util::ObjectPool<ConnectorInfo>(100, true);
+#else
+		bufferPool = new Util::ObjectPool<Buffer>(100, false);
+		connectorInfoPool = new Util::ObjectPool<ConnectorInfo>(100, false);
+
+#endif
 
 		init();
 	}
@@ -685,7 +709,9 @@ namespace NetworkFramework
 		
 		sendDataToWorkerThread(RECEIVE_TYPE_DISCONNECT, connectorInfo, nullptr, 0);
 
-		delete connectorInfo;
+		resetConnectorInfo(connectorInfo);
+
+		connectorInfoPool->returnObject(connectorInfo);
 	}
 
 	void Network::start()
@@ -811,7 +837,8 @@ namespace NetworkFramework
 								break;
 							}
 
-							ConnectorInfo* connectorInfo = createConnectorInfo(server, clntFd);
+							ConnectorInfo* connectorInfo = connectorInfoPool->getObject();
+							initConnectorInfo(connectorInfo, server, clntFd);
 
 							setSocketOption(clntFd);
 

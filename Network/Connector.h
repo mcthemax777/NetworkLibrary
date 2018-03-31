@@ -9,6 +9,8 @@
 
 namespace NetworkFramework
 {
+	typedef int8_t ConnectorType;
+
 	enum CONNECTOR_TYPE
 	{
 		CONNECTOR_TYPE_SERVER = 0,

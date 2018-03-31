@@ -1,18 +1,9 @@
 #pragma once
-#include "SystemDefine.h"
 
-namespace CustomUtil
+#include <mutex>
+
+namespace Util
 {
-	template <typename T>
-	class Property {
-	public:
-		virtual ~Property() {}
-		virtual T & operator = (const T &f) { return value = f; }
-		virtual operator T const & () const { return value; }
-	protected:
-		T value;
-	};
-
 	template < typename T >
 	class Singleton
 	{
@@ -29,6 +20,8 @@ namespace CustomUtil
 	public:
 		static T * GetInstance()
 		{
+			std::call_once(m_flag,
+				[]() { m_pInstance = new T; });
 			if (m_pInstance == NULL)
 				m_pInstance = new T;
 			return m_pInstance;
@@ -45,9 +38,11 @@ namespace CustomUtil
 
 	private:
 		static T * m_pInstance;
+		static std::once_flag m_flag;
 	};
 
 	template <typename T> T * Singleton<T>::m_pInstance = 0;
+	template <typename T> std::once_flag Singleton<T>::m_flag;
 }
 
 

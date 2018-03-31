@@ -4,9 +4,6 @@
 
 namespace NetworkFramework
 {
-
-
-
 	Timer::Timer(int _timerNo, int _interval, int _finishCount)
 	{
 		timerNo = _timerNo;

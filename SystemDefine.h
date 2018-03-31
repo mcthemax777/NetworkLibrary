@@ -7,13 +7,6 @@
 #define OS_PLATFORM         PLATFORM_WINDOWS
 
 
-#define SINGLE_THREAD       0
-#define MULTI_THREAD        1
-
-#define THREAD_TYPE         MULTI_THREAD
-
-
-
 #if OS_PLATFORM == PLATFORM_LINUX
 
 #elif OS_PLATFORM == PLATFORM_WINDOWS

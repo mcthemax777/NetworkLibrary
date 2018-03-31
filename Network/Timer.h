@@ -1,12 +1,9 @@
 #pragma once
 
-
-
 #include <functional>
 
 namespace NetworkFramework
 {
-
 	class Timer
 	{
 	protected:

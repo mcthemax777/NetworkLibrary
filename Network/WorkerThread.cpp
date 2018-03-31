@@ -2,7 +2,7 @@
 #include "Network.h"
 #include "Connector.h"
 
-#include "Log.h"
+#include "Log/Log.h"
 #include <stdlib.h>
 
 namespace NetworkFramework

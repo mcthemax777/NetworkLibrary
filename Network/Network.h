@@ -30,11 +30,12 @@
 #include <functional>
 #include <vector>
 #include <pthread.h>
-#include "CustomUtil.h"
+#include "Util/Singleton.h"
 #include "Define.h"
 #include "DataConvertor.h"
 #include "Server.h"
 #include "Client.h"
+#include "Util/ObjectPool.h"
 
 #define MAX_IP_LEN 15
 #define EVENT_BUFFER_SIZE 50
@@ -61,18 +62,13 @@ namespace NetworkFramework
 		RECEIVE_TYPE_DISCONNECT,
 	};
 
-	//class CharString
-	//{
-	//public:
-	//	CharString();
-	//	~CharString();
-	//	void clear();
-	//	void deepCopy(int _stringSize, const char* _string);
-	//	void shallowCopy(int _stringSize, char* _string);
+	class Buffer
+	{
+	public:
+		char buffer[RECV_BUF];
 
-	//	int stringSize;
-	//	char* string;
-	//};
+		void reset() { memcpy(buffer, 0, RECV_BUF); }
+	};
 
 	class DataPacket
 	{
@@ -117,7 +113,7 @@ namespace NetworkFramework
 		DataConvertor* dataConvertor;
 	};
 
-	class Network : public CustomUtil::Singleton<Network>
+	class Network : public Util::Singleton<Network>
 	{
 	public:
 		int workerThreadCount;
@@ -139,7 +135,9 @@ namespace NetworkFramework
 		void sendMessage(HostId hostId, const char* data, int dataSize);
 		void sendDataToWorkerThreadWithConverting(ConnectorInfo* connectorInfo, char* data, int dataSize);
 		bool processReceiveData(ConnectorInfo* connectorInfo, char* receiveBuffer, int bufferSize);
-		ConnectorInfo* createConnectorInfo(Connector* connector, HostId hostId);
+		void initConnectorInfo(ConnectorInfo* connectorInfo, Connector* connector, HostId hostId);
+		void resetConnectorInfo(ConnectorInfo* connectorInfo);
+
 		void disconnectWithConnectorInfo(ConnectorInfo* connectorInfo);
 		EventFunction* getEventFunction(HostId hostId);
 		bool removeEventFunction(HostId hostId);
@@ -148,18 +146,13 @@ namespace NetworkFramework
 		Network();
 
 	public:
-
-
 		char recvBuffer[RCV_BUF];
 		
 		//나의 Server 정보
 		std::vector<Server*>* serverList;
-
 		//나의 Client 정보
 		std::vector<Client*>* clientList;
-
 		std::vector<EventFunction*>* eventFunctionList;
-
 		//등록한 타이머 저장
 		std::vector<Timer*> timerQueue;
 
@@ -203,5 +196,7 @@ namespace NetworkFramework
 #endif
 		long nextPingCheckTime;
 
+		Util::ObjectPool<ConnectorInfo>* connectorInfoPool;
+		Util::ObjectPool<Buffer>* bufferPool;
 	};
 }

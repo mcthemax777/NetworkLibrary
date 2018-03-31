@@ -1,11 +1,11 @@
 #pragma once
 
+#include "SystemDefine.h"
 #include <cstdint>
 
 namespace NetworkFramework
 {
 	typedef int32_t HostId;
-	typedef int8_t ConnectorType;
 
 	class Data
 	{

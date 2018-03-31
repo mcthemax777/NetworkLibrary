@@ -11,12 +11,6 @@ namespace NetworkFramework
 	class ConnectorInfo;
 	class DataPacket;
 
-	struct ThreadPipe
-	{
-		int readPipe;
-		int writePipe;
-	};
-
 	class WorkerThread
 	{
 	public:
@@ -29,15 +23,9 @@ namespace NetworkFramework
 		void pushDataPacket(DataPacket* dataPacket);
 		DataPacket* popDataPacket();
 
-		//virtual void connected(ConnectInfo* connectInfo) = 0;
-		//virtual void disconnected(ConnectInfo* connectInfo) = 0;
-		//virtual void receiveData(ConnectInfo* connectInfo, const char* data, int dataSize) = 0;
-
 		pthread_t* getTid() { return &tid; }
 		pthread_cond_t* getCond() { return &cond; }
 		int getDataPacketCount();
-
-		//ThreadPipe threadPipe;
 
 	protected:
 		void lock() { pthread_mutex_lock(&mutex); }
