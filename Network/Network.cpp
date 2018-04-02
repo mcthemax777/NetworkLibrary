@@ -25,6 +25,8 @@
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <signal.h>
+#include <cstring>
+
 
 #endif
 
@@ -274,7 +276,7 @@ namespace NetworkFramework
 	{
 		WorkerThread* wt = (WorkerThread*)data;
 
-		DebugLog("run workerThread - workThread id : %p\n", wt->getTid());
+		DebugLog("run workerThread");
 
 		wt->run();
 

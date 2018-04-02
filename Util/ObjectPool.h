@@ -9,7 +9,7 @@ namespace Util
 	class ObjectPool
 	{
 	public:
-		ObjectPool(int capacity, bool isUsingMultiThread)
+		ObjectPool(unsigned int capacity, bool isUsingMultiThread)
 		{
 			this->capacity = capacity;
 			this->isUsingMultiThread = isUsingMultiThread;
@@ -92,7 +92,7 @@ namespace Util
 	protected:
 		pthread_mutex_t mutex;
 
-		int capacity;
+		unsigned int capacity;
 		bool isUsingMultiThread;
 		std::stack<T*> objectList;
 	};

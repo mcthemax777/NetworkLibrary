@@ -18,8 +18,11 @@ Log::Log()
 
 	logPath = new char[128];
 	memset(logPath, 0, 128);
+#if OS_PLATFORM == PLATFORM_WINDOWS
 	memcpy(logPath, "../../Log/GameLog/GameLog_", 25);
-
+#else
+	memcpy(logPath, "../Log/GameLog/GameLog_", 22);
+#endif
 	writeBuffer = new char[5000];
 	buffer = new char[5000];
 
@@ -101,8 +104,14 @@ void Log::print(logtype type, const char* fmt, ...)
 	vsprintf(writeBuffer, fmt, list);
 	va_end(list);
 
-	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread %p] %s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, std::this_thread::get_id, writeBuffer);
+	pthread_t tid;
+	tid = pthread_self();
 
+#if OS_PLATFORM == PLATFORM_WINDOWS
+	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread %p]%s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, tid.p, writeBuffer);
+#else
+	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread %d]%s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, tid, writeBuffer);
+#endif
 	puts(buffer);
 
 	if (fp)

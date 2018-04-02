@@ -9,6 +9,8 @@
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/time.h>
+#include <cstring>
+
 #elif OS_PLATFORM == PLATFORM_WINDOWS
 
 #ifndef _CRT_SECURE_NO_WARNINGS
@@ -25,6 +27,8 @@
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/time.h>
+#include <cstring>
+
 #endif
 
 #include <functional>
