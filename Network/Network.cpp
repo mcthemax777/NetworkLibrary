@@ -99,7 +99,7 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
 
 
 
-namespace NetworkFramework
+namespace CG
 {
 
 	void Network::sendDataToWorkerThreadWithConverting(ConnectorInfo* connectorInfo, char* data, int dataSize)
@@ -331,8 +331,8 @@ namespace NetworkFramework
 		bufferPool = new Util::ObjectPool<Buffer>(100, true);
 		connectorInfoPool = new Util::ObjectPool<ConnectorInfo>(100, true);
 #else
-		bufferPool = new Util::ObjectPool<Buffer>(100, false);
-		connectorInfoPool = new Util::ObjectPool<ConnectorInfo>(100, false);
+		bufferPool = new Util::ObjectPool<Buffer*>(100, false);
+		connectorInfoPool = new Util::ObjectPool<ConnectorInfo*>(100, false);
 
 #endif
 
@@ -891,6 +891,8 @@ namespace NetworkFramework
 					connectorInfo = (ConnectorInfo*)event[i].udata;
 
 #endif
+
+
 					processReceiveData(connectorInfo, recvBuffer, RCV_BUF - 1);
 				}
 			}

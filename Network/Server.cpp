@@ -1,7 +1,7 @@
 #include "Server.h"
 #include "Network.h"
 
-namespace NetworkFramework
+namespace CG
 {
 	void Server::sendMessage(HostId hostId, char* data, int dataSize)
 	{

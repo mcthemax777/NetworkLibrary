@@ -2,7 +2,7 @@
 
 #include <functional>
 
-namespace NetworkFramework
+namespace CG
 {
 	class Timer
 	{

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace NetworkFramework
+namespace CG
 {
 	class DataConvertor
 	{

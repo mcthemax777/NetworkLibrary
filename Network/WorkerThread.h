@@ -6,7 +6,7 @@
 #include <pthread.h>
 #include <deque>
 
-namespace NetworkFramework
+namespace CG
 {
 	class ConnectorInfo;
 	class DataPacket;

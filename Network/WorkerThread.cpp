@@ -5,7 +5,7 @@
 #include "Log/Log.h"
 #include <stdlib.h>
 
-namespace NetworkFramework
+namespace CG
 {
 	WorkerThread::WorkerThread()
 	{

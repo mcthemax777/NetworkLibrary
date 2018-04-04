@@ -2,7 +2,7 @@
 
 #include "Connector.h"
 
-namespace NetworkFramework
+namespace CG
 {
 	class ClientConfig : public ConnectConfig
 	{

@@ -34,6 +34,7 @@
 #include <functional>
 #include <vector>
 #include <pthread.h>
+#include <list>
 #include "Util/Singleton.h"
 #include "Define.h"
 #include "DataConvertor.h"
@@ -52,7 +53,7 @@ typedef uint64_t dataSize_t;
 
 typedef int stringSize_t;
 
-namespace NetworkFramework
+namespace CG
 {
 	class Timer;
 	class ConnectorInfo;

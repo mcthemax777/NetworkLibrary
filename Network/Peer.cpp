@@ -1,10 +1,10 @@
-#include "Client.h"
+#include "Peer.h"
 #include "Network.h"
 #include "Log/Log.h"
 
 namespace CG
 {
-	void Client::sendMessage(const char* data, int dataSize)
+	void Peer::sendMessage(const char* data, int dataSize)
 	{
 		if (connectorInfo != nullptr)
 			Network::GetInstance()->sendMessage(connectorInfo->getHostId(), data, dataSize);

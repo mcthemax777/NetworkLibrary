@@ -1,7 +1,7 @@
 #include "ConnectorInfo.h"
 #include "Network.h"
 
-namespace NetworkFramework
+namespace CG
 {
 	void ConnectorInfo::sendMessage(const char* data, int dataSize)
 	{

@@ -3,7 +3,7 @@
 #include "SystemDefine.h"
 #include <cstdint>
 
-namespace NetworkFramework
+namespace CG
 {
 	typedef int32_t HostId;
 

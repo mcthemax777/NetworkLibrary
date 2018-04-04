@@ -7,7 +7,7 @@
 #include "Define.h"
 #include "ConnectorInfo.h"
 
-namespace NetworkFramework
+namespace CG
 {
 	typedef int8_t ConnectorType;
 
@@ -15,6 +15,7 @@ namespace NetworkFramework
 	{
 		CONNECTOR_TYPE_SERVER = 0,
 		CONNECTOR_TYPE_CLIENT,
+		CONNECTOR_TYPE_PEER,
 	};
 
 	class ConnectConfig

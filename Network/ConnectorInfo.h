@@ -3,7 +3,7 @@
 #include <functional>
 #include "Define.h"
 
-namespace NetworkFramework
+namespace CG
 {
 	class Connector;
 	class DataConvertor;

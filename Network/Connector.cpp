@@ -5,7 +5,7 @@
 
 #include <cstring>
 
-namespace NetworkFramework
+namespace CG
 {
 	Connector::Connector()
 	{
