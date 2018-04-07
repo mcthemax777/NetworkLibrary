@@ -2,6 +2,7 @@
 
 #include "SystemDefine.h"
 #include "Util/Singleton.h"
+#include "Util/Lock/Lock.h"
 
 typedef int logtype;
 
@@ -30,16 +31,13 @@ enum LogType {
 #define ErrorLog(fmt, ...)  Log::GetInstance()->print(LOG_TYPE_ERROR, "%s,%s,%d,ERROR," fmt, __FILE__, __FUNCTION__, __LINE__, ## __VA_ARGS__)
 #define CriticalLog(fmt, ...)  Log::GetInstance()->print(LOG_TYPE_CRITICAL, "%s,%s,%d,CRITICAL," fmt, __FILE__, __FUNCTION__, __LINE__, ## __VA_ARGS__)
 
-class Log : public Util::Singleton<Log>
+class Log : public Util::Singleton<Log>, public Util::Lock
 {
 public:
 	Log();
 	~Log();
 
 	bool initialize(const char* logpath);
-
-	void lock() { pthread_mutex_lock(&mutex); }
-	void unLock() { pthread_mutex_unlock(&mutex); }
 
 	bool createFile();
 
@@ -54,5 +52,4 @@ private:
 	char* buffer;
 
 protected:
-	pthread_mutex_t mutex;
 };

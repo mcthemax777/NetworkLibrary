@@ -26,7 +26,6 @@ Log::Log()
 	writeBuffer = new char[5000];
 	buffer = new char[5000];
 
-	pthread_mutex_init(&mutex, NULL);
 }
 
 Log::~Log()
@@ -40,7 +39,6 @@ Log::~Log()
 	delete buffer;
 	delete writeBuffer;
 
-	pthread_mutex_destroy(&mutex);
 }
 
 bool Log::initialize(const char* _logpath)
@@ -50,6 +48,8 @@ bool Log::initialize(const char* _logpath)
 
 bool Log::createFile()
 {
+
+
 	if (fp)
 	{
 		fclose(fp);

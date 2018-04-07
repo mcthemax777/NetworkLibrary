@@ -87,11 +87,11 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
 		{
 			_tzset();
 			tzflag++;
+
 		}
 		tz->tz_minuteswest = _timezone / 60;
 		tz->tz_dsttime = _daylight;
 	}
-
 	return 0;
 }
 
@@ -101,12 +101,20 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
 
 namespace CG
 {
-
-	void Network::sendDataToWorkerThreadWithConverting(ConnectorInfo* connectorInfo, char* data, int dataSize)
+	WorkerThread* Network::getWorkerThreadUsingHash(int hashKey)
 	{
-		char* currentData = data;
+		int hash = hashKey % workerThreadCount;
 
-		int currentDataSize = dataSize;
+		return workerThreadArray[hash];
+	}
+
+	void Network::sendDataToWorkerThreadWithConverting(WorkerThread* workerThread, ConnectorInfo* connectorInfo, Buffer* buffer)
+	{
+		char* currentData = buffer->data;
+
+		int currentDataSize = buffer->dataSize;
+
+		int currentBufferIndex = 0;
 
 		while (true)
 		{
@@ -115,8 +123,14 @@ namespace CG
 
 			if (index == 0) //불완전한 형태의 데이터일때
 			{
-				connectorInfo->storageData = currentData;
-				connectorInfo->storageDataSize = currentDataSize;
+				if (buffer->data != currentData) // currentdata가 가르키는 위치가 버퍼데이터랑 다르면 리셋 시켜줘야됨.
+				{
+					memmove(buffer->data, currentData, currentDataSize);
+				}
+
+				buffer->dataSize = currentDataSize;
+
+				connectorInfo->buffer = buffer;
 
 				break;
 			}
@@ -127,41 +141,75 @@ namespace CG
 			}
 			else
 			{
-				sendDataToWorkerThread(RECEIVE_TYPE_DATA, connectorInfo, currentData, index - 1);
-
 				currentData += index;
 				currentDataSize -= index;
 
+				DataPacket* dp = workerThread->dataPacketPool->getObject();
+
 				if (currentDataSize == 0)
+				{
+					dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, true);
+
+					workerThread->pushDataPacket(dp);
+
+					connectorInfo->buffer = nullptr;
+				
 					break;
+				}
+				else
+				{
+					dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, false);
+
+					workerThread->pushDataPacket(dp);
+				}
+
+				currentBufferIndex += index;
 			}
 		}
 	}
 
-	bool Network::processReceiveData(ConnectorInfo* connectorInfo, char* receiveBuffer, int bufferSize)
+	bool Network::processReceiveData(ConnectorInfo* connectorInfo)
 	{
-		Buffer* buffer = bufferPool->getObject();
-		char* poolBuffer = buffer->buffer;
+		WorkerThread* workerThread = getWorkerThreadUsingHash(connectorInfo->hostId);
 
-		int dataSize = recv(connectorInfo->getHostId(), poolBuffer, RECV_BUF, 0);
+		char* receiveDataStartingPoint;
+
+		Buffer* buffer = connectorInfo->buffer;
+		
+		int receivedDataSize = 0;
+
+		if (buffer == nullptr)
+		{
+			buffer = workerThread->bufferPool->getObject();
+
+			buffer->dataSize = 0;
+
+			receiveDataStartingPoint = buffer->data;
+
+			connectorInfo->buffer = buffer;
+		}
+		else
+		{
+			receivedDataSize = buffer->dataSize;
+			receiveDataStartingPoint = buffer->data + receivedDataSize;
+		}
+
+		int dataSize = recv(connectorInfo->getHostId(), receiveDataStartingPoint, RECV_BUF - receivedDataSize, 0);
 
 		if (dataSize > 0)
 		{
-			char* data = new char[dataSize];
+			buffer->dataSize = receivedDataSize + dataSize;
 
-			memcpy(data, poolBuffer, dataSize);
-
-			sendDataToWorkerThreadWithConverting(connectorInfo, data, dataSize);
-
-			bufferPool->returnObject(buffer);
+			sendDataToWorkerThreadWithConverting(workerThread, connectorInfo, buffer);
 
 			return true;
 		}
 		else
 		{
-			bufferPool->returnObject(buffer);
+			workerThread->bufferPool->returnObject(buffer);
+			connectorInfo->buffer = nullptr;
 
-			disconnectWithConnectorInfo(connectorInfo);
+			disconnectWithConnectorInfo(workerThread, connectorInfo);
 
 			if (dataSize != -1)
 			{
@@ -176,13 +224,17 @@ namespace CG
 
 	void Network::windowsConnectorInfoThread(ConnectorInfo* connectorInfo)
 	{
-		sendDataToWorkerThread(RECEIVE_TYPE_CONNECT, connectorInfo, nullptr, 0);
+		WorkerThread* workerThread = getWorkerThreadUsingHash(connectorInfo->hostId);
 
-		char rcvBuf[RCV_BUF];
+		DataPacket* dp = workerThread->dataPacketPool->getObject();
+
+		dp->setDataPacket(RECEIVE_TYPE_CONNECT, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId);
+
+		workerThread->pushDataPacket(dp);
 
 		while (true)
 		{
-			bool isReceiveData = processReceiveData(connectorInfo, rcvBuf, RCV_BUF - 1);
+			bool isReceiveData = processReceiveData(connectorInfo);
 
 			if (isReceiveData == false)
 			{
@@ -208,10 +260,14 @@ namespace CG
 
 			ConnectorInfo* connectorInfo = connectorInfoPool->getObject();
 
-			initConnectorInfo(connectorInfo, server, clientSocket);
+			connectorInfo->init(server, clientSocket);
 
 
-			server->connectorInfoMap.insert(std::pair<int, ConnectorInfo*>(connectorInfo->hostId, connectorInfo));
+			if (server->connectorInfoMap.insert(std::pair<int, ConnectorInfo*>(connectorInfo->hostId, connectorInfo)).second == false)
+			{
+				ErrorLog("insert error");
+				return;
+			}
 
 			//ToDo. 쓰레드로 리시브 걸어두고 받으면 워커쓰레드로 던져주기
 			pthread_t* tid = new pthread_t();
@@ -283,23 +339,6 @@ namespace CG
 		return NULL;
 	}
 
-	void Network::initConnectorInfo(ConnectorInfo* connectorInfo, Connector* connector, HostId hostId)
-	{
-		connectorInfo->hostId = hostId;
-		connectorInfo->dataConvertor = connector->connectorInfo->dataConvertor;
-		connectorInfo->connector = connector;
-	}
-
-	void Network::resetConnectorInfo(ConnectorInfo* connectorInfo)
-	{
-		connectorInfo->hostId = 0;
-
-		connectorInfo->dataConvertor = nullptr;
-		connectorInfo->connector = nullptr;
-		connectorInfo->storageData = nullptr;
-		connectorInfo->storageDataSize = 0;
-	}
-
 	Network::Network()
 	{
 		workerThreadCount = 4;
@@ -323,17 +362,15 @@ namespace CG
 			}
 		}
 
-		clientList = new std::vector<Client*>();
-		serverList = new std::vector<Server*>();
-		eventFunctionList = new std::vector<EventFunction*>();
+		clientList = new Util::MTList<Client*>();
+		serverList = new Util::MTList<Server*>();
+		eventFunctionList = new Util::MTList<EventFunction*>();
+		timerQueue = new Util::NBQueue<Timer*>();
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
-		bufferPool = new Util::ObjectPool<Buffer>(100, true);
 		connectorInfoPool = new Util::ObjectPool<ConnectorInfo>(100, true);
 #else
-		bufferPool = new Util::ObjectPool<Buffer*>(100, false);
-		connectorInfoPool = new Util::ObjectPool<ConnectorInfo*>(100, false);
-
+		connectorInfoPool = new Util::ObjectPool<ConnectorInfo>(100, false);
 #endif
 
 		init();
@@ -341,18 +378,67 @@ namespace CG
 
 	Network::~Network()
 	{
+
+#if OS_PLATFORM == PLATFORM_WINDOWS
+
+		WSACleanup();
+
+		for (int i = 0; i < serverTidList->size(); i++)
+		{
+			pthread_cancel(*(serverTidList->at(i)));
+		}
+
+		for (int i = 0; i < clientTidList->size(); i++)
+		{
+			pthread_cancel(*(clientTidList->at(i)));
+		}
+
+		delete serverTidList;
+		delete clientTidList;
+
+#elif OS_PLATFORM == PLATFORM_LINUX
+
+		//todo epoll destroy
+
+		free(event);
+
+#elif OS_PLATFORM == PLATFORM_MAC
+
+		//todo kqueue delete
+
+		free(event);
+
+#endif
+
 		for (int i = 0; i < workerThreadCount; i++)
 		{
+			pthread_cancel(*(workerThreadArray[i]->getTid()));
 			delete workerThreadArray[i];
 		}
 
 		delete clientList;
 		delete serverList;
+		delete connectorInfoPool;
+		delete eventFunctionList;
+		delete timerQueue;
+
+		pthread_cancel(*networkTid);
 	}
 
 	bool Network::init()
 	{
-#if OS_PLATFORM == PLATFORM_LINUX
+#if OS_PLATFORM == PLATFORM_WINDOWS
+
+		if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+		{
+			ErrorLog("wsaStartup error");
+			return false;
+		}
+
+		serverTidList = new Util::MTList<pthread_t*>();
+		clientTidList = new Util::MTList<pthread_t*>();
+
+#elif OS_PLATFORM == PLATFORM_LINUX
 
 		eventFd = epoll_create(EVENT_BUFFER_SIZE);
 		if (eventFd < 0) {
@@ -363,17 +449,6 @@ namespace CG
 		event = (struct epoll_event*)malloc(sizeof(struct epoll_event)*EVENT_BUFFER_SIZE);
 
 		memset(&connectEvent, 0, sizeof(struct epoll_event));
-
-#elif OS_PLATFORM == PLATFORM_WINDOWS
-
-		if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-		{
-			ErrorLog("wsaStartup error");
-			return false;
-		}
-
-		serverTidList = new std::vector<pthread_t*>();
-		clientTidList = new std::vector<pthread_t*>();
 
 #elif OS_PLATFORM == PLATFORM_MAC
 
@@ -386,10 +461,6 @@ namespace CG
 		event = (struct kevent*)malloc(sizeof(struct kevent)*EVENT_BUFFER_SIZE);
 
 #endif
-
-
-		memset(recvBuffer, 0, RCV_BUF);
-
 		clntaddrLen = sizeof(clntaddr);
 
 		lastLoopTime = 0;
@@ -442,7 +513,7 @@ namespace CG
 	bool Network::addTimer(Timer *timer)
 	{
 		timer->startTime = getNetworkCurrentTime();
-		timerQueue.push_back(timer);
+		timerQueue->push(timer);
 
 		return true;
 	}
@@ -458,12 +529,7 @@ namespace CG
 
 		serverList->push_back(server);
 
-#if OS_PLATFORM == PLATFORM_LINUX
-		connectEvent.events = EPOLLIN;
-		connectEvent.data.ptr = (void*)server;
-		epoll_ctl(eventFd, EPOLL_CTL_ADD, server->connectorInfo->hostId, &connectEvent);
-
-#elif OS_PLATFORM == PLATFORM_WINDOWS
+#if OS_PLATFORM == PLATFORM_WINDOWS
 
 		//ToDo. 쓰레드로 엑셉트해두고 받으면 워커쓰레드로 던져주기
 		pthread_t* tid = new pthread_t();
@@ -471,11 +537,17 @@ namespace CG
 
 		if (pthread_create(tid, NULL, Network::GetInstance()->windowsServerThread, server) != 0)
 		{
-			ErrorLog("thread create error : ");
+			ErrorLog("thread create error");
 			return false;
 		}
 
 		serverTidList->push_back(tid);
+
+#elif OS_PLATFORM == PLATFORM_LINUX
+
+		connectEvent.events = EPOLLIN;
+		connectEvent.data.ptr = (void*)server;
+		epoll_ctl(eventFd, EPOLL_CTL_ADD, server->connectorInfo->hostId, &connectEvent);
 
 #elif OS_PLATFORM == PLATFORM_MAC
 
@@ -483,7 +555,7 @@ namespace CG
 
 		if (kevent(eventFd, &connectEvent, 1, NULL, 0, NULL) == -1)
 		{
-			printf("kevent init error");
+			ErrorLog("kevent init error");
 			return false;
 		}
 
@@ -522,6 +594,7 @@ namespace CG
 		clientTidList->push_back(tid);
 
 #else
+
 		setSocketOption(hostId);
 		
 #if OS_PLATFORM == PLATFORM_LINUX
@@ -541,7 +614,15 @@ namespace CG
 		}
 
 #endif
-		sendDataToWorkerThread(RECEIVE_TYPE_CONNECT, connectorInfo, nullptr, 0);
+
+		WorkerThread* workerThread = getWorkerThreadUsingHash(connectorInfo->hostId);
+
+		DataPacket* dp = workerThread->dataPacketPool->getObject();
+
+		dp->setDataPacket(RECEIVE_TYPE_CONNECT, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId);
+
+		workerThread->pushDataPacket(dp);
+
 #endif
 		
 		return true;
@@ -605,26 +686,6 @@ namespace CG
 		return sock;
 	}
 
-	void Network::sendDataToWorkerThread(int receiveType, ConnectorInfo* const connectorInfo, char* data, int dataSize)
-	{
-		DebugLog("sendDataToWorkerThread");
-
-		DataPacket* dp = new DataPacket();
-
-		dp->receiveType = receiveType;
-		dp->hostId = connectorInfo->hostId;
-		dp->eventFunctionHostId = connectorInfo->connector->connectorInfo->hostId;
-		dp->data = data;
-		dp->dataSize = dataSize;
-
-		//같은 hostId는 같은 쓰레드로 넣어줘야 함.
-		int hash = connectorInfo->hostId % workerThreadCount;
-
-		workerThreadArray[hash]->pushDataPacket(dp);
-
-		return;
-	}
-
 	EventFunction* Network::getEventFunction(HostId hostId)
 	{
 		for (int i = 0; i < eventFunctionList->size(); i++)
@@ -639,9 +700,9 @@ namespace CG
 		return nullptr;
 	}
 
-	bool Network::removeEventFunction(HostId hostId)
+	bool Network::removeEventFunction(EventFunction* eventFuction)
 	{
-		std::vector<EventFunction*>::iterator itr;
+		/*std::vector<EventFunction*>::iterator itr;
 		for (itr = eventFunctionList->begin(); itr != eventFunctionList->end(); itr++)
 		{
 			if ((*itr)->hostId == hostId)
@@ -650,9 +711,12 @@ namespace CG
 				eventFunctionList->erase(itr);
 				return true;
 			}
-		}
+		}*/
 
-		return false;
+		if (eventFunctionList->remove(eventFuction))
+			return true;
+		else
+			return false;
 	}
 
 	void Network::sendMessage(HostId hostId, const char* data, int dataSize)
@@ -668,27 +732,23 @@ namespace CG
 	}
 	
 
-	void Network::disconnectWithConnectorInfo(ConnectorInfo* connectorInfo)
+	void Network::disconnectWithConnectorInfo(WorkerThread* workerThread, ConnectorInfo* connectorInfo)
 	{
 		DebugLog("disconnectWithConnectorInfo - hostId : %d", connectorInfo->hostId);
 
-		//clientInfo와 연결끊기
-		if (connectorInfo->connector->getConnectorType() == CONNECTOR_TYPE_SERVER)
-		{
-			if (((Server*)connectorInfo->connector)->connectorInfoMap.erase(connectorInfo->hostId) <= 0)
-				ErrorLog("???");
-		}
-		else
-		{
-			Client* client = ((Client*)connectorInfo->connector);
-			client->isConnected = false;
-		}
+		DataPacket* dp = workerThread->dataPacketPool->getObject();
 
+		dp->setDataPacket(RECEIVE_TYPE_DISCONNECT, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId);
+
+		workerThread->pushDataPacket(dp);
+
+		//connectorInfo 연결 끊기
 		int fd = connectorInfo->hostId;
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
 
 		closesocket(fd);
+
 #else
 
 #if OS_PLATFORM == PLATFORM_LINUX
@@ -706,12 +766,23 @@ namespace CG
 		}
 
 #endif
-		close(fd);
-#endif
-		
-		sendDataToWorkerThread(RECEIVE_TYPE_DISCONNECT, connectorInfo, nullptr, 0);
 
-		resetConnectorInfo(connectorInfo);
+		close(fd);
+
+#endif
+
+		if (connectorInfo->connector->getConnectorType() == CONNECTOR_TYPE_SERVER)
+		{
+			if (((Server*)connectorInfo->connector)->connectorInfoMap.erase(connectorInfo->hostId) <= 0)
+				ErrorLog("already remove connectorInfo");
+		}
+		else
+		{
+			Client* client = ((Client*)connectorInfo->connector);
+			client->connectorInfo = nullptr;
+		}
+
+		connectorInfo->reset();
 
 		connectorInfoPool->returnObject(connectorInfo);
 	}
@@ -840,7 +911,7 @@ namespace CG
 							}
 
 							ConnectorInfo* connectorInfo = connectorInfoPool->getObject();
-							initConnectorInfo(connectorInfo, server, clntFd);
+							connectorInfo->init(server, clntFd);
 
 							setSocketOption(clntFd);
 
@@ -864,16 +935,21 @@ namespace CG
 							if (server->connectorInfoMap.insert(std::pair<int, ConnectorInfo*>(connectorInfo->hostId, connectorInfo)).second == false)
 							{
 								ErrorLog("insert error");
-								delete connectorInfo;
+								connectorInfoPool->returnObject(connectorInfo);
 								break;
 							}
 							
-							sendDataToWorkerThread(RECEIVE_TYPE_CONNECT, connectorInfo, nullptr, 0);
+							WorkerThread* workerThread = getWorkerThreadUsingHash(connectorInfo->hostId);
+
+							DataPacket* dp = workerThread->dataPacketPool->getObject();
+
+							dp->setDataPacket(RECEIVE_TYPE_CONNECT, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId);
+
+							workerThread->pushDataPacket(dp);
 
 							break;
 						}
 					}
-
 
 					if (isServer) continue;
 
@@ -887,13 +963,11 @@ namespace CG
 #elif OS_PLATFORM == PLATFORM_MAC
 
 					clntFd = (int)event[i].ident;
-
 					connectorInfo = (ConnectorInfo*)event[i].udata;
 
 #endif
 
-
-					processReceiveData(connectorInfo, recvBuffer, RCV_BUF - 1);
+					processReceiveData(connectorInfo);
 				}
 			}
 		}

@@ -5,6 +5,7 @@
 
 namespace CG
 {
+	class Buffer;
 	class Connector;
 	class DataConvertor;
 
@@ -20,8 +21,10 @@ namespace CG
 		friend class WorkerThread;
 
 	protected:
+		void init(Connector* _connector, HostId _hostId);
+		void reset();
 
-		char* storageData;
+		Buffer* buffer;
 		int storageDataSize;
 
 		char* ip;

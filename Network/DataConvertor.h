@@ -13,7 +13,7 @@ namespace CG
 	public:
 		int convert(char* data, int dataSize)
 		{
-			return dataSize - 1;
+			return dataSize;
 		}
 	};
 }

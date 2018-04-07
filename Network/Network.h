@@ -41,6 +41,9 @@
 #include "Server.h"
 #include "Client.h"
 #include "Util/ObjectPool.h"
+#include "Util/List/MTList.h"
+#include "Util/List/STList.h"
+
 
 #define MAX_IP_LEN 15
 #define EVENT_BUFFER_SIZE 50
@@ -70,9 +73,9 @@ namespace CG
 	class Buffer
 	{
 	public:
-		char buffer[RECV_BUF];
-
-		void reset() { memcpy(buffer, 0, RECV_BUF); }
+		char data[RECV_BUF];
+		int dataSize;
+		void reset() { memcpy(data, 0, RECV_BUF); }
 	};
 
 	class DataPacket
@@ -81,8 +84,26 @@ namespace CG
 		int receiveType;
 		HostId hostId;
 		HostId eventFunctionHostId;
-		char* data;
-		dataSize_t dataSize;
+		Buffer* buffer;
+		int startIndex;
+		int dataSize;
+		bool isLastDataInBuffer;
+
+		void setDataPacket(int _receiveType, HostId _hostId, HostId _eventFunctionHostId, Buffer* _buffer = nullptr, int _startIndex = 0, int _dataSize = 0, bool _isLastDataInBuffer = true)
+		{
+			receiveType = _receiveType;
+			hostId = _hostId;
+			eventFunctionHostId = _eventFunctionHostId;
+			buffer = _buffer;
+			startIndex = _startIndex;
+			dataSize = _dataSize;
+			isLastDataInBuffer = _isLastDataInBuffer;
+		}
+
+		~DataPacket()
+		{
+
+		}
 	};
 
 	//이거 나중에 메모리풀 3개로 나눠야되서 귀찮아지네.. 그냥 안씀
@@ -135,31 +156,26 @@ namespace CG
 		bool addClient(Client* client);
 		int CreateTCPServerSocket(const char* ip, unsigned short port);
 		int CreateTCPClientSocket(const char* ip, unsigned short port);
-		void sendDataToWorkerThread(int receiveType, ConnectorInfo* const connectorInfo, char* data, int dataSize);
 		bool addTimer(Timer *timer);
 		void sendMessage(HostId hostId, const char* data, int dataSize);
-		void sendDataToWorkerThreadWithConverting(ConnectorInfo* connectorInfo, char* data, int dataSize);
-		bool processReceiveData(ConnectorInfo* connectorInfo, char* receiveBuffer, int bufferSize);
-		void initConnectorInfo(ConnectorInfo* connectorInfo, Connector* connector, HostId hostId);
-		void resetConnectorInfo(ConnectorInfo* connectorInfo);
-
-		void disconnectWithConnectorInfo(ConnectorInfo* connectorInfo);
+		void sendDataToWorkerThreadWithConverting(WorkerThread* workerThread, ConnectorInfo* connectorInfo, Buffer* buffer);
+		bool processReceiveData(ConnectorInfo* connectorInfo);
+		WorkerThread* getWorkerThreadUsingHash(int hashKey);
+		void disconnectWithConnectorInfo(WorkerThread* workerThread, ConnectorInfo* connectorInfo);
 		EventFunction* getEventFunction(HostId hostId);
-		bool removeEventFunction(HostId hostId);
+		bool removeEventFunction(EventFunction* eventFuction);
 		void start();
 		
 		Network();
 
-	public:
-		char recvBuffer[RCV_BUF];
-		
+	public:		
 		//나의 Server 정보
-		std::vector<Server*>* serverList;
+		Util::List<Server*>* serverList;
 		//나의 Client 정보
-		std::vector<Client*>* clientList;
-		std::vector<EventFunction*>* eventFunctionList;
+		Util::List<Client*>* clientList;
+		Util::List<EventFunction*>* eventFunctionList;
 		//등록한 타이머 저장
-		std::vector<Timer*> timerQueue;
+		Util::Queue<Timer*>* timerQueue;
 
 		int eventFd;
 		int clntFd;
@@ -179,8 +195,8 @@ namespace CG
 		WSAData wsaData;
 
 	public:
-		std::vector<pthread_t*>* serverTidList;
-		std::vector<pthread_t*>* clientTidList;
+		Util::List<pthread_t*>* serverTidList;
+		Util::List<pthread_t*>* clientTidList;
 
 		void windowsConnectorInfoThread(ConnectorInfo* connectorInfo);
 		void windowsServerThread(Server* server);
@@ -202,6 +218,5 @@ namespace CG
 		long nextPingCheckTime;
 
 		Util::ObjectPool<ConnectorInfo>* connectorInfoPool;
-		Util::ObjectPool<Buffer>* bufferPool;
 	};
 }

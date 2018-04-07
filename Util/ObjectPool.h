@@ -1,7 +1,9 @@
 #pragma once
 
-#include <mutex>
-#include <stack>
+#include "Log/Log.h"
+#include "Util/Queue/STQueue.h"
+#include "Util/Queue/NBQueue.h"
+
 
 namespace Util
 {
@@ -14,87 +16,58 @@ namespace Util
 			this->capacity = capacity;
 			this->isUsingMultiThread = isUsingMultiThread;
 
-			for (int i = 0; i < capacity; i++)
-			{
-				T* t = new T();
-				objectList.push(t);
-			}
+			if (isUsingMultiThread) objectList = new NBQueue<T*>();
+			else objectList = new STQueue<T*>();
 
-			pthread_mutex_init(&mutex, NULL);
+			for (int i = 0; i < capacity; i++)
+				objectList->push(new T());
+
 		}
+
 		virtual ~ObjectPool()
 		{
-
+			delete objectList;
 		}
 
 		T* getObject()
 		{
-			T* t;
+			T* t = 0;
 
-			lock();
+			t = objectList->pop();
 
-			if (objectList.empty())
+			if (t == 0)
 			{
+				DebugLog("already use all object in objectPool");
 				t = new T();
 			}
-			else
-			{
-				t = objectList.top();
-				objectList.pop();
-			}
-
-			unLock();
 
 			return t;
-
 		}
 
 		void returnObject(T* object)
 		{
-			lock();
-
-			if (objectList.size() >= capacity)
+			if (objectList->size() >= capacity)
 			{
-				unLock();
 				delete object;
 			}
 			else
 			{
-				objectList.push(object);
-				unLock();
+				objectList->push(object);
 			}
 		}
 
-		int objectCount()
+		int size()
 		{
-			lock();
-
-			int size = objectList.size();
-
-			unLock();
+			int size = objectList->size();
 
 			return size;
 		}
-		
-		void lock() 
-		{
-			if(isUsingMultiThread)
-				pthread_mutex_lock(&mutex);
-		}
-		void unLock() 
-		{ 
-			if (isUsingMultiThread)
-				pthread_mutex_unlock(&mutex); 
-		}
-
-	private:
 
 	protected:
-		pthread_mutex_t mutex;
+		Util::Queue<T*>* objectList;
 
 		unsigned int capacity;
 		bool isUsingMultiThread;
-		std::stack<T*> objectList;
 	};
 }
 

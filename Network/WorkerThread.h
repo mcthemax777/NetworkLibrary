@@ -5,11 +5,15 @@
 
 #include <pthread.h>
 #include <deque>
+#include "Util/Queue/BQueue.h"
+#include "Util/ObjectPool.h"
+
 
 namespace CG
 {
 	class ConnectorInfo;
 	class DataPacket;
+	class Buffer;
 
 	class WorkerThread
 	{
@@ -18,25 +22,23 @@ namespace CG
 		~WorkerThread();
 		bool initialize();
 		void run();
-		void sendDataToWorkerThreadWithConverting();
 
 		void pushDataPacket(DataPacket* dataPacket);
-		DataPacket* popDataPacket();
 
 		pthread_t* getTid() { return &tid; }
 		pthread_cond_t* getCond() { return &cond; }
 		int getDataPacketCount();
 
 	protected:
-		void lock() { pthread_mutex_lock(&mutex); }
-		void unLock() { pthread_mutex_unlock(&mutex); }
-		void unLockAndWait() { pthread_cond_wait(&cond, &mutex); pthread_mutex_unlock(&mutex); }
-
-	protected:
 		pthread_t tid;
 		pthread_mutex_t mutex;
 		pthread_cond_t cond;
-		std::deque<DataPacket*>* dataPacketQueue;
+		//std::deque<DataPacket*>* dataPacketQueue;
+
+	public:
+		Util::BQueue<DataPacket*>* dataPacketQueue;
+		Util::ObjectPool<DataPacket>* dataPacketPool;
+		Util::ObjectPool<Buffer>* bufferPool;
 	};
 }
 #endif //__WORKER_THREAD_H__

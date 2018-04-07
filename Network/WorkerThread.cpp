@@ -11,36 +11,20 @@ namespace CG
 	{
 		pthread_mutex_init(&mutex, NULL);
 		pthread_cond_init(&cond, NULL);
+
+		dataPacketQueue = new Util::BQueue<DataPacket*>();
+		dataPacketPool = new Util::ObjectPool<DataPacket>(10, true);
+		bufferPool = new Util::ObjectPool<Buffer>(10, true);
 	}
 
 
 	WorkerThread::~WorkerThread()
 	{
-		lock();
 
-		if (dataPacketQueue->empty() == false) //delete data packet
-		{
-			DataPacket* dp = NULL;
-			std::deque<DataPacket*>::iterator itr;
-			for (itr = dataPacketQueue->begin(); itr != dataPacketQueue->end(); itr++)
-			{
-				dp = dataPacketQueue->front();
-				dataPacketQueue->pop_front();
-				delete dp;
-			}
-		}
-
-		unLock();
-
-		pthread_mutex_destroy(&mutex);
-		pthread_cond_destroy(&cond);
 	}
 
 	bool WorkerThread::initialize()
 	{
-		dataPacketQueue = new std::deque<DataPacket*>();
-		dataPacketQueue->clear();
-
 		return true;
 	}
 
@@ -49,7 +33,7 @@ namespace CG
 	{
 		while (true)
 		{
-			DataPacket* dp = popDataPacket();
+			DataPacket* dp = dataPacketQueue->pop();
 			if (dp != NULL)
 			{
 				EventFunction* eventFunction = Network::GetInstance()->getEventFunction(dp->eventFunctionHostId);
@@ -62,7 +46,10 @@ namespace CG
 				{
 					if (dp->receiveType == RECEIVE_TYPE_DATA)
 					{
-						eventFunction->onReceive(dp->hostId, dp->data, dp->dataSize);
+						eventFunction->onReceive(dp->hostId, dp->buffer->data + dp->startIndex, dp->dataSize);
+
+						if(dp->isLastDataInBuffer)
+							bufferPool->returnObject(dp->buffer);
 					}
 					else if (dp->receiveType == RECEIVE_TYPE_CONNECT)
 					{
@@ -78,60 +65,18 @@ namespace CG
 					}
 				}
 
-				delete dp;
+				dataPacketPool->returnObject(dp);
 			}
 		}
 	}
 
-	void WorkerThread::sendDataToWorkerThreadWithConverting()
-	{
-
-	}
-
-
 	void WorkerThread::pushDataPacket(DataPacket* dataPacket)
 	{
-		lock();
-
-		dataPacketQueue->push_back(dataPacket);
-
-		if (dataPacketQueue->size() == 1)
-			pthread_cond_signal(&cond);
-
-		unLock();
+		dataPacketQueue->push(dataPacket);
 	}
-
-
-	DataPacket* WorkerThread::popDataPacket()
-	{
-		lock();
-
-		DataPacket* dp = NULL;
-		if (dataPacketQueue->empty() == false)
-		{
-			dp = dataPacketQueue->front();
-			dataPacketQueue->pop_front();
-			unLock();
-		}
-		else
-		{
-			unLockAndWait();
-		}
-
-		return dp;
-	}
-
 
 	int WorkerThread::getDataPacketCount()
 	{
-		//    lock();
-		//    int cnt = (int)dataPacketQueue->size();
-		//    unLock();
-		//    return cnt;
-
-			// not use lock because this function doesn't want correct value
-
 		return (int)dataPacketQueue->size();
-
 	}
 }
