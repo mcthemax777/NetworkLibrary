@@ -1,6 +1,9 @@
 #pragma once
 
+#define HAVE_STRUCT_TIMESPEC
+
 #include <mutex>
+#include <pthread.h>
 
 namespace Util
 {

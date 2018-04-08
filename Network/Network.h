@@ -37,18 +37,17 @@
 #include <list>
 #include "Util/Singleton.h"
 #include "Define.h"
-#include "DataConvertor.h"
 #include "Server.h"
 #include "Client.h"
 #include "Util/ObjectPool.h"
 #include "Util/List/MTList.h"
 #include "Util/List/STList.h"
+#include "CGDataConvertor.h"
 
 
 #define MAX_IP_LEN 15
 #define EVENT_BUFFER_SIZE 50
 #define MAX_CONNECT_SIZE 100
-#define RECV_BUF 5000
 #define NETWORK_LOOP_DT 1000
 
 typedef int8_t dataType_t;
@@ -68,14 +67,6 @@ namespace CG
 		RECEIVE_TYPE_CONNECT = 0,
 		RECEIVE_TYPE_DATA,
 		RECEIVE_TYPE_DISCONNECT,
-	};
-
-	class Buffer
-	{
-	public:
-		char data[RECV_BUF];
-		int dataSize;
-		void reset() { memcpy(data, 0, RECV_BUF); }
 	};
 
 	class DataPacket
@@ -157,7 +148,10 @@ namespace CG
 		int CreateTCPServerSocket(const char* ip, unsigned short port);
 		int CreateTCPClientSocket(const char* ip, unsigned short port);
 		bool addTimer(Timer *timer);
-		void sendMessage(HostId hostId, const char* data, int dataSize);
+		void sendData(int fd, const char* data, int dataSize);
+		void sendMessage(Connector* connector, HostId hostId, const char* data, int dataSize);
+		void sendMessage(Connector* connector, const char* data, int dataSize);
+		void sendMessage(ConnectorInfo* connectorInfo, const char* data, int dataSize);
 		void sendDataToWorkerThreadWithConverting(WorkerThread* workerThread, ConnectorInfo* connectorInfo, Buffer* buffer);
 		bool processReceiveData(ConnectorInfo* connectorInfo);
 		WorkerThread* getWorkerThreadUsingHash(int hashKey);

@@ -14,7 +14,7 @@ namespace CG
 
 	void ConnectorInfo::sendMessage(const char* data, int dataSize)
 	{
-		Network::GetInstance()->sendMessage(hostId, data, dataSize);
+		Network::GetInstance()->sendMessage(this, data, dataSize);
 	}
 
 	void ConnectorInfo::reset()

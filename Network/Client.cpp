@@ -7,7 +7,7 @@ namespace CG
 	void Client::sendMessage(const char* data, int dataSize)
 	{
 		if (connectorInfo != nullptr)
-			Network::GetInstance()->sendMessage(connectorInfo->getHostId(), data, dataSize);
+			Network::GetInstance()->sendMessage(this, data, dataSize);
 		else
 			ErrorLog("clientInfo is null");
 	}

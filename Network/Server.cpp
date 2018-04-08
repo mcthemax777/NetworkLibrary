@@ -5,6 +5,6 @@ namespace CG
 {
 	void Server::sendMessage(HostId hostId, char* data, int dataSize)
 	{
-		Network::GetInstance()->sendMessage(connectorInfo->getHostId(), data, dataSize);
+		Network::GetInstance()->sendMessage(this, connectorInfo->getHostId(), data, dataSize);
 	}
 }

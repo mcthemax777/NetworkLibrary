@@ -118,7 +118,7 @@ namespace CG
 
 		while (true)
 		{
-			int index = connectorInfo->dataConvertor->convert(currentData, currentDataSize);
+			int index = connectorInfo->dataConvertor->receiveConvert(currentData, currentDataSize);
 
 
 			if (index == 0) //불완전한 형태의 데이터일때
@@ -146,9 +146,19 @@ namespace CG
 
 				DataPacket* dp = workerThread->dataPacketPool->getObject();
 
+				bool isCGDataConvertor = false;
+
+				if (strcmp(typeid(*(connectorInfo->dataConvertor)).name(), "class CG::CGDataConvertor") == 0)
+				{
+					isCGDataConvertor = true;
+				}
+
 				if (currentDataSize == 0)
 				{
-					dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, true);
+					if(isCGDataConvertor)
+						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex + sizeof(messageType_t) + sizeof(messageSize_t), index - sizeof(messageType_t) - sizeof(messageSize_t), true);
+					else
+						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, true);
 
 					workerThread->pushDataPacket(dp);
 
@@ -158,7 +168,10 @@ namespace CG
 				}
 				else
 				{
-					dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, false);
+					if (isCGDataConvertor)
+						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex + sizeof(messageType_t) + sizeof(messageSize_t), index - sizeof(messageType_t) - sizeof(messageSize_t), false);
+					else
+						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, false);
 
 					workerThread->pushDataPacket(dp);
 				}
@@ -719,9 +732,28 @@ namespace CG
 			return false;
 	}
 
-	void Network::sendMessage(HostId hostId, const char* data, int dataSize)
+	void Network::sendMessage(Connector* connector, const char* data, int dataSize)
 	{
-		if (send(hostId, data, dataSize, 0) != dataSize)
+		sendMessage(connector, connector->connectorInfo->hostId, data, dataSize);
+	}
+
+	void Network::sendMessage(Connector* connector, HostId hostId, const char* data, int dataSize)
+	{
+		Buffer buffer = connector->dataConvertor->sendConvert(data, dataSize);
+
+		sendData(hostId, buffer.data, buffer.dataSize);
+	}
+
+	void Network::sendMessage(ConnectorInfo* connectorInfo, const char* data, int dataSize)
+	{
+		Buffer buffer = connectorInfo->dataConvertor->sendConvert(data, dataSize);
+
+		sendData(connectorInfo->hostId, buffer.data, buffer.dataSize);
+	}
+
+	void Network::sendData(int fd, const char* data, int dataSize)
+	{
+		if (send(fd, data, dataSize, 0) != dataSize)
 		{
 			ErrorLog("sendMessage error");
 		}

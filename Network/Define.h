@@ -3,6 +3,8 @@
 #include "SystemDefine.h"
 #include <cstdint>
 
+#define RECV_BUF 5000
+
 namespace CG
 {
 	typedef int32_t HostId;
