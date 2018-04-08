@@ -18,6 +18,7 @@ namespace CG
 
 		friend class Connector;
 		friend class Network;
+		friend class ClientNetwork;
 		friend class WorkerThread;
 
 	protected:

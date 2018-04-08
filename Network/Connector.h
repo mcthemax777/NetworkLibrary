@@ -40,6 +40,7 @@ namespace CG
 		ConnectorType getConnectorType() { return type; }
 
 		friend class Network;
+		friend class ClientNetwork;
 	protected:
 		Connector();
 

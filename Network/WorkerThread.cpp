@@ -7,12 +7,13 @@
 
 namespace CG
 {
-	WorkerThread::WorkerThread()
+	WorkerThread::WorkerThread(bool isMultiThread)
 	{
-		pthread_mutex_init(&mutex, NULL);
-		pthread_cond_init(&cond, NULL);
+		if(isMultiThread)
+			dataPacketQueue = new Util::BQueue<DataPacket*>();
+		else
+			dataPacketQueue = new Util::NBQueue<DataPacket*>();
 
-		dataPacketQueue = new Util::BQueue<DataPacket*>();
 		dataPacketPool = new Util::ObjectPool<DataPacket>(10, true);
 		bufferPool = new Util::ObjectPool<Buffer>(10, true);
 	}
@@ -66,6 +67,18 @@ namespace CG
 				}
 
 				dataPacketPool->returnObject(dp);
+			}
+			else
+			{
+				if (Network::GetInstance()->workerThreadCount != 0)
+				{
+					ErrorLog("not wait queue");
+				}
+				else
+				{
+
+				}
+				break;
 			}
 		}
 	}

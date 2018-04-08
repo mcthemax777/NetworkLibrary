@@ -3,7 +3,8 @@
 #include "SystemDefine.h"
 #include <cstdint>
 
-#define RECV_BUF 5000
+#define RCV_BUF 5000
+#define ALLOCATE_BUFFER_SIZE 10
 
 namespace CG
 {
@@ -17,6 +18,4 @@ namespace CG
 	};
 
 	typedef Data Message;
-
-	const int RCV_BUF = 200 * 1024;
 }

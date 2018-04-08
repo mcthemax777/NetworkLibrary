@@ -19,7 +19,7 @@ Log::Log()
 	logPath = new char[128];
 	memset(logPath, 0, 128);
 #if OS_PLATFORM == PLATFORM_WINDOWS
-	memcpy(logPath, "../../Log/GameLog/GameLog_", 25);
+	memcpy(logPath, "C:/CppProjects/CellDivisionGame/Server/Log/GameLog/GameLog_", 25);
 #else
 	memcpy(logPath, "../Log/GameLog/GameLog_", 22);
 #endif
@@ -71,6 +71,7 @@ bool Log::createFile()
 	if ((fp = fopen(fullfilename, "w")) == nullptr)
 	{
 		printf("log file open error");
+		getchar();
 		exit(1);
 	}
 

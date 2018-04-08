@@ -3,8 +3,8 @@
 
 namespace CG
 {
-	void Server::sendMessage(HostId hostId, char* data, int dataSize)
+	void Server::sendMessage(HostId hostId, const char* data, int dataSize)
 	{
-		Network::GetInstance()->sendMessage(this, connectorInfo->getHostId(), data, dataSize);
+		Network::GetInstance()->sendMessage(this, hostId, data, dataSize);
 	}
 }

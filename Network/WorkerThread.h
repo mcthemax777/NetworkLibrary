@@ -18,7 +18,7 @@ namespace CG
 	class WorkerThread
 	{
 	public:
-		WorkerThread();
+		WorkerThread(bool isMultiThread);
 		~WorkerThread();
 		bool initialize();
 		void run();
@@ -26,17 +26,13 @@ namespace CG
 		void pushDataPacket(DataPacket* dataPacket);
 
 		pthread_t* getTid() { return &tid; }
-		pthread_cond_t* getCond() { return &cond; }
 		int getDataPacketCount();
 
 	protected:
 		pthread_t tid;
-		pthread_mutex_t mutex;
-		pthread_cond_t cond;
-		//std::deque<DataPacket*>* dataPacketQueue;
 
 	public:
-		Util::BQueue<DataPacket*>* dataPacketQueue;
+		Util::Queue<DataPacket*>* dataPacketQueue;
 		Util::ObjectPool<DataPacket>* dataPacketPool;
 		Util::ObjectPool<Buffer>* bufferPool;
 	};

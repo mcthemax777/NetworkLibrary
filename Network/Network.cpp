@@ -39,7 +39,7 @@
 #include "Client.h"
 #include "Timer.h"
 #include "DataConvertor.h"
-
+#include "Util/FileParser.h"
 
 
 
@@ -103,9 +103,16 @@ namespace CG
 {
 	WorkerThread* Network::getWorkerThreadUsingHash(int hashKey)
 	{
-		int hash = hashKey % workerThreadCount;
+		if (workerThreadCount == 0)
+		{
+			return (*workerThreadArray);
+		}
+		else
+		{
+			int hash = hashKey % workerThreadCount;
 
-		return workerThreadArray[hash];
+			return workerThreadArray[hash];
+		}
 	}
 
 	void Network::sendDataToWorkerThreadWithConverting(WorkerThread* workerThread, ConnectorInfo* connectorInfo, Buffer* buffer)
@@ -207,7 +214,7 @@ namespace CG
 			receiveDataStartingPoint = buffer->data + receivedDataSize;
 		}
 
-		int dataSize = recv(connectorInfo->getHostId(), receiveDataStartingPoint, RECV_BUF - receivedDataSize, 0);
+		int dataSize = recv(connectorInfo->getHostId(), receiveDataStartingPoint, RCV_BUF - receivedDataSize, 0);
 
 		if (dataSize > 0)
 		{
@@ -354,24 +361,57 @@ namespace CG
 
 	Network::Network()
 	{
-		workerThreadCount = 4;
+		rapidjson::Document document = Util::FileParser::parseJson("cg_config.json");
 
-		workerThreadArray = new WorkerThread*[workerThreadCount];
-
-		for (int i = 0; i < workerThreadCount; i++)
+		if (document.HasMember("worker_thread_count"))
 		{
-			workerThreadArray[i] = new WorkerThread();
+			if (document["worker_thread_count"].IsInt())
+			{
+				workerThreadCount = document["worker_thread_count"].GetInt();
+			}
+			else
+			{
+				ErrorLog("worker_thread_count is not int-type");
+			}
+		}
+		else
+		{
+			ErrorLog("worker_thread_count do not exist");
+		}
 
-			if (workerThreadArray[i]->initialize() == false)
+
+
+		if (workerThreadCount == 0) //single Thread
+		{
+			workerThreadArray = new WorkerThread*();
+
+			*workerThreadArray = new WorkerThread(false);
+
+			if ((*workerThreadArray)->initialize() == false)
 			{
 				ErrorLog("worker thread error");
 				return;
 			}
+		}
+		else
+		{
+			workerThreadArray = new WorkerThread*[workerThreadCount];
 
-			if (pthread_create(workerThreadArray[i]->getTid(), NULL, WorkerThreadFunction, (void*)(workerThreadArray[i])) != 0)
+			for (int i = 0; i < workerThreadCount; i++)
 			{
-				ErrorLog("thread create error : ");
-				return;
+				workerThreadArray[i] = new WorkerThread(true);
+
+				if (workerThreadArray[i]->initialize() == false)
+				{
+					ErrorLog("worker thread error");
+					return;
+				}
+
+				if (pthread_create(workerThreadArray[i]->getTid(), NULL, WorkerThreadFunction, (void*)(workerThreadArray[i])) != 0)
+				{
+					ErrorLog("thread create error : ");
+					return;
+				}
 			}
 		}
 
@@ -755,7 +795,7 @@ namespace CG
 	{
 		if (send(fd, data, dataSize, 0) != dataSize)
 		{
-			ErrorLog("sendMessage error");
+			ErrorLog("sendMessage error - host id : %d", fd);
 		}
 		else
 		{

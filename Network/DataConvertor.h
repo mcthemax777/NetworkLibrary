@@ -8,9 +8,17 @@ namespace CG
 	class Buffer
 	{
 	public:
-		char data[RECV_BUF];
+		char data[RCV_BUF];
 		int dataSize;
-		void reset() { memcpy(data, 0, RECV_BUF); }
+		Buffer()
+		{
+		}
+
+		~Buffer()
+		{
+		}
+
+		void reset() { memcpy(data, 0, RCV_BUF); }
 	};
 
 	class DataConvertor

@@ -16,6 +16,7 @@ namespace CG
 		std::function<void(time_t)> processTimerFinish;
 
 		friend class Network;
+		friend class ClientNetwork;
 
 	protected:
 		int timerNo;

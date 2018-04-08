@@ -13,9 +13,10 @@ namespace CG
 	public:
 		Server() { type = CONNECTOR_TYPE::CONNECTOR_TYPE_SERVER; }
 
-		void sendMessage(HostId hostid, char* data, int dataSize);
+		void sendMessage(HostId hostid, const char* data, int dataSize);
 
 		friend class Network;
+		friend class ClientNetwork;
 
 	protected:
 		std::map<HostId, ConnectorInfo*> connectorInfoMap;
