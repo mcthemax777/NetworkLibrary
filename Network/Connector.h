@@ -6,6 +6,7 @@
 
 #include "Define.h"
 #include "ConnectorInfo.h"
+#include "NetworkPacket.h"
 
 namespace CG
 {
@@ -47,5 +48,37 @@ namespace CG
 		ConnectorType type;
 		ConnectorInfo* connectorInfo;
 		bool isConnected;
+
+
+
+	public:
+		template<typename T, typename std::enable_if<std::is_base_of<CG::NetworkPacket, T>::value>::type* = nullptr>
+		void registerPacket(std::function<void(HostId, T*)> onReceiveNPacket)
+		{
+			T* t = new T();
+			NetworkPacket* packet = (NetworkPacket*)t;
+			packet->onReceiveNPacket = (void*)&onReceiveNPacket;
+			onReceiveNPacket(1, nullptr);
+			(*((std::function<void*(HostId, T*)> *)packet->onReceiveNPacket))(1, packet);
+
+			if (npMap.insert(std::pair<npType_t, NetworkPacket*>(packet->header.npType, packet)).second == false)
+			{
+				ErrorLog("???");
+			}
+
+			if (npFunctionMap.insert(std::pair<npType_t, void*>(packet->header.npType, (void*)&onReceiveNPacket)).second == false)
+			{
+				ErrorLog("???");
+			}
+
+
+			/*NetworkPacket* p = packet->create();
+			std::printf("%s\n\n\n\n", typeid(*p).name());*/
+		}
+
+		std::map<npType_t, NetworkPacket*> npMap;
+		std::map<npType_t, void*> npFunctionMap;
+
+		bool isCGModule;
 	};
 }

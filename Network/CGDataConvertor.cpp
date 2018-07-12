@@ -9,58 +9,58 @@ namespace CG
 		int pDataSize = dataSize;
 		int recvCnt = dataSize;
 
-		if (pDataSize < sizeof(messageType_t))
+		if (pDataSize < sizeof(npType_t))
 		{
 			return 0;
 		}
 
-		messageType_t* messageType = (messageType_t*)pData;
+		npType_t* npType = (npType_t*)pData;
 
-		if (*messageType < 0)
+		if (*npType < 0)
 		{
-			ErrorLog("messageType is not correct");
+			ErrorLog("npType is not correct");
 			return -1;
 		}
 
-		pData += sizeof(messageType_t);
-		pDataSize -= sizeof(messageType_t);
+		pData += sizeof(npType_t);
+		pDataSize -= sizeof(npType_t);
 
 
-		if (pDataSize < sizeof(messageSize_t))
+		if (pDataSize < sizeof(npSize_t))
 		{
 			return 0;
 		}
 
-		messageSize_t* messageSize = (messageSize_t*)pData;
+		npSize_t* npSize = (npSize_t*)pData;
 
-		if (*messageSize < 0)
+		if (*npSize < 0)
 		{
 			ErrorLog("dataType is not correct");
 			return -1;
 		}
 
-		pData += sizeof(messageSize_t);
-		pDataSize -= sizeof(messageSize_t);
+		pData += sizeof(npSize_t);
+		pDataSize -= sizeof(npSize_t);
 
-		if (*messageType == MESSAGE_TYPE_USER)
+		if (*npType < MESSAGE_TYPE_MESSAGE)
 		{
-			if (pDataSize == *messageSize)
+			if (pDataSize == *npSize)
 			{
 				return dataSize;
 			}
-			else if (pDataSize < *messageSize)
+			else if (pDataSize < *npSize)
 			{
 				DebugLog("data do not come complete");
 				return 0;
 			}
 			else
 			{
-				return sizeof(messageType_t) + sizeof(messageSize_t) + *messageSize;
+				return sizeof(npType_t) + sizeof(npSize_t) + *npSize;
 			}
 		}
 		else
 		{
-			ErrorLog("messageType is not correct");
+			ErrorLog("npType is not correct");
 			return -1;
 		}
 
@@ -74,18 +74,18 @@ namespace CG
 		char* pData = buffer.data;
 		int pDataSize = 0;
 
-		messageSize_t messageSize = dataSize;
-		messageType_t messageType = MESSAGE_TYPE_USER;
+		npSize_t npSize = dataSize;
+		npType_t npType = MESSAGE_TYPE_MESSAGE;
 
-		memcpy(pData, &messageType, sizeof(messageType_t));
+		memcpy(pData, &npType, sizeof(npType_t));
 
-		pData += sizeof(messageType_t);
-		pDataSize += sizeof(messageType_t);
+		pData += sizeof(npType_t);
+		pDataSize += sizeof(npType_t);
 
-		memcpy(pData, &messageSize, sizeof(messageSize_t));
+		memcpy(pData, &npSize, sizeof(npSize_t));
 
-		pData += sizeof(messageSize_t);
-		pDataSize += sizeof(messageSize_t);
+		pData += sizeof(npSize_t);
+		pDataSize += sizeof(npSize_t);
 
 		memcpy(pData, data, dataSize);
 

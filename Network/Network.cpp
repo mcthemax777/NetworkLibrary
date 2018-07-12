@@ -163,7 +163,7 @@ namespace CG
 				if (currentDataSize == 0)
 				{
 					if(isCGDataConvertor)
-						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex + sizeof(messageType_t) + sizeof(messageSize_t), index - sizeof(messageType_t) - sizeof(messageSize_t), true);
+						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex + sizeof(dataType_t) + sizeof(dataSize_t), index - sizeof(dataType_t) - sizeof(dataSize_t), true);
 					else
 						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, true);
 
@@ -176,7 +176,7 @@ namespace CG
 				else
 				{
 					if (isCGDataConvertor)
-						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex + sizeof(messageType_t) + sizeof(messageSize_t), index - sizeof(messageType_t) - sizeof(messageSize_t), false);
+						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex + sizeof(dataType_t) + sizeof(dataSize_t), index - sizeof(dataType_t) - sizeof(dataSize_t), false);
 					else
 						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, false);
 

@@ -43,6 +43,7 @@
 #include "Util/List/MTList.h"
 #include "Util/List/STList.h"
 #include "CGDataConvertor.h"
+#include "NetworkPacket.h"
 
 
 #define MAX_IP_LEN 15

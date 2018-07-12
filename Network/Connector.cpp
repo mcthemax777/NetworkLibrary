@@ -21,10 +21,16 @@ namespace CG
 		connectorInfo->port = config->port;
 
 		if (config->dataConvertor == nullptr)
-			dataConvertor = new DefaultDataConvertor();
-		else
-			dataConvertor = config->dataConvertor;
+		{
+			dataConvertor = new CGDataConvertor();
+			isCGModule = true;
 
+		}
+		else
+		{
+			dataConvertor = config->dataConvertor;
+			isCGModule = false;
+		}
 		connectorInfo->dataConvertor = dataConvertor;
 		connectorInfo->connector = this;
 
@@ -44,6 +50,11 @@ namespace CG
 
 		isConnected = false;
 	}
+
+//	template<typename T, typename std::enable_if<std::is_base_of<CG::NetworkPacket, T>::value>::type* = nullptr>
+//	void Connector::registerPacket(std::function<void(HostId, T*)> onReceiveNPacket);
+
+
 }
 
 

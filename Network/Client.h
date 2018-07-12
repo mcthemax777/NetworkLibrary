@@ -12,7 +12,7 @@ namespace CG
 	{
 	public:
 		Client() { type = CONNECTOR_TYPE::CONNECTOR_TYPE_CLIENT; }
-		void sendMessage(const char* data, int dataSize);
+		void sendMessage(char* data, int dataSize);
 		void processMessage();
 	};
 }

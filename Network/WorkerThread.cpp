@@ -47,6 +47,7 @@ namespace CG
 				{
 					if (dp->receiveType == RECEIVE_TYPE_DATA)
 					{
+						Connector* c = dp-> 
 						eventFunction->onReceive(dp->hostId, dp->buffer->data + dp->startIndex, dp->dataSize);
 
 						if(dp->isLastDataInBuffer)
