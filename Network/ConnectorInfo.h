@@ -1,12 +1,13 @@
 #pragma once
 
 #include <functional>
+#include <list>
 #include "Define.h"
 
 namespace CG
 {
 	class Buffer;
-	class Connector;
+	class BaseConnector;
 	class DataConvertor;
 
 	class ConnectorInfo
@@ -14,25 +15,25 @@ namespace CG
 	public:
 		HostId getHostId() { return hostId; }
 
-		void sendMessage(const char* data, int dataSize);
+		void sendData(const char* data, int dataSize);
 
-		friend class Connector;
+		friend class BaseConnector;
 		friend class Network;
 		friend class ClientNetwork;
 		friend class WorkerThread;
 
 	protected:
-		void init(Connector* _connector, HostId _hostId);
+		void init(BaseConnector* _connector, HostId _hostId);
 		void reset();
 
-		Buffer* buffer;
-		int storageDataSize;
+
+		std::list<Buffer*> bufferList;
 
 		char* ip;
 		unsigned short port;
-		DataConvertor* dataConvertor;
+		//DataConvertor* dataConvertor;
 		HostId hostId;
 
-		Connector* connector;
+		BaseConnector* connector;
 	};
 }

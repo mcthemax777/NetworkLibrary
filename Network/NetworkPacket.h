@@ -4,9 +4,10 @@
 #include <list>
 #include <functional>
 #include "Define.h"
+#include "Util/Serializer/Serializer.h"
 
 #define CREATE_PACKET(__TYPE__) \
-CG::NetworkPacket* create() \
+__TYPE__* create() \
 { \
     return new __TYPE__(); \
 } \
@@ -18,7 +19,7 @@ namespace CG
 
 	enum MESSAGE_TYPE
 	{
-		MESSAGE_TYPE_MESSAGE = 50000,
+		MESSAGE_TYPE_MESSAGE = 1000,
 	};
 
 	typedef int16_t inpType_t;
@@ -32,108 +33,27 @@ namespace CG
 		virtual int size() = 0;
 	};
 
-	class Header : public NPSerializer
+	class Header : public Util::Serialize
 	{
 	public:
 		npType_t npType;
 		npSize_t npSize;
 
-		int serialize(char* buffer)
+		Header()
 		{
-			int size = 0;
-
-			memcpy(buffer, &npType, sizeof(npType_t));
-			buffer += sizeof(npType_t);
-			size += sizeof(npType_t);
-
-			memcpy(buffer, &npSize, sizeof(npSize_t));
-			buffer += sizeof(npSize_t);
-			size += sizeof(npSize_t);
-
-			return size;
-		}
-
-		int deserialize(const char* buffer)
-		{
-			int size = 0;
-
-			memcpy(&npType, buffer, sizeof(npType_t));
-			buffer += sizeof(npType_t);
-			size += sizeof(npType_t);
-
-			memcpy(&npSize, buffer, sizeof(npSize_t));
-			buffer += sizeof(npSize_t);
-			size += sizeof(npSize_t);
-
-			return size;
-		}
-
-		int size()
-		{
-			return sizeof(npType_t) + sizeof(npSize_t);
+			addMemberValue(&npType);
+			addMemberValue(&npSize);
 		}
 	};
 
-	class NPString : public NPSerializer
+	class NetworkPacket : public Util::Serialize
 	{
 	public:
-		int32_t dataSize;
-		char* data;
-
-		void init(int _dataSize, char* _data)
-		{
-			dataSize = _dataSize;
-
-			char* data = new char[dataSize];
-			memcpy(data, _data, dataSize);
+		NetworkPacket() 
+		{ 
+			addMemberValue(&header);
 		}
-
-		int serialize(char* buffer)
-		{
-			int size = 0;
-
-			memcpy(buffer, &dataSize, sizeof(int32_t));
-			buffer += sizeof(int32_t);
-			size += sizeof(int32_t);
-
-			memcpy(buffer, data, dataSize);
-			buffer += dataSize;
-			size += dataSize;
-
-			return size;
-		}
-
-		int deserialize(const char* buffer)
-		{
-			int size = 0;
-
-			memcpy(&dataSize, buffer, sizeof(int32_t));
-			buffer += sizeof(int32_t);
-			size += sizeof(int32_t);
-
-			memcpy(data, buffer, dataSize);
-			buffer += dataSize;
-			size += dataSize;
-
-			return size;
-		}
-
-		int size()
-		{
-			return sizeof(npType_t) + sizeof(npSize_t);
-		}
-
-		~NPString()
-		{
-			delete data;
-		}
-	};
-
-	class NetworkPacket : public NPSerializer
-	{
-	public:
-		NetworkPacket() { npsList.push_back(&header); }
-
+/*
 		int serialize(char* buffer)
 		{
 			int size = 0;
@@ -185,7 +105,7 @@ namespace CG
 			}
 
 			return size;
-		}
+		}*/
 
 		virtual NetworkPacket* create()
 		{
@@ -194,8 +114,6 @@ namespace CG
 
 	public:
 		Header header;
-
-		void* onReceiveNPacket;
 	};
 
 	class MessagePacket : public NetworkPacket
@@ -204,12 +122,12 @@ namespace CG
 		MessagePacket()
 		{
 			header.npType = MESSAGE_TYPE_MESSAGE;
-			npsList.push_back(&str);
+			addMemberValue(&str);
 		}
 
 		CREATE_PACKET(CG::MessagePacket)
 
 	public:
-		NPString str;
+		std::string str;
 	};
 }

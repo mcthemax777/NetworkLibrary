@@ -1,18 +1,21 @@
 #pragma once
 
-#include "Connector.h"
+#include "BaseClient.h"
+#include "ReceiveHandler.h"
 
 namespace CG
 {
-	class ClientConfig : public ConnectConfig
-	{
-	};
-
-	class Client : public Connector
+	class Client : public BaseClient
 	{
 	public:
-		Client() { type = CONNECTOR_TYPE::CONNECTOR_TYPE_CLIENT; }
-		void sendMessage(char* data, int dataSize);
-		void processMessage();
+		Client();
+
+		std::function<void(HostId, char*, int)> onReceive;
+
+		ReceiveHandler* receiveHandler;
+
+		int processData(ConnectorInfo* connectorInfo, char* data, int dataSize);
+
+		void sendMessage(const char* data, int dataSize);
 	};
 }

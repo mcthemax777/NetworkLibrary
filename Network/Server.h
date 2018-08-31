@@ -1,25 +1,23 @@
 #pragma once
 
-#include "Connector.h"
+#include "BaseServer.h"
+
 
 namespace CG
 {
-	class ServerConfig : public ConnectConfig
-	{
-	};
+	class ReceiveHandler;
 
-	class Server : public Connector
+	class Server : public BaseServer
 	{
 	public:
-		Server() { type = CONNECTOR_TYPE::CONNECTOR_TYPE_SERVER; }
+		Server();
+
+		std::function<void(HostId, char*, int)> onReceive;
+
+		ReceiveHandler* receiveHandler;
+
+		int processData(ConnectorInfo* connectorInfo, char* data, int dataSize);
 
 		void sendMessage(HostId hostid, char* data, int dataSize);
-
-		friend class Network;
-		friend class ClientNetwork;
-
-	protected:
-		std::map<HostId, ConnectorInfo*> connectorInfoMap;
-
 	};
 }

@@ -5,6 +5,7 @@
 
 #include <pthread.h>
 #include <deque>
+#include <list>
 #include "Util/Queue/BQueue.h"
 #include "Util/ObjectPool.h"
 
@@ -35,6 +36,8 @@ namespace CG
 		Util::Queue<DataPacket*>* dataPacketQueue;
 		Util::ObjectPool<DataPacket>* dataPacketPool;
 		Util::ObjectPool<Buffer>* bufferPool;
+
+		std::list<Buffer*>::iterator itr;
 	};
 }
 #endif //__WORKER_THREAD_H__

@@ -32,11 +32,11 @@
 
 #include "WorkerThread.h"
 #include "Log/Log.h"
-#include "Connector.h"
+#include "BaseConnector.h"
 #include "ConnectorInfo.h"
 #include "Define.h"
-#include "Server.h"
-#include "Client.h"
+#include "BaseServer.h"
+#include "BaseClient.h"
 #include "Timer.h"
 #include "DataConvertor.h"
 #include "Util/FileParser.h"
@@ -117,117 +117,109 @@ namespace CG
 
 	void Network::sendDataToWorkerThreadWithConverting(WorkerThread* workerThread, ConnectorInfo* connectorInfo, Buffer* buffer)
 	{
-		char* currentData = buffer->data;
+		//char* currentData = buffer->data;
 
-		int currentDataSize = buffer->dataSize;
+		//int currentDataSize = buffer->dataSize;
 
-		int currentBufferIndex = 0;
+		//int currentBufferIndex = 0;
 
-		while (true)
-		{
-			int index = connectorInfo->dataConvertor->receiveConvert(currentData, currentDataSize);
+		//while (true)
+		//{
+		//	int index = connectorInfo->dataConvertor->receiveConvert(currentData, currentDataSize);
 
 
-			if (index == 0) //불완전한 형태의 데이터일때
-			{
-				if (buffer->data != currentData) // currentdata가 가르키는 위치가 버퍼데이터랑 다르면 리셋 시켜줘야됨.
-				{
-					memmove(buffer->data, currentData, currentDataSize);
-				}
+		//	if (index == 0) //불완전한 형태의 데이터일때
+		//	{
+		//		if (buffer->data != currentData) // currentdata가 가르키는 위치가 버퍼데이터랑 다르면 리셋 시켜줘야됨.
+		//		{
+		//			memmove(buffer->data, currentData, currentDataSize);
+		//		}
 
-				buffer->dataSize = currentDataSize;
+		//		buffer->dataSize = currentDataSize;
+		//		buffer->startIndex = 0;
 
-				connectorInfo->buffer = buffer;
+		//		connectorInfo->buffer = buffer;
 
-				break;
-			}
-			if (index < 0)
-			{
-				ErrorLog("index error - %d", index);
-				break;
-			}
-			else
-			{
-				currentData += index;
-				currentDataSize -= index;
+		//		break;
+		//	}
+		//	else if (index < 0)
+		//	{
+		//		ErrorLog("index error - %d", index);
+		//		break;
+		//	}
+		//	else
+		//	{
+		//		currentData += index;
+		//		currentDataSize -= index;
 
-				DataPacket* dp = workerThread->dataPacketPool->getObject();
+		//		DataPacket* dp = workerThread->dataPacketPool->getObject();
 
-				bool isCGDataConvertor = false;
+		//		dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, currentDataSize);
 
-				if (strcmp(typeid(*(connectorInfo->dataConvertor)).name(), "class CG::CGDataConvertor") == 0)
-				{
-					isCGDataConvertor = true;
-				}
+		//		workerThread->pushDataPacket(dp);
 
-				if (currentDataSize == 0)
-				{
-					if(isCGDataConvertor)
-						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex + sizeof(dataType_t) + sizeof(dataSize_t), index - sizeof(dataType_t) - sizeof(dataSize_t), true);
-					else
-						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, true);
+		//		if (currentDataSize == 0)
+		//		{
+		//			connectorInfo->buffer = nullptr;
 
-					workerThread->pushDataPacket(dp);
+		//			break;
+		//		}
 
-					connectorInfo->buffer = nullptr;
-				
-					break;
-				}
-				else
-				{
-					if (isCGDataConvertor)
-						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex + sizeof(dataType_t) + sizeof(dataSize_t), index - sizeof(dataType_t) - sizeof(dataSize_t), false);
-					else
-						dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, false);
-
-					workerThread->pushDataPacket(dp);
-				}
-
-				currentBufferIndex += index;
-			}
-		}
+		//		currentBufferIndex += index;
+		//	}
+		//}
 	}
 
 	bool Network::processReceiveData(ConnectorInfo* connectorInfo)
 	{
 		WorkerThread* workerThread = getWorkerThreadUsingHash(connectorInfo->hostId);
 
-		char* receiveDataStartingPoint;
+		Buffer* buffer = workerThread->bufferPool->getObject();
 
-		Buffer* buffer = connectorInfo->buffer;
-		
-		int receivedDataSize = 0;
+		buffer->dataSize = 0;
 
-		if (buffer == nullptr)
+
+		//////////////////////////////////////////////이전 버젼임
+		//Buffer* buffer = connectorInfo->buffer;
+		//
+		//int receivedDataSize = 0;
+
+		//if (buffer == nullptr) //이전에 짤려서 온 데이터가 없을 경우
+		//{
+		//	buffer = workerThread->bufferPool->getObject();
+
+		//	buffer->dataSize = 0;
+
+		//	receiveDataStartingPoint = buffer->data;
+
+		//	connectorInfo->buffer = buffer;
+		//}
+		//else
+		//{
+		//	receivedDataSize = buffer->dataSize;
+		//	receiveDataStartingPoint = buffer->data + receivedDataSize;
+		//}
+		//////////////////////////////////////////////////////////
+
+		int dataSize = recv(connectorInfo->getHostId(), buffer->data, RCV_BUF, 0);
+
+		if (dataSize > 0) //무언가 받은 데이터가 있을때(데이터 전송받은 상황)
 		{
-			buffer = workerThread->bufferPool->getObject();
+			buffer->dataSize = dataSize;
 
-			buffer->dataSize = 0;
+			DataPacket* dp = workerThread->dataPacketPool->getObject();
 
-			receiveDataStartingPoint = buffer->data;
+			dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo, buffer);
 
-			connectorInfo->buffer = buffer;
-		}
-		else
-		{
-			receivedDataSize = buffer->dataSize;
-			receiveDataStartingPoint = buffer->data + receivedDataSize;
-		}
+			workerThread->pushDataPacket(dp);
 
-		int dataSize = recv(connectorInfo->getHostId(), receiveDataStartingPoint, RCV_BUF - receivedDataSize, 0);
-
-		if (dataSize > 0)
-		{
-			buffer->dataSize = receivedDataSize + dataSize;
-
-			sendDataToWorkerThreadWithConverting(workerThread, connectorInfo, buffer);
+			//sendDataToWorkerThreadWithConverting(workerThread, connectorInfo, buffer);
 
 			return true;
 		}
-		else
+		else //disconnect 일 경우
 		{
 			workerThread->bufferPool->returnObject(buffer);
-			connectorInfo->buffer = nullptr;
 
 			disconnectWithConnectorInfo(workerThread, connectorInfo);
 
@@ -237,7 +229,7 @@ namespace CG
 			}
 
 			return false;
-		}
+		}//ToDo.무언가 문제가 있는 상황(-1)이 날라왔을 경우를 처리해야됨.
 	}
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
@@ -248,7 +240,7 @@ namespace CG
 
 		DataPacket* dp = workerThread->dataPacketPool->getObject();
 
-		dp->setDataPacket(RECEIVE_TYPE_CONNECT, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId);
+		dp->setDataPacket(RECEIVE_TYPE_CONNECT, connectorInfo);
 
 		workerThread->pushDataPacket(dp);
 
@@ -263,7 +255,7 @@ namespace CG
 		}
 	}
 
-	void Network::windowsServerThread(Server* server)
+	void Network::windowsServerThread(BaseServer* server)
 	{
 		struct sockaddr_in clntaddr;
 		int clntaddrLen = sizeof(clntaddr);
@@ -314,7 +306,7 @@ namespace CG
 
 	void* Network::windowsServerThread(void* voidServer)
 	{
-		Server* server = (Server*)voidServer;
+		BaseServer* server = (BaseServer*)voidServer;
 
 		Network::GetInstance()->windowsServerThread(server);
 
@@ -415,9 +407,9 @@ namespace CG
 			}
 		}
 
-		clientList = new Util::MTList<Client*>();
-		serverList = new Util::MTList<Server*>();
-		eventFunctionList = new Util::MTList<EventFunction*>();
+		clientList = new Util::MTList<BaseClient*>();
+		serverList = new Util::MTList<BaseServer*>();
+		//eventFunctionList = new Util::MTList<EventFunction*>();
 		timerQueue = new Util::NBQueue<Timer*>();
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
@@ -472,7 +464,7 @@ namespace CG
 		delete clientList;
 		delete serverList;
 		delete connectorInfoPool;
-		delete eventFunctionList;
+		//delete eventFunctionList;
 		delete timerQueue;
 
 		pthread_cancel(*networkTid);
@@ -538,27 +530,27 @@ namespace CG
 		return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);    // milliseconds 단위로 변환
 	}
 
-	bool Network::addConnector(Connector* connector)
+	bool Network::addConnector(BaseConnector* connector)
 	{
 		bool isSuccess = false;
 		
 		if (connector->type == CONNECTOR_TYPE_SERVER)
-			isSuccess = addServer((Server*)connector);
+			isSuccess = addServer((BaseServer*)connector);
 		else
-			isSuccess = addClient((Client*)connector);
+			isSuccess = addClient((BaseClient*)connector);
 		
-		if (isSuccess)
-		{
-			EventFunction* eventFunction = new EventFunction();
-			eventFunction->hostId = connector->connectorInfo->hostId;
-			eventFunction->onConnect = connector->onConnect;
-			eventFunction->onReceive = connector->onReceive;
-			eventFunction->onDisconnect = connector->onDisconnect;
-			eventFunction->dataConvertor = connector->dataConvertor;
+		//if (isSuccess)
+		//{
+		//	EventFunction* eventFunction = new EventFunction();
+		//	eventFunction->hostId = connector->connectorInfo->hostId;
+		//	eventFunction->onConnect = connector->onConnect;
+		//	eventFunction->onReceive = connector->onReceive;
+		//	eventFunction->onDisconnect = connector->onDisconnect;
+		//	//eventFunction->dataConvertor = connector->dataConvertor;
 
-			//이미 있는 호스트 아이디인지는 확인해야된다.
-			eventFunctionList->push_back(eventFunction);
-		}
+		//	//이미 있는 호스트 아이디인지는 확인해야된다.
+		//	eventFunctionList->push_back(eventFunction);
+		//}
 
 		return isSuccess;
 	}
@@ -571,7 +563,7 @@ namespace CG
 		return true;
 	}
 
-	bool Network::addServer(Server* server)
+	bool Network::addServer(BaseServer* server)
 	{
 		server->connectorInfo->hostId = CreateTCPServerSocket(server->connectorInfo->ip, server->connectorInfo->port);
 		if (server->connectorInfo->hostId < 0)
@@ -617,7 +609,7 @@ namespace CG
 	}
 
 
-	bool Network::addClient(Client* client)
+	bool Network::addClient(BaseClient* client)
 	{
 		int hostId = CreateTCPClientSocket(client->connectorInfo->ip, client->connectorInfo->port);
 		if (hostId < 0)
@@ -739,56 +731,52 @@ namespace CG
 		return sock;
 	}
 
-	EventFunction* Network::getEventFunction(HostId hostId)
+	//EventFunction* Network::getEventFunction(HostId hostId)
+	//{
+	//	for (int i = 0; i < eventFunctionList->size(); i++)
+	//	{
+	//		EventFunction* eventFunction = eventFunctionList->at(i);
+	//		if (eventFunction->hostId == hostId)
+	//		{
+	//			return eventFunction;
+	//		}
+	//	}
+	//	
+	//	return nullptr;
+	//}
+
+	//bool Network::removeEventFunction(EventFunction* eventFuction)
+	//{
+	//	/*std::vector<EventFunction*>::iterator itr;
+	//	for (itr = eventFunctionList->begin(); itr != eventFunctionList->end(); itr++)
+	//	{
+	//		if ((*itr)->hostId == hostId)
+	//		{
+	//			EventFunction* eventFunction = *itr;
+	//			eventFunctionList->erase(itr);
+	//			return true;
+	//		}
+	//	}*/
+
+	//	if (eventFunctionList->remove(eventFuction))
+	//		return true;
+	//	else
+	//		return false;
+	//}
+
+	void Network::sendData(BaseConnector* connector, const char* data, int dataSize)
 	{
-		for (int i = 0; i < eventFunctionList->size(); i++)
-		{
-			EventFunction* eventFunction = eventFunctionList->at(i);
-			if (eventFunction->hostId == hostId)
-			{
-				return eventFunction;
-			}
-		}
-		
-		return nullptr;
+		sendData(connector->connectorInfo->hostId, data, dataSize);
 	}
 
-	bool Network::removeEventFunction(EventFunction* eventFuction)
+	//void Network::sendData(HostId hostId, const char* data, int dataSize)
+	//{
+	//	sendData(hostId, data, dataSize);
+	//}
+
+	void Network::sendData(ConnectorInfo* connectorInfo, const char* data, int dataSize)
 	{
-		/*std::vector<EventFunction*>::iterator itr;
-		for (itr = eventFunctionList->begin(); itr != eventFunctionList->end(); itr++)
-		{
-			if ((*itr)->hostId == hostId)
-			{
-				EventFunction* eventFunction = *itr;
-				eventFunctionList->erase(itr);
-				return true;
-			}
-		}*/
-
-		if (eventFunctionList->remove(eventFuction))
-			return true;
-		else
-			return false;
-	}
-
-	void Network::sendMessage(Connector* connector, const char* data, int dataSize)
-	{
-		sendMessage(connector, connector->connectorInfo->hostId, data, dataSize);
-	}
-
-	void Network::sendMessage(Connector* connector, HostId hostId, const char* data, int dataSize)
-	{
-		Buffer buffer = connector->dataConvertor->sendConvert(data, dataSize);
-
-		sendData(hostId, buffer.data, buffer.dataSize);
-	}
-
-	void Network::sendMessage(ConnectorInfo* connectorInfo, const char* data, int dataSize)
-	{
-		Buffer buffer = connectorInfo->dataConvertor->sendConvert(data, dataSize);
-
-		sendData(connectorInfo->hostId, buffer.data, buffer.dataSize);
+		sendData(connectorInfo->hostId, data, dataSize);
 	}
 
 	void Network::sendData(int fd, const char* data, int dataSize)
@@ -810,7 +798,7 @@ namespace CG
 
 		DataPacket* dp = workerThread->dataPacketPool->getObject();
 
-		dp->setDataPacket(RECEIVE_TYPE_DISCONNECT, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId);
+		dp->setDataPacket(RECEIVE_TYPE_DISCONNECT, connectorInfo);
 
 		workerThread->pushDataPacket(dp);
 
@@ -845,12 +833,12 @@ namespace CG
 
 		if (connectorInfo->connector->getConnectorType() == CONNECTOR_TYPE_SERVER)
 		{
-			if (((Server*)connectorInfo->connector)->connectorInfoMap.erase(connectorInfo->hostId) <= 0)
+			if (((BaseServer*)connectorInfo->connector)->connectorInfoMap.erase(connectorInfo->hostId) <= 0)
 				ErrorLog("already remove connectorInfo");
 		}
 		else
 		{
-			Client* client = ((Client*)connectorInfo->connector);
+			BaseClient* client = ((BaseClient*)connectorInfo->connector);
 			client->connectorInfo = nullptr;
 		}
 

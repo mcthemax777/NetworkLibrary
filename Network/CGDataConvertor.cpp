@@ -63,8 +63,6 @@ namespace CG
 			ErrorLog("npType is not correct");
 			return -1;
 		}
-
-		return -1;
 	}
 
 	Buffer CGDataConvertor::sendConvert(const char* data, int dataSize)

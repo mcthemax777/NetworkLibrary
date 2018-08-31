@@ -3,27 +3,23 @@
 
 namespace CG
 {
-	void ConnectorInfo::init(Connector* _connector, HostId _hostId)
+	void ConnectorInfo::init(BaseConnector* _connector, HostId _hostId)
 	{
 		connector = _connector;
 		hostId = _hostId;
-		dataConvertor = connector->dataConvertor;
-
-		buffer = nullptr;
+		bufferList.clear();
 	}
 
-	void ConnectorInfo::sendMessage(const char* data, int dataSize)
+	void ConnectorInfo::sendData(const char* data, int dataSize)
 	{
-		Network::GetInstance()->sendMessage(this, data, dataSize);
+		Network::GetInstance()->sendData(this, data, dataSize);
 	}
 
 	void ConnectorInfo::reset()
 	{
 		hostId = 0;
-
-		dataConvertor = nullptr;
 		connector = nullptr;
-		buffer = nullptr;
+		bufferList.clear();
 	}
 }
 

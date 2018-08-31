@@ -37,8 +37,8 @@
 #include <list>
 #include "Util/Singleton.h"
 #include "Define.h"
-#include "Server.h"
-#include "Client.h"
+#include "BaseServer.h"
+#include "BaseClient.h"
 #include "Util/ObjectPool.h"
 #include "Util/List/MTList.h"
 #include "Util/List/STList.h"
@@ -60,7 +60,7 @@ namespace CG
 {
 	class Timer;
 	class ConnectorInfo;
-	class Connector;
+	class BaseConnector;
 	class WorkerThread;
 
 	enum RECEIVE_TYPE
@@ -74,22 +74,14 @@ namespace CG
 	{
 	public:
 		int receiveType;
-		HostId hostId;
-		HostId eventFunctionHostId;
+		ConnectorInfo* connectorInfo;
 		Buffer* buffer;
-		int startIndex;
-		int dataSize;
-		bool isLastDataInBuffer;
 
-		void setDataPacket(int _receiveType, HostId _hostId, HostId _eventFunctionHostId, Buffer* _buffer = nullptr, int _startIndex = 0, int _dataSize = 0, bool _isLastDataInBuffer = true)
+		void setDataPacket(int _receiveType, ConnectorInfo* _connectorInfo, Buffer* _buffer = nullptr)
 		{
 			receiveType = _receiveType;
-			hostId = _hostId;
-			eventFunctionHostId = _eventFunctionHostId;
+			connectorInfo = _connectorInfo;
 			buffer = _buffer;
-			startIndex = _startIndex;
-			dataSize = _dataSize;
-			isLastDataInBuffer = _isLastDataInBuffer;
 		}
 
 		~DataPacket()
@@ -120,16 +112,16 @@ namespace CG
 		DisconnectDataPacket() { receiveType = RECEIVE_TYPE_DISCONNECT; }
 	};
 
-	class EventFunction
-	{
-	public:
-		HostId hostId;
-	public:
-		std::function<void(HostId)> onConnect;
-		std::function<void(HostId)> onDisconnect;
-		std::function<void(HostId, char*, int)> onReceive;
-		DataConvertor* dataConvertor;
-	};
+	//class EventFunction
+	//{
+	//public:
+	//	HostId hostId;
+	//public:
+	//	std::function<void(HostId)> onConnect;
+	//	std::function<void(HostId)> onDisconnect;
+	//	std::function<void(HostId, char*, int)> onReceive;
+	//	DataConvertor* dataConvertor;
+	//};
 
 	class Network : public Util::Singleton<Network>
 	{
@@ -143,32 +135,32 @@ namespace CG
 		long getNetworkCurrentTime();
 		bool init();
 
-		bool addConnector(Connector* connect);
-		bool addServer(Server* server);
-		bool addClient(Client* client);
+		bool addConnector(BaseConnector* connect);
+		bool addServer(BaseServer* server);
+		bool addClient(BaseClient* client);
 		int CreateTCPServerSocket(const char* ip, unsigned short port);
 		int CreateTCPClientSocket(const char* ip, unsigned short port);
 		bool addTimer(Timer *timer);
 		void sendData(int fd, const char* data, int dataSize);
-		void sendMessage(Connector* connector, HostId hostId, const char* data, int dataSize);
-		void sendMessage(Connector* connector, const char* data, int dataSize);
-		void sendMessage(ConnectorInfo* connectorInfo, const char* data, int dataSize);
+		//void sendData(HostId hostId, const char* data, int dataSize);
+		void sendData(BaseConnector* connector, const char* data, int dataSize);
+		void sendData(ConnectorInfo* connectorInfo, const char* data, int dataSize);
 		void sendDataToWorkerThreadWithConverting(WorkerThread* workerThread, ConnectorInfo* connectorInfo, Buffer* buffer);
 		bool processReceiveData(ConnectorInfo* connectorInfo);
 		WorkerThread* getWorkerThreadUsingHash(int hashKey);
 		void disconnectWithConnectorInfo(WorkerThread* workerThread, ConnectorInfo* connectorInfo);
-		EventFunction* getEventFunction(HostId hostId);
-		bool removeEventFunction(EventFunction* eventFuction);
+		//EventFunction* getEventFunction(HostId hostId);
+		//bool removeEventFunction(EventFunction* eventFuction);
 		void start();
 		
 		Network();
 
 	public:		
 		//나의 Server 정보
-		Util::List<Server*>* serverList;
+		Util::List<BaseServer*>* serverList;
 		//나의 Client 정보
-		Util::List<Client*>* clientList;
-		Util::List<EventFunction*>* eventFunctionList;
+		Util::List<BaseClient*>* clientList;
+		//Util::List<EventFunction*>* eventFunctionList;
 		//등록한 타이머 저장
 		Util::Queue<Timer*>* timerQueue;
 
@@ -194,7 +186,7 @@ namespace CG
 		Util::List<pthread_t*>* clientTidList;
 
 		void windowsConnectorInfoThread(ConnectorInfo* connectorInfo);
-		void windowsServerThread(Server* server);
+		void windowsServerThread(BaseServer* server);
 
 		static void* windowsServerThread(void* voidServer);
 		static void* windowsConnectorInfoThread(void* voidConnectorInfo);
