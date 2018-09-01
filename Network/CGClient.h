@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client.h"
-#include "CGReceiveController.h"
+#include "CGNetworkHandler.h"
 
 namespace CG
 {
@@ -10,12 +10,12 @@ namespace CG
 	public:
 		CGClient();
 
-		CGReceiveController* receiveHandler;
+		CGNetworkHandler* networkHandler;
 
 		template<typename T, typename std::enable_if<std::is_base_of<CG::NetworkPacket, T>::value>::type* = nullptr>
 		void registerPacket(std::function<void(HostId, NetworkPacket*)> onReceiveNPacket)
 		{
-			receiveHandler->registerPacket<T>(onReceiveNPacket);
+			networkHandler->registerPacket<T>(onReceiveNPacket);
 		}
 
 		int processData(ConnectorInfo* connectorInfo, char* data, int dataSize);

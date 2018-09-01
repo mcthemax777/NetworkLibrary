@@ -17,11 +17,11 @@ namespace CG
 		std::function<void(HostId, NetworkPacket*)> packetFunction;
 	};
 
-	class CGReceiveController
+	class CGNetworkHandler
 	{
 	public:
 
-		int CGReceiveController::processData(ConnectorInfo* connectorInfo, char* data, int dataSize);
+		int CGNetworkHandler::processData(ConnectorInfo* connectorInfo, char* data, int dataSize);
 
 		template<typename T, typename std::enable_if<std::is_base_of<CG::NetworkPacket, T>::value>::type* = nullptr>
 		void registerPacket(std::function<void(HostId, NetworkPacket*)> onReceiveNPacket)

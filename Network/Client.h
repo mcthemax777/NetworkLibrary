@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseClient.h"
-#include "ReceiveHandler.h"
+#include "NetworkHandler.h"
 
 namespace CG
 {
@@ -12,10 +12,12 @@ namespace CG
 
 		std::function<void(HostId, char*, int)> onReceive;
 
-		ReceiveHandler* receiveHandler;
+		NetworkHandler* networkHandler;
 
 		int processData(ConnectorInfo* connectorInfo, char* data, int dataSize);
 
 		void sendMessage(const char* data, int dataSize);
+
+		void sendMessage(std::string message);
 	};
 }

@@ -1,4 +1,4 @@
-#include "CGReceiveController.h"
+#include "CGNetworkHandler.h"
 #include "Network.h"
 #include "NetworkPacket.h"
 
@@ -6,7 +6,7 @@ namespace CG
 {
 
 
-	int CGReceiveController::processData(ConnectorInfo* connectorInfo, char* data, int dataSize)
+	int CGNetworkHandler::processData(ConnectorInfo* connectorInfo, char* data, int dataSize)
 	{
 		char* pData = data;
 		int pDataSize = dataSize;
@@ -85,7 +85,7 @@ namespace CG
 		return dataSize;
 	}
 
-	void CGReceiveController::sendPacket(HostId hostId, NetworkPacket* packet)
+	void CGNetworkHandler::sendPacket(HostId hostId, NetworkPacket* packet)
 	{
 		int bufferSize = packet->size();
 		char* buffer = new char[bufferSize];

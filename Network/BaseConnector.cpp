@@ -1,7 +1,7 @@
 #include "BaseConnector.h"
 #include "Network.h"
 #include "Log/Log.h"
-#include "DataConvertor.h"
+#include "Buffer.h"
 #include "ConnectorInfo.h"
 
 #include <cstring>
@@ -21,18 +21,6 @@ namespace CG
 		memcpy(connectorInfo->ip, "127.0.0.1", 9);
 		connectorInfo->port = config->port;
 
-		//if (config->dataConvertor == nullptr)
-		//{
-		//	dataConvertor = new CGDataConvertor();
-		//	isCGModule = true;
-
-		//}
-		//else
-		//{
-		//	dataConvertor = config->dataConvertor;
-		//	isCGModule = false;
-		//}
-		//connectorInfo->dataConvertor = dataConvertor;
 		connectorInfo->connector = this;
 
 		if (Network::GetInstance()->addConnector(this) == false)

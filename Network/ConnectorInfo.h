@@ -31,7 +31,6 @@ namespace CG
 
 		char* ip;
 		unsigned short port;
-		//DataConvertor* dataConvertor;
 		HostId hostId;
 
 		BaseConnector* connector;

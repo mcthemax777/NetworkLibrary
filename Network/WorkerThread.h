@@ -1,5 +1,4 @@
-#ifndef __WORKER_THREAD_H__
-#define __WORKER_THREAD_H__
+#pragma once
 
 #define HAVE_STRUCT_TIMESPEC
 
@@ -40,6 +39,3 @@ namespace CG
 		std::list<Buffer*>::iterator itr;
 	};
 }
-#endif //__WORKER_THREAD_H__
-
-

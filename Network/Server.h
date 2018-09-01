@@ -5,7 +5,7 @@
 
 namespace CG
 {
-	class ReceiveHandler;
+	class NetworkHandler;
 
 	class Server : public BaseServer
 	{
@@ -14,10 +14,12 @@ namespace CG
 
 		std::function<void(HostId, char*, int)> onReceive;
 
-		ReceiveHandler* receiveHandler;
+		NetworkHandler* networkHandler;
 
 		int processData(ConnectorInfo* connectorInfo, char* data, int dataSize);
 
 		void sendMessage(HostId hostid, char* data, int dataSize);
+		void sendMessage(HostId hostId, std::string message);
+
 	};
 }

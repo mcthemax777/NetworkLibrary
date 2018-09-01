@@ -42,7 +42,7 @@
 #include "Util/ObjectPool.h"
 #include "Util/List/MTList.h"
 #include "Util/List/STList.h"
-#include "CGDataConvertor.h"
+#include "Buffer.h"
 #include "NetworkPacket.h"
 
 

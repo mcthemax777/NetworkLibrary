@@ -53,59 +53,6 @@ namespace CG
 		{ 
 			addMemberValue(&header);
 		}
-/*
-		int serialize(char* buffer)
-		{
-			int size = 0;
-
-			char* pBuffer = buffer;
-
-			std::list<NPSerializer*>::iterator itr;
-			itr = npsList.begin();
-
-			for (itr = npsList.begin(); itr != npsList.end(); itr++)
-			{
-				int resultSize = (*itr)->serialize(pBuffer);
-				pBuffer += resultSize;
-				size += resultSize;
-			}
-
-			return size;
-		}
-
-		int deserialize(const char* buffer)
-		{
-			int size = 0;
-
-			const char* pBuffer = buffer;
-
-			std::list<NPSerializer*>::iterator itr;
-			itr = npsList.begin();
-
-			for (itr = npsList.begin(); itr != npsList.end(); itr++)
-			{
-				int resultSize = (*itr)->deserialize(pBuffer);
-				pBuffer += resultSize;
-				size += resultSize;
-			}
-
-			return size;
-		}
-
-		virtual int size()
-		{
-			int size = 0;
-
-			std::list<NPSerializer*>::iterator itr;
-			itr = npsList.begin();
-
-			for (itr = npsList.begin(); itr != npsList.end(); itr++)
-			{
-				size += (*itr)->size();
-			}
-
-			return size;
-		}*/
 
 		virtual NetworkPacket* create()
 		{
@@ -121,6 +68,7 @@ namespace CG
 	public:
 		MessagePacket()
 		{
+			//set type
 			header.npType = MESSAGE_TYPE_MESSAGE;
 			addMemberValue(&str);
 		}

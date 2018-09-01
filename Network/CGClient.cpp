@@ -5,16 +5,16 @@ namespace CG
 {
 	CGClient::CGClient()
 	{
-		receiveHandler = new CGReceiveController();
+		networkHandler = new CGNetworkHandler();
 	}
 
 	int CGClient::processData(ConnectorInfo* connectorInfo, char* data, int dataSize)
 	{
-		return receiveHandler->processData(connectorInfo, data, dataSize);
+		return networkHandler->processData(connectorInfo, data, dataSize);
 	}
 
 	void CGClient::sendPacket(NetworkPacket* packet)
 	{
-		receiveHandler->sendPacket(connectorInfo->getHostId(), packet);
+		networkHandler->sendPacket(connectorInfo->getHostId(), packet);
 	}
 }

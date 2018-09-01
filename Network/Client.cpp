@@ -7,16 +7,21 @@ namespace CG
 {
 	Client::Client()
 	{
-		receiveHandler = new ReceiveHandler(&onReceive);
+		networkHandler = new NetworkHandler(&onReceive);
 	}
 
 	int Client::processData(ConnectorInfo* connectorInfo, char* data, int dataSize)
 	{
-		return receiveHandler->processData(connectorInfo, data, dataSize);
+		return networkHandler->processData(connectorInfo, data, dataSize);
 	}
 
 	void Client::sendMessage(const char* data, int dataSize)
 	{
-		Network::GetInstance()->sendData(this, data, dataSize);
+		networkHandler->sendMessage(connectorInfo->getHostId(), data, dataSize);
+	}
+
+	void Client::sendMessage(std::string message)
+	{
+		Network::GetInstance()->sendData(connectorInfo->getHostId(), message.c_str(), message.size());
 	}
 }

@@ -5,7 +5,7 @@ namespace CG
 {
 	CGServer::CGServer()
 	{
-		receiveHandler = new CGReceiveController();
+		networkHandler = new CGNetworkHandler();
 
 		//onReceiveConvertor = [&](char* data, int dataSize) -> int
 		//{
@@ -130,11 +130,11 @@ namespace CG
 
 	int CGServer::processData(ConnectorInfo* connectorInfo, char* data, int dataSize)
 	{
-		return receiveHandler->processData(connectorInfo, data, dataSize);
+		return networkHandler->processData(connectorInfo, data, dataSize);
 	}
 
 	void CGServer::sendPacket(HostId hostId, NetworkPacket* packet)
 	{
-		receiveHandler->sendPacket(hostId, packet);
+		networkHandler->sendPacket(hostId, packet);
 	}
 }
