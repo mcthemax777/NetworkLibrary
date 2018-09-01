@@ -22,7 +22,7 @@ NetworkLibrary offer network function that is easy to use connecting with other.
 
 ## example
 
-### snd/rcv data exameple
+### 1. snd/rcv data exameple
 
 #### Server
 
@@ -147,9 +147,7 @@ stop client
 client->stop();
 ~~~
     
-***
-
-### snd/rcv packet exameple
+### 2. snd/rcv packet exameple
 
 #### packet
 
