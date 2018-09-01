@@ -8,94 +8,126 @@ NetworkLibrary offer network function that is easy to use connecting with other.
 
 #### Server
 
-    //create client instance
-    CG::Server* server = new CG::Server();
+create server instance
+~~~cpp
+CG::Server* server = new CG::Server();
+~~~
 
-    //init server config
-    CG::ServerConfig serverConfig;
+init server config
+~~~cpp
+CG::ServerConfig serverConfig;
 
-    serverConfig.ip = "127.0.0.1";
-    serverConfig.port = 8080;
+serverConfig.ip = "127.0.0.1";
+serverConfig.port = 8080;
+~~~
 
+connect with client
+~~~cpp
+server->onConnect = [](CG::HostId hostId)
+{
+  DebugLog("connected with client");
+};
+~~~
 
-    //connect with client
-    server->onConnect = [](CG::HostId hostId)
-    {
-      DebugLog("client와 연결되었습니다.");
-    };
+disconnect with client
+~~~cpp
+server->onDisconnect = [](CG::HostId hostId)
+{
+  DebugLog("disconnected with client");
+};
+~~~
 
-    //disconnect with client.
-    server->onDisconnect = [](CG::HostId hostId)
-    {
-      DebugLog("client와 연결이 해제되었습니다.");
-    };
+receive data from client
+~~~cpp
+server->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
+{
+    //print receive message
+    char* receiveData = new char[dataSize];
 
-    receive data from client
-    server->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
-    {
-    	//print receive message
-    	char* receiveData = new char[dataSize];
+    memcpy(receiveData, data, dataSize);
+    receiveData[dataSize] = 0;
 
-    	memcpy(receiveData, data, dataSize);
-    	receiveData[dataSize] = 0;
+    DebugLog("receive data from client %s", receiveData);
+};
+~~~
 
-    	DebugLog("client로부터 메세지를 받았습니다. %s", receiveData);
-    };
+send data to client
+~~~cpp
+char* strt = "hellohello";
+server->sendMessage(hostId, strt, 10);
+~~~
 
-    //start server
-    server->start(&serverConfig);
+start server
+~~~cpp
+server->start(&serverConfig);
+~~~
 
-    //stop server
-    server->stop();
-    
+stop server
+~~~cpp
+server->stop();
+~~~
+ 
 
 #### Client
 
-    //create client instance
-    CG::Client* client = new CG::Client();
+create client instance
+~~~cpp
+CG::Client* client = new CG::Client();
+~~~
 
-    //init client config
-    CG::ClientConfig clientConfig;
+init client config
+~~~cpp
+CG::ClientConfig clientConfig;
 
-    clientConfig.ip = "127.0.0.1";
-    clientConfig.port = 8080;
-    //clientConfig.dataConvertor = new CG::CGDataConvertor();
+clientConfig.ip = "127.0.0.1";
+clientConfig.port = 8080;
+~~~
 
-    //connect with server
-    client->onConnect = [&](CG::HostId hostId)
-    {
-      DebugLog("server와 연결되었습니다.");
+connect with server
+~~~cpp
+client->onConnect = [&](CG::HostId hostId)
+{
+  DebugLog("connected with server");
+};
+~~~
 
-      //send test message
-      char* strt = "hellohello";
-      client->sendMessage(strt, 10);
+disconnect with server
+~~~cpp
+client->onDisconnect = [](CG::HostId hostId)
+{
+  DebugLog("disconnected with server");
+};
+~~~
 
-      delete strt;
-    };
+receive data from server
+~~~cpp
+client->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
+{
+  //print receive message
+  char* receiveData = new char[dataSize];
 
-    //disconnect with server.
-    client->onDisconnect = [](CG::HostId hostId)
-    {
-      DebugLog("server와 연결이 종료되었습니다.");
-    };
+  memcpy(receiveData, data, dataSize);
+  receiveData[dataSize] = 0;
 
-    //receive data from server
-    client->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
-    {
-      //print receive message
-      char* receiveData = new char[dataSize];
+  DebugLog("receive data from server %s", receiveData);
+};
+~~~
 
-      memcpy(receiveData, data, dataSize);
-      receiveData[dataSize] = 0;
+send data to server
+~~~cpp
+char* strt = "hellohello";
+client->sendMessage(strt, 10);
+~~~
 
-      DebugLog("server로부터 메세지를 받았습니다. %s", receiveData);
-    };
+start client
+~~~cpp
+client->start(&clientConfig);
+~~~
 
-    //start connecting with server
-    client->start(&clientConfig);
-    
-    //stop
-    //client->stop();
+stop client
+~~~cpp
+client->stop();
+~~~
     
 ***
 
@@ -103,104 +135,145 @@ NetworkLibrary offer network function that is easy to use connecting with other.
 
 #### packet
 
-    class MessagePacket : public NetworkPacket
-    {
-    public:
-      MessagePacket()
-      {
-        //set type
-        header.npType = MESSAGE_TYPE_MESSAGE;
+make packet class
+~~~cpp
+class MessagePacket : public NetworkPacket
+{
+public:
+  MessagePacket()
+  {
+    //set type
+    header.npType = MESSAGE_TYPE_MESSAGE;
 
-        //init serial member value
-        addMemberValue(&str);
-      }
+    //init serial member value
+    addMemberValue(&str);
+  }
 
-      CREATE_PACKET(CG::MessagePacket)
+  CREATE_PACKET(CG::MessagePacket)
 
-    public:
-      std::string str;
-    };
+public:
+  std::string str;
+};
+~~~
+    
 
 #### Server
 
-    //create client instance
-    CG::CGServer* server = new CG::CGServer();
+create server instance
+~~~cpp
+CG::CGServer* server = new CG::CGServer();
+~~~
 
-    //init server config
-    CG::ServerConfig serverConfig;
+init server config
+~~~cpp
+CG::ServerConfig serverConfig;
 
-    serverConfig.ip = "127.0.0.1";
-    serverConfig.port = 8080;
+serverConfig.ip = "127.0.0.1";
+serverConfig.port = 8080;
+~~~
 
+connect with client
+~~~cpp
+server->onConnect = [](CG::HostId hostId)
+{
+  DebugLog("connected with client");
+};
+~~~
 
-    //connect with client
-    server->onConnect = [](CG::HostId hostId)
-    {
-      DebugLog("client와 연결되었습니다.");
-    };
+disconnect with client
+~~~cpp
+server->onDisconnect = [](CG::HostId hostId)
+{
+  DebugLog("disconnected with client");
+};
+~~~
 
-    //disconnect with client.
-    server->onDisconnect = [](CG::HostId hostId)
-    {
-      DebugLog("client와 연결이 해제되었습니다.");
-    };
+receive packet from client
+~~~cpp
+server->registerPacket<CG::MessagePacket>([&](CG::HostId hostId, CG::NetworkPacket* packet)
+{
+  CG::MessagePacket* p = (CG::MessagePacket*)packet;
+  DebugLog("receive packet - %s", p->str.c_str());
+});
+~~~
 
-    //receive packet from client
-    server->registerPacket<CG::MessagePacket>([&](CG::HostId hostId, CG::NetworkPacket* packet)
-    {
-      CG::MessagePacket* p = (CG::MessagePacket*)packet;
-      DebugLog("%s", p->str.c_str());
-      
-      server->sendPacket(hostId, p);
-    });
+send packet to client
+~~~cpp
+MessagePacket* p = new MessagePacket();
+p->str = "hello";
 
-    //start server
-    server->start(&serverConfig);
+server->sendPacket(hostId, p);
+~~~
 
-    //stop server
-    server->stop();
+start server
+~~~cpp
+server->start(&serverConfig);
+~~~
+
+stop server
+~~~cpp
+server->stop();
+~~~
+ 
 
 #### Client
 
-    //create client instance
-    CG::CGClient* client = new CG::CGClient();
+create client instance
+~~~cpp
+CG::Client* client = new CG::Client();
+~~~
 
-    //init client config
-    CG::ClientConfig clientConfig;
+init client config
+~~~cpp
+CG::ClientConfig clientConfig;
 
-    clientConfig.ip = "127.0.0.1";
-    clientConfig.port = 8080;
+clientConfig.ip = "127.0.0.1";
+clientConfig.port = 8080;
+~~~
 
-    //connect with server
-    client->onConnect = [&](CG::HostId hostId)
-    {
-      DebugLog("server와 연결되었습니다.");
+connect with server
+~~~cpp
+client->onConnect = [&](CG::HostId hostId)
+{
+  DebugLog("connected with server");
+};
+~~~
 
-      //send test message
-      std::string strt = "hellohello";
-      CG::MessagePacket* packet = new CG::MessagePacket();
-      packet->str = strt;
+disconnect with server
+~~~cpp
+client->onDisconnect = [](CG::HostId hostId)
+{
+  DebugLog("disconnected with server");
+};
+~~~
 
-      client->sendPacket(packet);
-    };
+receive packet from server
+~~~cpp
+client->registerPacket<CG::MessagePacket>([](CG::HostId hostId, CG::NetworkPacket* packet)
+{
+  CG::MessagePacket* p = (CG::MessagePacket*)packet;
+  DebugLog("receive packet - %s", p->str.c_str());
 
-    //disconnect with server.
-    client->onDisconnect = [](CG::HostId hostId)
-    {
-      DebugLog("server와 연결이 종료되었습니다.");
-    };
+});
+~~~
 
-    //receive packet from client
-    client->registerPacket<CG::MessagePacket>([](CG::HostId hostId, CG::NetworkPacket* packet)
-    {
-      CG::MessagePacket* p = (CG::MessagePacket*)packet;
-      DebugLog("receive packet");
+send packet to server
+~~~cpp
+MessagePacket* p = new MessagePacket();
+p->str = "hello";
 
-    });
+server->sendPacket(hostId, p);
+~~~
 
-    //start connecting with server
-    client->start(&clientConfig);
-    //stop
-    client->stop();
-    
+start client
+~~~cpp
+client->start(&clientConfig);
+~~~
+
+stop client
+~~~cpp
+client->stop();
+~~~
+ 
+
     
