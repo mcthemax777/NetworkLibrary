@@ -2,6 +2,8 @@
 
 NetworkLibrary offer network function that is easy to use connecting with other.
 
+***
+
 ## environment
 
 ### thread
@@ -15,6 +17,8 @@ NetworkLibrary offer network function that is easy to use connecting with other.
  
 ### language
  - c++ only
+
+***
 
 ## example
 
