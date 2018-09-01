@@ -2,6 +2,20 @@
 
 NetworkLibrary offer network function that is easy to use connecting with other.
 
+## environment
+
+### thread
+ - multi
+ - single (client module)
+
+### platform
+ - linux (epoll)
+ - mac (kqueue)
+ - window (select) - just develop mode
+ 
+### language
+ - c++ only
+
 ## example
 
 ### snd/rcv data exameple
