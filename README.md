@@ -236,7 +236,7 @@ server->stop();
 
 create client instance
 ~~~cpp
-CG::Client* client = new CG::Client();
+CG::CGClient* client = new CG::CGClient();
 ~~~
 
 init client config
