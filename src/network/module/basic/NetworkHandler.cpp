@@ -1,8 +1,8 @@
 #include "NetworkHandler.h"
-#include "Network.h"
+#include "network/core/Network.h"
 #include "Log/Log.h"
-#include "Buffer.h"
-#include "ConnectorInfo.h"
+#include "network/core/Buffer.h"
+#include "network/core/ConnectorInfo.h"
 
 #include <cstring>
 

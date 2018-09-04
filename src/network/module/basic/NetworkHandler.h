@@ -4,9 +4,8 @@
 #include <functional>
 #include <map>
 
-#include "Define.h"
-#include "ConnectorInfo.h"
-#include "NetworkPacket.h"
+#include "network/core/Define.h"
+#include "network/core/ConnectorInfo.h"
 
 namespace CG
 {

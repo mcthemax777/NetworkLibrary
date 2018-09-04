@@ -1,5 +1,5 @@
 #include "Server.h"
-#include "Network.h"
+#include "network/core/Network.h"
 #include "NetworkHandler.h"
 
 namespace CG

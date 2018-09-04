@@ -1,5 +1,5 @@
 #include "CGServer.h"
-#include "Network.h"
+#include "network/core/Network.h"
 
 namespace CG
 {

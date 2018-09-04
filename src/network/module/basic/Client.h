@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BaseClient.h"
+#include "network/core/BaseClient.h"
 #include "NetworkHandler.h"
 
 namespace CG

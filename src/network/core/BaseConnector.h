@@ -6,7 +6,6 @@
 
 #include "Define.h"
 #include "ConnectorInfo.h"
-#include "NetworkPacket.h"
 
 namespace CG
 {

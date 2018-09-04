@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{a3e57203-12de-4518-adfe-da6f5e9583a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\network">
+      <UniqueIdentifier>{d7cae16d-c808-4ab0-adfc-4d658b177c9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\network\core">
+      <UniqueIdentifier>{adc295e6-450b-4316-80fc-9a8307074929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\network\module">
+      <UniqueIdentifier>{affd1e85-b723-4e1b-8b72-7c97f5d57e04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\network\module\basic">
+      <UniqueIdentifier>{4442d22f-c379-465e-a6bb-b9f7234c97bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\network\module\packet">
+      <UniqueIdentifier>{a9188c9c-e4f2-40dc-861c-8737c15e1f5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\log">
+      <UniqueIdentifier>{94ee0d7b-184b-4a2a-9b22-dea6cd17f6e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{a7959115-5f40-4a1f-bb45-384b98e6529c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\list">
+      <UniqueIdentifier>{fd09a60f-eac1-49c5-a122-2d498e31a1d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\lock">
+      <UniqueIdentifier>{8f58ff17-f0a8-47e9-9f15-a31047e40b46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\serialize">
+      <UniqueIdentifier>{6f110710-76ce-45d8-af51-2dd9aabe0529}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\queue">
+      <UniqueIdentifier>{0759a224-05ab-41c1-9fe0-be3be3eb19e3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\SystemDefine.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\core\Peer.h">
+      <Filter>src\network\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\core\Timer.h">
+      <Filter>src\network\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\core\WorkerThread.h">
+      <Filter>src\network\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\core\BaseClient.h">
+      <Filter>src\network\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\core\BaseConnector.h">
+      <Filter>src\network\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\core\BaseServer.h">
+      <Filter>src\network\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\core\Buffer.h">
+      <Filter>src\network\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\core\ConnectorInfo.h">
+      <Filter>src\network\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\core\Define.h">
+      <Filter>src\network\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\core\Network.h">
+      <Filter>src\network\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\module\basic\Client.h">
+      <Filter>src\network\module\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\module\basic\NetworkHandler.h">
+      <Filter>src\network\module\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\module\basic\Server.h">
+      <Filter>src\network\module\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\module\packet\CGNetworkHandler.h">
+      <Filter>src\network\module\packet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\module\packet\CGServer.h">
+      <Filter>src\network\module\packet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\module\packet\NetworkPacket.h">
+      <Filter>src\network\module\packet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\network\module\packet\CGClient.h">
+      <Filter>src\network\module\packet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\log\Log.h">
+      <Filter>src\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\FileParser.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\ObjectPool.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\Property.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\Singleton.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\list\MTList.h">
+      <Filter>src\util\list</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\list\STList.h">
+      <Filter>src\util\list</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\list\List.h">
+      <Filter>src\util\list</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\lock\Lock.h">
+      <Filter>src\util\lock</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\lock\SpinLock.h">
+      <Filter>src\util\lock</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\lock\CondLock.h">
+      <Filter>src\util\lock</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\serialize\Serialize.h">
+      <Filter>src\util\serialize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\queue\NBQueue.h">
+      <Filter>src\util\queue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\queue\Queue.h">
+      <Filter>src\util\queue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\queue\STQueue.h">
+      <Filter>src\util\queue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\queue\BQueue.h">
+      <Filter>src\util\queue</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\network\core\Peer.cpp">
+      <Filter>src\network\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\core\Timer.cpp">
+      <Filter>src\network\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\core\WorkerThread.cpp">
+      <Filter>src\network\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\core\BaseClient.cpp">
+      <Filter>src\network\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\core\BaseConnector.cpp">
+      <Filter>src\network\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\core\BaseServer.cpp">
+      <Filter>src\network\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\core\ConnectorInfo.cpp">
+      <Filter>src\network\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\core\Network.cpp">
+      <Filter>src\network\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\module\basic\NetworkHandler.cpp">
+      <Filter>src\network\module\basic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\module\basic\Server.cpp">
+      <Filter>src\network\module\basic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\module\basic\Client.cpp">
+      <Filter>src\network\module\basic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\module\packet\CGNetworkHandler.cpp">
+      <Filter>src\network\module\packet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\module\packet\CGServer.cpp">
+      <Filter>src\network\module\packet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\module\packet\NetworkPacket.cpp">
+      <Filter>src\network\module\packet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\network\module\packet\CGClient.cpp">
+      <Filter>src\network\module\packet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\log\Log.cpp">
+      <Filter>src\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\serialize\Serialize.cpp">
+      <Filter>src\util\serialize</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

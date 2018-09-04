@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,19 +19,72 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\log\Log.cpp" />
+    <ClCompile Include="..\..\src\network\core\BaseClient.cpp" />
+    <ClCompile Include="..\..\src\network\core\BaseConnector.cpp" />
+    <ClCompile Include="..\..\src\network\core\BaseServer.cpp" />
+    <ClCompile Include="..\..\src\network\core\ConnectorInfo.cpp" />
+    <ClCompile Include="..\..\src\network\core\Network.cpp" />
+    <ClCompile Include="..\..\src\network\core\Peer.cpp" />
+    <ClCompile Include="..\..\src\network\core\Timer.cpp" />
+    <ClCompile Include="..\..\src\network\core\WorkerThread.cpp" />
+    <ClCompile Include="..\..\src\network\module\basic\Client.cpp" />
+    <ClCompile Include="..\..\src\network\module\basic\NetworkHandler.cpp" />
+    <ClCompile Include="..\..\src\network\module\basic\Server.cpp" />
+    <ClCompile Include="..\..\src\network\module\packet\CGClient.cpp" />
+    <ClCompile Include="..\..\src\network\module\packet\CGNetworkHandler.cpp" />
+    <ClCompile Include="..\..\src\network\module\packet\CGServer.cpp" />
+    <ClCompile Include="..\..\src\network\module\packet\NetworkPacket.cpp" />
+    <ClCompile Include="..\..\src\util\serialize\Serialize.cpp" />
     <ClCompile Include="..\basic\server\BSMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\log\Log.h" />
+    <ClInclude Include="..\..\src\network\core\BaseClient.h" />
+    <ClInclude Include="..\..\src\network\core\BaseConnector.h" />
+    <ClInclude Include="..\..\src\network\core\BaseServer.h" />
+    <ClInclude Include="..\..\src\network\core\Buffer.h" />
+    <ClInclude Include="..\..\src\network\core\ConnectorInfo.h" />
+    <ClInclude Include="..\..\src\network\core\Define.h" />
+    <ClInclude Include="..\..\src\network\core\Network.h" />
+    <ClInclude Include="..\..\src\network\core\Peer.h" />
+    <ClInclude Include="..\..\src\network\core\Timer.h" />
+    <ClInclude Include="..\..\src\network\core\WorkerThread.h" />
+    <ClInclude Include="..\..\src\network\module\basic\Client.h" />
+    <ClInclude Include="..\..\src\network\module\basic\NetworkHandler.h" />
+    <ClInclude Include="..\..\src\network\module\basic\Server.h" />
+    <ClInclude Include="..\..\src\network\module\packet\CGClient.h" />
+    <ClInclude Include="..\..\src\network\module\packet\CGNetworkHandler.h" />
+    <ClInclude Include="..\..\src\network\module\packet\CGServer.h" />
+    <ClInclude Include="..\..\src\network\module\packet\NetworkPacket.h" />
+    <ClInclude Include="..\..\src\SystemDefine.h" />
+    <ClInclude Include="..\..\src\util\FileParser.h" />
+    <ClInclude Include="..\..\src\util\list\List.h" />
+    <ClInclude Include="..\..\src\util\list\MTList.h" />
+    <ClInclude Include="..\..\src\util\list\STList.h" />
+    <ClInclude Include="..\..\src\util\lock\CondLock.h" />
+    <ClInclude Include="..\..\src\util\lock\Lock.h" />
+    <ClInclude Include="..\..\src\util\lock\SpinLock.h" />
+    <ClInclude Include="..\..\src\util\ObjectPool.h" />
+    <ClInclude Include="..\..\src\util\Property.h" />
+    <ClInclude Include="..\..\src\util\queue\BQueue.h" />
+    <ClInclude Include="..\..\src\util\queue\NBQueue.h" />
+    <ClInclude Include="..\..\src\util\queue\Queue.h" />
+    <ClInclude Include="..\..\src\util\queue\STQueue.h" />
+    <ClInclude Include="..\..\src\util\serialize\Serialize.h" />
+    <ClInclude Include="..\..\src\util\Singleton.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{78E6013F-1116-413D-8D03-D2F557F3CD75}</ProjectGuid>
     <RootNamespace>vs2017</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -72,14 +125,21 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\CppProjects\Lib\3rd-party\rapidjson\include;C:\CppProjects\Lib\src;C:\CppProjects\Lib\3rd-party\prebuilt-dll-2-9-1-release\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\CppProjects\Lib\3rd-party\prebuilt-dll-2-9-1-release\lib\x86;C:\CppProjects\Lib\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;pthreadVC2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -87,7 +147,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\CppProjects\Lib\3rd-party\prebuilt-dll-2-9-1-release\include;C:\CppProjects\Lib\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\CppProjects\Lib\3rd-party\prebuilt-dll-2-9-1-release\lib\x86;C:\CppProjects\Lib\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;pthreadVC2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

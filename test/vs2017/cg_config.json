@@ -1,0 +1,5 @@
+{
+	"worker_thread_count" : 4,
+	"read_buffer_size" : 5000,
+	"allocate_buffer_count" : 10
+}

@@ -1,7 +1,7 @@
 #include "Client.h"
-#include "Network.h"
+#include "network/core/Network.h"
 #include "Log/Log.h"
-#include "WorkerThread.h"
+#include "network/core/WorkerThread.h"
 
 namespace CG
 {

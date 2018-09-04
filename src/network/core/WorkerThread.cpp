@@ -3,7 +3,7 @@
 #include "BaseConnector.h"
 
 #include "Log/Log.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 namespace CG
 {

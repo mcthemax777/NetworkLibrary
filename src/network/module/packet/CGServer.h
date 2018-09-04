@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Server.h"
+#include "network/core/BaseServer.h"
 #include "CGNetworkHandler.h"
+#include "NetworkPacket.h"
 
 namespace CG
 {

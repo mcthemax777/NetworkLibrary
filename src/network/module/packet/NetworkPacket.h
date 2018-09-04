@@ -3,8 +3,8 @@
 #include <string>
 #include <list>
 #include <functional>
-#include "Define.h"
-#include "Util/Serializer/Serializer.h"
+#include "network/core/Define.h"
+#include "Util/Serialize/Serialize.h"
 
 #define CREATE_PACKET(__TYPE__) \
 __TYPE__* create() \

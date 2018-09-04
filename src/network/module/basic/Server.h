@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BaseServer.h"
+#include "network/core/BaseServer.h"
 
 
 namespace CG
