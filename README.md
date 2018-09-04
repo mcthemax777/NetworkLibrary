@@ -43,7 +43,7 @@ connect with client
 ~~~cpp
 server->onConnect = [](CG::HostId hostId)
 {
-  DebugLog("connected with client");
+  std::cout << "connected with client";
 };
 ~~~
 
@@ -51,7 +51,7 @@ disconnect with client
 ~~~cpp
 server->onDisconnect = [](CG::HostId hostId)
 {
-  DebugLog("disconnected with client");
+  std::cout << "disconnected with client";
 };
 ~~~
 
@@ -65,7 +65,7 @@ server->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
     memcpy(receiveData, data, dataSize);
     receiveData[dataSize] = 0;
 
-    DebugLog("receive data from client %s", receiveData);
+    std::cout << "receive data from client - " << receiveData;
 };
 ~~~
 
@@ -105,7 +105,7 @@ connect with server
 ~~~cpp
 client->onConnect = [&](CG::HostId hostId)
 {
-  DebugLog("connected with server");
+  std::cout << "connected with server";
 };
 ~~~
 
@@ -113,7 +113,7 @@ disconnect with server
 ~~~cpp
 client->onDisconnect = [](CG::HostId hostId)
 {
-  DebugLog("disconnected with server");
+  std::cout << "disconnected with server";
 };
 ~~~
 
@@ -127,7 +127,7 @@ client->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
   memcpy(receiveData, data, dataSize);
   receiveData[dataSize] = 0;
 
-  DebugLog("receive data from server %s", receiveData);
+  std::cout << "receive data from server - " <<receiveData;
 };
 ~~~
 
@@ -192,7 +192,7 @@ connect with client
 ~~~cpp
 server->onConnect = [](CG::HostId hostId)
 {
-  DebugLog("connected with client");
+  std::cout << "connected with client";
 };
 ~~~
 
@@ -209,7 +209,7 @@ receive packet from client
 server->registerPacket<CG::MessagePacket>([&](CG::HostId hostId, CG::NetworkPacket* packet)
 {
   CG::MessagePacket* p = (CG::MessagePacket*)packet;
-  DebugLog("receive packet - %s", p->str.c_str());
+  std::cout << "receive packet - str : " << p->str.c_str();
 });
 ~~~
 
@@ -251,7 +251,7 @@ connect with server
 ~~~cpp
 client->onConnect = [&](CG::HostId hostId)
 {
-  DebugLog("connected with server");
+  std::cout << "connected with server";
 };
 ~~~
 
@@ -259,7 +259,7 @@ disconnect with server
 ~~~cpp
 client->onDisconnect = [](CG::HostId hostId)
 {
-  DebugLog("disconnected with server");
+  std::cout << "disconnected with server";
 };
 ~~~
 
@@ -268,7 +268,7 @@ receive packet from server
 client->registerPacket<CG::MessagePacket>([](CG::HostId hostId, CG::NetworkPacket* packet)
 {
   CG::MessagePacket* p = (CG::MessagePacket*)packet;
-  DebugLog("receive packet - %s", p->str.c_str());
+  std::cout << "receive packet - str : " << p->str.c_str();
 
 });
 ~~~
