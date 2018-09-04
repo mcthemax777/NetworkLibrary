@@ -1,2 +1,4 @@
 test/vs2017/Debug/*
 3rd-party/*
+test/vs2017/vs2017.VC.db
+test/vs2017/vs2017.VC.VC.opendb
