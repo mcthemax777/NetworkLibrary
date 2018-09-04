@@ -112,17 +112,6 @@ namespace CG
 		DisconnectDataPacket() { receiveType = RECEIVE_TYPE_DISCONNECT; }
 	};
 
-	//class EventFunction
-	//{
-	//public:
-	//	HostId hostId;
-	//public:
-	//	std::function<void(HostId)> onConnect;
-	//	std::function<void(HostId)> onDisconnect;
-	//	std::function<void(HostId, char*, int)> onReceive;
-	//	DataConvertor* dataConvertor;
-	//};
-
 	class Network : public Util::Singleton<Network>
 	{
 	public:
@@ -142,15 +131,11 @@ namespace CG
 		int CreateTCPClientSocket(const char* ip, unsigned short port);
 		bool addTimer(Timer *timer);
 		void sendData(int fd, const char* data, int dataSize);
-		//void sendData(HostId hostId, const char* data, int dataSize);
 		void sendData(BaseConnector* connector, const char* data, int dataSize);
 		void sendData(ConnectorInfo* connectorInfo, const char* data, int dataSize);
-		void sendDataToWorkerThreadWithConverting(WorkerThread* workerThread, ConnectorInfo* connectorInfo, Buffer* buffer);
 		bool processReceiveData(ConnectorInfo* connectorInfo);
 		WorkerThread* getWorkerThreadUsingHash(int hashKey);
 		void disconnectWithConnectorInfo(WorkerThread* workerThread, ConnectorInfo* connectorInfo);
-		//EventFunction* getEventFunction(HostId hostId);
-		//bool removeEventFunction(EventFunction* eventFuction);
 		void start();
 		
 		Network();

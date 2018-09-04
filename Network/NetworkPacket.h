@@ -70,6 +70,8 @@ namespace CG
 		{
 			//set type
 			header.npType = MESSAGE_TYPE_MESSAGE;
+			
+			//init serial member value
 			addMemberValue(&str);
 		}
 

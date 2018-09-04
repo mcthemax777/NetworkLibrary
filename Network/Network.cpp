@@ -114,61 +114,6 @@ namespace CG
 		}
 	}
 
-	void Network::sendDataToWorkerThreadWithConverting(WorkerThread* workerThread, ConnectorInfo* connectorInfo, Buffer* buffer)
-	{
-		//char* currentData = buffer->data;
-
-		//int currentDataSize = buffer->dataSize;
-
-		//int currentBufferIndex = 0;
-
-		//while (true)
-		//{
-		//	int index = connectorInfo->dataConvertor->receiveConvert(currentData, currentDataSize);
-
-
-		//	if (index == 0) //불완전한 형태의 데이터일때
-		//	{
-		//		if (buffer->data != currentData) // currentdata가 가르키는 위치가 버퍼데이터랑 다르면 리셋 시켜줘야됨.
-		//		{
-		//			memmove(buffer->data, currentData, currentDataSize);
-		//		}
-
-		//		buffer->dataSize = currentDataSize;
-		//		buffer->startIndex = 0;
-
-		//		connectorInfo->buffer = buffer;
-
-		//		break;
-		//	}
-		//	else if (index < 0)
-		//	{
-		//		ErrorLog("index error - %d", index);
-		//		break;
-		//	}
-		//	else
-		//	{
-		//		currentData += index;
-		//		currentDataSize -= index;
-
-		//		DataPacket* dp = workerThread->dataPacketPool->getObject();
-
-		//		dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo->hostId, connectorInfo->connector->connectorInfo->hostId, buffer, currentBufferIndex, index, currentDataSize);
-
-		//		workerThread->pushDataPacket(dp);
-
-		//		if (currentDataSize == 0)
-		//		{
-		//			connectorInfo->buffer = nullptr;
-
-		//			break;
-		//		}
-
-		//		currentBufferIndex += index;
-		//	}
-		//}
-	}
-
 	bool Network::processReceiveData(ConnectorInfo* connectorInfo)
 	{
 		WorkerThread* workerThread = getWorkerThreadUsingHash(connectorInfo->hostId);
@@ -176,29 +121,6 @@ namespace CG
 		Buffer* buffer = workerThread->bufferPool->getObject();
 
 		buffer->dataSize = 0;
-
-
-		//////////////////////////////////////////////이전 버젼임
-		//Buffer* buffer = connectorInfo->buffer;
-		//
-		//int receivedDataSize = 0;
-
-		//if (buffer == nullptr) //이전에 짤려서 온 데이터가 없을 경우
-		//{
-		//	buffer = workerThread->bufferPool->getObject();
-
-		//	buffer->dataSize = 0;
-
-		//	receiveDataStartingPoint = buffer->data;
-
-		//	connectorInfo->buffer = buffer;
-		//}
-		//else
-		//{
-		//	receivedDataSize = buffer->dataSize;
-		//	receiveDataStartingPoint = buffer->data + receivedDataSize;
-		//}
-		//////////////////////////////////////////////////////////
 
 		int dataSize = recv(connectorInfo->getHostId(), buffer->data, RCV_BUF, 0);
 
@@ -211,8 +133,6 @@ namespace CG
 			dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo, buffer);
 
 			workerThread->pushDataPacket(dp);
-
-			//sendDataToWorkerThreadWithConverting(workerThread, connectorInfo, buffer);
 
 			return true;
 		}
@@ -537,19 +457,6 @@ namespace CG
 			isSuccess = addServer((BaseServer*)connector);
 		else
 			isSuccess = addClient((BaseClient*)connector);
-		
-		//if (isSuccess)
-		//{
-		//	EventFunction* eventFunction = new EventFunction();
-		//	eventFunction->hostId = connector->connectorInfo->hostId;
-		//	eventFunction->onConnect = connector->onConnect;
-		//	eventFunction->onReceive = connector->onReceive;
-		//	eventFunction->onDisconnect = connector->onDisconnect;
-		//	//eventFunction->dataConvertor = connector->dataConvertor;
-
-		//	//이미 있는 호스트 아이디인지는 확인해야된다.
-		//	eventFunctionList->push_back(eventFunction);
-		//}
 
 		return isSuccess;
 	}
