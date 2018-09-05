@@ -18,6 +18,23 @@ NetworkLibrary offer network function that is easy to use connecting with other.
 ### language
  - c++ only
 
+### exteral using
+ - prebuilt
+ - rapidJson
+ - doxygen
+***
+
+## explain
+
+### simple architacture
+
+(image)
+
+### simple class diagram
+
+
+
+
 ***
 
 ## example
@@ -60,7 +77,7 @@ receive data from client
 server->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
 {
     //print receive message
-    char* receiveData = new char[dataSize];
+    char* receiveData = new char[dataSize + 1];
 
     memcpy(receiveData, data, dataSize);
     receiveData[dataSize] = 0;
@@ -122,7 +139,7 @@ receive data from server
 client->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
 {
   //print receive message
-  char* receiveData = new char[dataSize];
+  char* receiveData = new char[dataSize + 1];
 
   memcpy(receiveData, data, dataSize);
   receiveData[dataSize] = 0;
