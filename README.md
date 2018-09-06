@@ -36,12 +36,12 @@ To Use easily, we offer two modules
 
 <br>
 ### simple architacture
+![simple-architecture](https://user-images.githubusercontent.com/41141549/45155014-76fa3800-b214-11e8-80fe-a4971e4635cf.PNG)
 
-<img src="https://github.com/mcthemax777/NetworkLibrary/tree/master/doc/simple-architecture.png" width="100%"></img>
 <br>
 ### simple class diagram
 <br>
-<img src="https://github.com/mcthemax777/NetworkLibrary/tree/master/doc/simple-class-diagram.png" width="100%"></img>
+![simple-class-diagram](https://user-images.githubusercontent.com/41141549/45155090-bfb1f100-b214-11e8-86d0-3f8f0559c7b1.PNG)
 
 <br><br>
 
