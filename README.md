@@ -37,11 +37,11 @@ To Use easily, we offer two modules
 <br>
 ### simple architacture
 
-<img src="./doc/simple-architecture.png" width="100%"></img>
+<img src="https://github.com/mcthemax777/NetworkLibrary/tree/master/doc/simple-architecture.png" width="100%"></img>
 <br>
 ### simple class diagram
 <br>
-<img src="./doc/simple-class-diagram.png" width="100%"></img>
+<img src="https://github.com/mcthemax777/NetworkLibrary/tree/master/doc/simple-class-diagram.png" width="100%"></img>
 
 <br><br>
 
