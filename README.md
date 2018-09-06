@@ -35,12 +35,12 @@ To Use easily, we offer two modules
  - packet snd/rcv transmission module (Ofcourse, tcp)
 
 <br>
-### simple architacture
+#### simple architacture
 
 <img src="https://user-images.githubusercontent.com/41141549/45155014-76fa3800-b214-11e8-80fe-a4971e4635cf.PNG" width="100%"></img>
 
 <br>
-### simple class diagram
+#### simple class diagram
 
 <br>
 <img src="https://user-images.githubusercontent.com/41141549/45155090-bfb1f100-b214-11e8-86d0-3f8f0559c7b1.PNG" width="100%"></img>
