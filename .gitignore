@@ -3,4 +3,5 @@ test/vs2017/vs2017.VC.db
 test/vs2017/vs2017.VC.VC.opendb
 test/makeLib/Debug/*
 test/vs2017/.vs/*
-
+test/makeLib/makeLib.VC.db
+test/makeLib/makeLib.VC.VC.opendb
