@@ -2,7 +2,7 @@
 
 #define HAVE_STRUCT_TIMESPEC
 
-#include <pthread.h>
+#include "util/thread/Thread.h"
 #include <deque>
 #include <list>
 #include "Util/Queue/BQueue.h"
@@ -15,7 +15,7 @@ namespace CG
 	class DataPacket;
 	class Buffer;
 
-	class WorkerThread
+	class WorkerThread : public Util::Thread
 	{
 	public:
 		WorkerThread(bool isMultiThread);
@@ -25,11 +25,9 @@ namespace CG
 
 		void pushDataPacket(DataPacket* dataPacket);
 
-		pthread_t* getTid() { return &tid; }
 		int getDataPacketCount();
 
 	protected:
-		pthread_t tid;
 
 	public:
 		Util::Queue<DataPacket*>* dataPacketQueue;

@@ -32,7 +32,7 @@ namespace CG
 
 	void WorkerThread::run()
 	{
-		while (true)
+		while (!isStop)
 		{
 			DataPacket* dp = dataPacketQueue->pop();
 			if (dp != NULL)

@@ -3,12 +3,11 @@
 #include <mutex>
 #include <queue>
 #include "Queue.h"
-#include "Util/Lock/CondLock.h"
 
 namespace Util
 {
 	template < typename T >
-	class BQueue : public Queue<T>, public CondLock
+	class BQueue : public Queue<T>
 	{
 	public:
 		BQueue()
@@ -23,45 +22,53 @@ namespace Util
 		{
 			T t = 0;
 
-			lock();
-
-			if (objectQueue.empty())
 			{
-				wait();
+				std::unique_lock<std::mutex> lock(mutex);
+
+				if (objectQueue.empty())
+				{
+					cv.wait(lock);
+				}
+
+				t = objectQueue.front();
+				objectQueue.pop();
 			}
-
-			t = objectQueue.front();
-			objectQueue.pop();
-
-			unLock();
 
 			return t;
 		}
 
 		void push(T t)
 		{
-			lock();
+			{
+				std::lock_guard<std::mutex> lock(mutex);
 
-			objectQueue.push(t);
+				objectQueue.push(t);
+
+				int size = objectQueue.size();
+			}
 
 			if (objectQueue.size() == 1)
-				signal();
-
-			unLock();
+			{
+				cv.notify_all();
+			}
 		}
 
 		int size()
 		{
-			lock();
+			int size;
+			{
+				std::lock_guard<std::mutex> lock(mutex);
 
-			int size = objectQueue.size();
-
-			unLock();
+				size = objectQueue.size();
+			}
 
 			return size;
 		}
 
 		std::queue<T> objectQueue;
+
+		std::mutex mutex;
+		std::condition_variable cv;
 	};
 }
 

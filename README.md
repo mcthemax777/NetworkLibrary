@@ -13,7 +13,7 @@ NetworkLibrary offer network function that is easy to use connecting with other.
 ### platform
  - linux (epoll)
  - mac (kqueue)
- - window (select) - just develop mode
+ - window (simple rcv, send) - just develop mode
 
 ### language
  - c++ only
@@ -26,20 +26,31 @@ NetworkLibrary offer network function that is easy to use connecting with other.
 
 ## explain
 
+### What is NetworkLibrary?
+
+NetworkLibrary offer network function that is easy to use connecting with other.
+
+To Use easily, we offer two modules
+ - tcp snd/rcv transmission module
+ - packet snd/rcv transmission module (Ofcourse, tcp)
+
+<br>
 ### simple architacture
 
-(image)
-
+<img src="./doc/simple-architecture.png" width="100%"></img>
+<br>
 ### simple class diagram
+<br>
+<img src="./doc/simple-class-diagram.png" width="100%"></img>
 
-
+<br><br>
 
 
 ***
 
 ## example
 
-### 1. snd/rcv data exameple
+### 1. tcp snd/rcv exameple
 
 #### Server
 
@@ -164,7 +175,7 @@ stop client
 client->stop();
 ~~~
 
-### 2. snd/rcv packet exameple
+### 2. packet snd/rcv exameple
 
 #### packet
 

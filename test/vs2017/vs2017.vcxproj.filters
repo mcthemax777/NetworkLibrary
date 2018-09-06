@@ -49,6 +49,9 @@
     <Filter Include="src\network\module\packet">
       <UniqueIdentifier>{1583a4f9-27d4-4c6a-8ee5-a7c44b3779be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\util\thread">
+      <UniqueIdentifier>{e828bc36-c391-4ef3-89f0-bbc9fb78361e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\basic\server\BSMain.cpp">
@@ -105,6 +108,9 @@
     <ClCompile Include="..\..\src\log\Log.cpp">
       <Filter>src\log</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\thread\Thread.cpp">
+      <Filter>src\util\thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\util\FileParser.h">
@@ -138,9 +144,6 @@
       <Filter>src\util\lock</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\lock\SpinLock.h">
-      <Filter>src\util\lock</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\util\lock\CondLock.h">
       <Filter>src\util\lock</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util\list\MTList.h">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\SystemDefine.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\thread\Thread.h">
+      <Filter>src\util\thread</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

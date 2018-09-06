@@ -36,6 +36,7 @@
     <ClCompile Include="..\..\src\network\module\packet\CGServer.cpp" />
     <ClCompile Include="..\..\src\network\module\packet\NetworkPacket.cpp" />
     <ClCompile Include="..\..\src\util\serialize\Serialize.cpp" />
+    <ClCompile Include="..\..\src\util\thread\Thread.cpp" />
     <ClCompile Include="..\basic\server\BSMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -62,7 +63,6 @@
     <ClInclude Include="..\..\src\util\list\List.h" />
     <ClInclude Include="..\..\src\util\list\MTList.h" />
     <ClInclude Include="..\..\src\util\list\STList.h" />
-    <ClInclude Include="..\..\src\util\lock\CondLock.h" />
     <ClInclude Include="..\..\src\util\lock\Lock.h" />
     <ClInclude Include="..\..\src\util\lock\SpinLock.h" />
     <ClInclude Include="..\..\src\util\ObjectPool.h" />
@@ -73,18 +73,19 @@
     <ClInclude Include="..\..\src\util\queue\STQueue.h" />
     <ClInclude Include="..\..\src\util\serialize\Serialize.h" />
     <ClInclude Include="..\..\src\util\Singleton.h" />
+    <ClInclude Include="..\..\src\util\thread\Thread.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{78E6013F-1116-413D-8D03-D2F557F3CD75}</ProjectGuid>
     <RootNamespace>vs2017</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -134,7 +135,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\3rd-party\rapidjson\include;..\..\src;..\..\3rd-party\prebuilt-dll-2-9-1-release\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\3rd-party\rapidjson\include;..\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\3rd-party\prebuilt-dll-2-9-1-release\lib\x86;..\..\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

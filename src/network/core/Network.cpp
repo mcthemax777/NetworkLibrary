@@ -200,37 +200,13 @@ namespace CG
 				return;
 			}
 
-			//ToDo. 쓰레드로 리시브 걸어두고 받으면 워커쓰레드로 던져주기
-			pthread_t* tid = new pthread_t();
+			std::thread* clientThread = new std::thread(&Network::windowsConnectorInfoThread, this, connectorInfo);
 
+			clientThreadList->push_back(clientThread);
 
-			if (pthread_create(tid, NULL, Network::GetInstance()->windowsConnectorInfoThread, connectorInfo) != 0)
-			{
-				ErrorLog("thread create error : ");
-				return ;
-			}
-
-			clientTidList->push_back(tid);
 		}
 	}
 
-	void* Network::windowsConnectorInfoThread(void* voidConnectorInfo)
-	{
-		ConnectorInfo* connectorInfo = (ConnectorInfo*)voidConnectorInfo;
-
-		Network::GetInstance()->windowsConnectorInfoThread(connectorInfo);
-
-		return NULL;
-	}
-
-	void* Network::windowsServerThread(void* voidServer)
-	{
-		BaseServer* server = (BaseServer*)voidServer;
-
-		Network::GetInstance()->windowsServerThread(server);
-
-		return NULL;
-	}
 
 #else
 	void Network::setSocketOption(int fd)
@@ -259,10 +235,8 @@ namespace CG
 	}
 
 
-	void* WorkerThreadFunction(void *data)
+	void* workerThreadFunction(WorkerThread* wt)
 	{
-		WorkerThread* wt = (WorkerThread*)data;
-
 		DebugLog("run workerThread");
 
 		wt->run();
@@ -318,11 +292,7 @@ namespace CG
 					return;
 				}
 
-				if (pthread_create(workerThreadArray[i]->getTid(), NULL, WorkerThreadFunction, (void*)(workerThreadArray[i])) != 0)
-				{
-					ErrorLog("thread create error : ");
-					return;
-				}
+				workerThreadArray[i]->start();
 			}
 		}
 
@@ -331,11 +301,7 @@ namespace CG
 		//eventFunctionList = new Util::MTList<EventFunction*>();
 		timerQueue = new Util::NBQueue<Timer*>();
 
-#if OS_PLATFORM == PLATFORM_WINDOWS
 		connectorInfoPool = new Util::ObjectPool<ConnectorInfo>(100, true);
-#else
-		connectorInfoPool = new Util::ObjectPool<ConnectorInfo>(100, false);
-#endif
 
 		init();
 	}
@@ -347,18 +313,19 @@ namespace CG
 
 		WSACleanup();
 
-		for (int i = 0; i < serverTidList->size(); i++)
+		for (int i = 0; i < serverThreadList->size(); i++)
 		{
-			pthread_cancel(*(serverTidList->at(i)));
+			delete serverThreadList->at(i);
+
 		}
 
-		for (int i = 0; i < clientTidList->size(); i++)
+		for (int i = 0; i < clientThreadList->size(); i++)
 		{
-			pthread_cancel(*(clientTidList->at(i)));
+			delete clientThreadList->at(i);
 		}
 
-		delete serverTidList;
-		delete clientTidList;
+		delete serverThreadList;
+		delete clientThreadList;
 
 #elif OS_PLATFORM == PLATFORM_LINUX
 
@@ -376,7 +343,7 @@ namespace CG
 
 		for (int i = 0; i < workerThreadCount; i++)
 		{
-			pthread_cancel(*(workerThreadArray[i]->getTid()));
+			workerThreadArray[i]->stop();
 			delete workerThreadArray[i];
 		}
 
@@ -386,7 +353,6 @@ namespace CG
 		//delete eventFunctionList;
 		delete timerQueue;
 
-		pthread_cancel(*networkTid);
 	}
 
 	bool Network::init()
@@ -399,8 +365,8 @@ namespace CG
 			return false;
 		}
 
-		serverTidList = new Util::MTList<pthread_t*>();
-		clientTidList = new Util::MTList<pthread_t*>();
+		serverThreadList = new Util::MTList<std::thread*>();
+		clientThreadList = new Util::MTList<std::thread*>();
 
 #elif OS_PLATFORM == PLATFORM_LINUX
 
@@ -429,13 +395,7 @@ namespace CG
 
 		lastLoopTime = 0;
 
-		networkTid = new pthread_t();
-
-		if (pthread_create(networkTid, NULL, startUnixRunningThread, NULL) != 0)
-		{
-			ErrorLog("thread create error : ");
-			return false;
-		}
+		networkThread = std::thread(&Network::start, this);
 
 		return true;
 	}
@@ -482,17 +442,9 @@ namespace CG
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
 
-		//ToDo. 쓰레드로 엑셉트해두고 받으면 워커쓰레드로 던져주기
-		pthread_t* tid = new pthread_t();
+		std::thread* serverThread = new std::thread(&Network::windowsServerThread, this, server);
 
-
-		if (pthread_create(tid, NULL, Network::GetInstance()->windowsServerThread, server) != 0)
-		{
-			ErrorLog("thread create error");
-			return false;
-		}
-
-		serverTidList->push_back(tid);
+		serverThreadList->push_back(serverThread);
 
 #elif OS_PLATFORM == PLATFORM_LINUX
 
@@ -532,17 +484,9 @@ namespace CG
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
 
-		//ToDo. 쓰레드로 리시브 걸어두고 받으면 워커쓰레드로 던져주기
-		pthread_t* tid = new pthread_t();
+		std::thread* clientThread = new std::thread(&Network::windowsConnectorInfoThread, this, connectorInfo);
 
-
-		if (pthread_create(tid, NULL, Network::GetInstance()->windowsConnectorInfoThread, connectorInfo) != 0)
-		{
-			ErrorLog("thread create error : ");
-			return false;
-		}
-
-		clientTidList->push_back(tid);
+		clientThreadList->push_back(clientThread);
 
 #else
 
@@ -674,11 +618,6 @@ namespace CG
 	{
 		sendData(connector->connectorInfo->hostId, data, dataSize);
 	}
-
-	//void Network::sendData(HostId hostId, const char* data, int dataSize)
-	//{
-	//	sendData(hostId, data, dataSize);
-	//}
 
 	void Network::sendData(ConnectorInfo* connectorInfo, const char* data, int dataSize)
 	{

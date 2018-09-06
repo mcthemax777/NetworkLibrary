@@ -9,18 +9,18 @@ namespace Util
 	public:
 		SpinLock()
 		{
-			pthread_mutex_init(&mutex, NULL);
+			
 		}
 
 		~SpinLock()
 		{
-			pthread_mutex_destroy(&mutex);
+			
 		}
 
-		void lock() { while (pthread_mutex_trylock(&mutex) != 0); }
-		void unLock() { pthread_mutex_unlock(&mutex); }
+		void lock() { while (!mutex.try_lock()); }
+		void unLock() { mutex.unlock(); }
 
 	protected:
-		pthread_mutex_t mutex;
+		std::mutex mutex;
 	};
 }

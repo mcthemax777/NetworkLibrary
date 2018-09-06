@@ -33,7 +33,7 @@
 
 #include <functional>
 #include <vector>
-#include <pthread.h>
+#include <thread>
 #include <list>
 #include "Util/Singleton.h"
 #include "Define.h"
@@ -158,7 +158,8 @@ namespace CG
 
 		long loopDt;
 
-		pthread_t* networkTid;
+		std::thread networkThread;
+		//pthread_t* networkTid;
 		static void* startUnixRunningThread(void* a);
 
 
@@ -166,14 +167,14 @@ namespace CG
 		WSAData wsaData;
 
 	public:
-		Util::List<pthread_t*>* serverTidList;
-		Util::List<pthread_t*>* clientTidList;
+		Util::List<std::thread*>* serverThreadList;
+		Util::List<std::thread*>* clientThreadList;
+		//Util::List<pthread_t*>* serverTidList;
+		//Util::List<pthread_t*>* clientTidList;
 
 		void windowsConnectorInfoThread(ConnectorInfo* connectorInfo);
 		void windowsServerThread(BaseServer* server);
 
-		static void* windowsServerThread(void* voidServer);
-		static void* windowsConnectorInfoThread(void* voidConnectorInfo);
 #else
 		void setSocketOption(int fd);
 #if OS_PLATFORM == PLATFORM_LINUX

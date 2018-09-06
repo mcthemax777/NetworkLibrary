@@ -6,7 +6,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include <iostream>
-#include <pthread.h>
+#include <thread>
 
 #include "Log.h"
 
@@ -105,13 +105,15 @@ void Log::print(logtype type, const char* fmt, ...)
 	vsprintf(writeBuffer, fmt, list);
 	va_end(list);
 
-	pthread_t tid;
-	tid = pthread_self();
+	std::thread::id tid;
+	tid = std::this_thread::get_id();
+
+	std::cout << tid << std::endl;
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
-	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread %p]%s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, tid.p, writeBuffer);
+	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread TESTING]%s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, writeBuffer);
 #else
-	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread %d]%s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, tid, writeBuffer);
+	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread TESTING]%s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, writeBuffer);
 #endif
 	puts(buffer);
 
