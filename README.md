@@ -13,14 +13,12 @@ NetworkLibrary offer network function that is easy to use connecting with other.
 ### platform
  - linux (epoll)
  - mac (kqueue)
- - window (simple rcv, send) - just develop mode
+ - window (simple rcv, send) - just develop mode(develop iocp, later)
 
 ### language
  - c++ only
 
 ### exteral using
- - prebuilt
- - rapidJson
  - doxygen
 ***
 
