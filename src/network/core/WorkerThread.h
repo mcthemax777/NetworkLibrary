@@ -1,7 +1,5 @@
 #pragma once
 
-#define HAVE_STRUCT_TIMESPEC
-
 #include "util/thread/Thread.h"
 #include <deque>
 #include <list>

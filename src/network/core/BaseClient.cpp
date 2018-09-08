@@ -5,12 +5,11 @@
 
 namespace CG
 {
-
-	void BaseClient::processMessage()
+	/*void BaseClient::processMessage()
 	{
 		if (Network::GetInstance()->workerThreadCount == 0)
 		{
 			(*(Network::GetInstance()->workerThreadArray))->run();
 		}
-	}
+	}*/
 }

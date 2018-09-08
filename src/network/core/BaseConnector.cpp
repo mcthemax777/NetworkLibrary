@@ -15,6 +15,7 @@ namespace CG
 
 	void BaseConnector::start(ConnectConfig* config)
 	{
+		//set config
 		connectorInfo = new ConnectorInfo();
 		connectorInfo->ip = new char[15];
 		memset(connectorInfo->ip, 0, 15);
@@ -23,6 +24,7 @@ namespace CG
 
 		connectorInfo->connector = this;
 
+		//set connect in network (server : listen, client : connect with other)
 		if (Network::GetInstance()->addConnector(this) == false)
 		{
 			ErrorLog("fucking addConnector");
@@ -39,9 +41,6 @@ namespace CG
 
 		isConnected = false;
 	}
-
-//	template<typename T, typename std::enable_if<std::is_base_of<CG::NetworkPacket, T>::value>::type* = nullptr>
-//	void Connector::registerPacket(std::function<void(HostId, T*)> onReceiveNPacket);
 }
 
 

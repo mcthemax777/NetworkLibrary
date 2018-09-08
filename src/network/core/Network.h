@@ -13,10 +13,7 @@
 
 #elif OS_PLATFORM == PLATFORM_WINDOWS
 
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-#define HAVE_STRUCT_TIMESPEC
+///atoi is desperate but i want to use to clean code (if don't use, divide linux and windows)
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 #include <WinSock2.h>
@@ -36,7 +33,6 @@
 #include <thread>
 #include <list>
 #include "util/singleton/Singleton.h"
-#include "Define.h"
 #include "BaseServer.h"
 #include "BaseClient.h"
 #include "util/objectPool/ObjectPool.h"
@@ -61,7 +57,7 @@ namespace CG
 
 	class DataPacket
 	{
-	public:
+	private:
 		int receiveType;
 		ConnectorInfo* connectorInfo;
 		Buffer* buffer;
@@ -73,14 +69,12 @@ namespace CG
 			buffer = _buffer;
 		}
 
-		~DataPacket()
-		{
-
-		}
+	public:
+		friend class Network;
 	};
 
 	//이거 나중에 메모리풀 3개로 나눠야되서 귀찮아지네.. 그냥 안씀
-	class ConnectDataPacket : public DataPacket
+	/*class ConnectDataPacket : public DataPacket
 	{
 	public:
 		ConnectDataPacket() { receiveType = RECEIVE_TYPE_CONNECT; }
@@ -99,7 +93,7 @@ namespace CG
 	{
 	public:
 		DisconnectDataPacket() { receiveType = RECEIVE_TYPE_DISCONNECT; }
-	};
+	};*/
 
 	class Network : public Util::Singleton<Network>
 	{
@@ -133,7 +127,6 @@ namespace CG
 		Util::List<BaseServer*>* serverList;
 		//나의 Client 정보
 		Util::List<BaseClient*>* clientList;
-		//Util::List<EventFunction*>* eventFunctionList;
 		//등록한 타이머 저장
 		Util::Queue<Timer*>* timerQueue;
 
@@ -148,36 +141,37 @@ namespace CG
 		long loopDt;
 
 		std::thread networkThread;
-		//pthread_t* networkTid;
 		static void* startUnixRunningThread(void* a);
 
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
+	private:
 		WSAData wsaData;
 
 	public:
 		Util::List<std::thread*>* serverThreadList;
 		Util::List<std::thread*>* clientThreadList;
-		//Util::List<pthread_t*>* serverTidList;
-		//Util::List<pthread_t*>* clientTidList;
+		Util::ObjectPool<ConnectorInfo>* connectorInfoPool;
 
 		void windowsConnectorInfoThread(ConnectorInfo* connectorInfo);
 		void windowsServerThread(BaseServer* server);
 
 #else
+
 		void setSocketOption(int fd);
+
 #if OS_PLATFORM == PLATFORM_LINUX
+	private:
 		struct epoll_event* event;
 		struct epoll_event connectEvent;
+
 #elif OS_PLATFORM == PLATFORM_MAC
+
 	private:
 		struct kevent* event;
 		struct kevent connectEvent;
 #endif
 
 #endif
-		long nextPingCheckTime;
-
-		Util::ObjectPool<ConnectorInfo>* connectorInfoPool;
 	};
 }

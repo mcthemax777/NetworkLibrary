@@ -3,14 +3,6 @@
 #include <chrono>
 #if OS_PLATFORM == PLATFORM_WINDOWS
 
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
-#include <windows.h>
-
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-
 #else
 
 #include <cstring>
@@ -35,18 +27,11 @@
 #include "log/Log.h"
 #include "BaseConnector.h"
 #include "ConnectorInfo.h"
-#include "Define.h"
+#include "NetworkDefine.h"
 #include "BaseServer.h"
 #include "BaseClient.h"
 #include "Timer.h"
 #include "CGFileParser.h"
-
-
-
-#if OS_PLATFORM == PLATFORM_WINDOWS
-#include <WinSock2.h>
-
-#endif
 
 
 
@@ -708,11 +693,6 @@ namespace CG
 						Server* server = serverList->at(j);
 						if (event[i].data.ptr == server) // Server sock
 						{
-
-#elif OS_PLATFORM == PLATFORM_WINDOWS
-
-
-
 
 #elif OS_PLATFORM == PLATFORM_MAC
 

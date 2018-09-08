@@ -119,6 +119,7 @@
     <ClCompile Include="..\..\..\src\network\core\BaseClient.cpp" />
     <ClCompile Include="..\..\..\src\network\core\BaseConnector.cpp" />
     <ClCompile Include="..\..\..\src\network\core\BaseServer.cpp" />
+    <ClCompile Include="..\..\..\src\network\core\CGFileParser.cpp" />
     <ClCompile Include="..\..\..\src\network\core\ConnectorInfo.cpp" />
     <ClCompile Include="..\..\..\src\network\core\Network.cpp" />
     <ClCompile Include="..\..\..\src\network\core\Peer.cpp" />
@@ -143,7 +144,6 @@
     <ClInclude Include="..\..\..\src\network\core\Buffer.h" />
     <ClInclude Include="..\..\..\src\network\core\CGFileParser.h" />
     <ClInclude Include="..\..\..\src\network\core\ConnectorInfo.h" />
-    <ClInclude Include="..\..\..\src\network\core\Define.h" />
     <ClInclude Include="..\..\..\src\network\core\Network.h" />
     <ClInclude Include="..\..\..\src\network\core\NetworkDefine.h" />
     <ClInclude Include="..\..\..\src\network\core\Peer.h" />

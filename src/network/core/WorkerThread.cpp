@@ -9,13 +9,15 @@ namespace CG
 {
 	WorkerThread::WorkerThread(bool isMultiThread)
 	{
-		if(isMultiThread)
+		//no single thread
+		/*if(isMultiThread)
 			dataPacketQueue = new Util::BQueue<DataPacket*>();
 		else
-			dataPacketQueue = new Util::NBQueue<DataPacket*>();
+			dataPacketQueue = new Util::NBQueue<DataPacket*>();*/
 
-		dataPacketPool = new Util::ObjectPool<DataPacket>(10, true);
-		bufferPool = new Util::ObjectPool<Buffer>(10, true);
+		dataPacketQueue = new Util::BQueue<DataPacket*>();
+		dataPacketPool = new Util::ObjectPool<DataPacket>(100, true);
+		bufferPool = new Util::ObjectPool<Buffer>(100, true);
 	}
 
 

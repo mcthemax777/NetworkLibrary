@@ -3,7 +3,7 @@
 #include <string>
 #include <list>
 #include <functional>
-#include "network/core/Define.h"
+#include "network/core/NetworkDefine.h"
 #include "Util/Serialize/Serialize.h"
 
 #define CREATE_PACKET(__TYPE__) \

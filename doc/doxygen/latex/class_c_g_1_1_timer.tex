@@ -1,0 +1,94 @@
+\hypertarget{class_c_g_1_1_timer}{}\section{CG\+:\+:Timer Class Reference}
+\label{class_c_g_1_1_timer}\index{C\+G\+::\+Timer@{C\+G\+::\+Timer}}
+
+
+if you want to regist timer, using this.  
+
+
+
+
+{\ttfamily \#include $<$Timer.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_c_g_1_1_timer_a3c8fc20be8fd5a16dae6ef82894b4fa1}{Timer}} (int \+\_\+timer\+No, int \+\_\+interval, int \+\_\+finish\+Count)
+\begin{DoxyCompactList}\small\item\em set timer info \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_timer_a7ee60b47517a990caea93d289f3a5ff4}\label{class_c_g_1_1_timer_a7ee60b47517a990caea93d289f3a5ff4}} 
+std\+::function$<$ void(time\+\_\+t)$>$ \mbox{\hyperlink{class_c_g_1_1_timer_a7ee60b47517a990caea93d289f3a5ff4}{process\+Timer\+Start}}
+\begin{DoxyCompactList}\small\item\em when timer start, call this function \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_g_1_1_timer_a356bd1762c00b2b9410251d3f1e48cd2}\label{class_c_g_1_1_timer_a356bd1762c00b2b9410251d3f1e48cd2}} 
+std\+::function$<$ void(time\+\_\+t)$>$ \mbox{\hyperlink{class_c_g_1_1_timer_a356bd1762c00b2b9410251d3f1e48cd2}{process\+Timer\+Interval}}
+\begin{DoxyCompactList}\small\item\em when timer call interval, call this function \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_g_1_1_timer_a03172466ad606010a6a3656bec707e52}\label{class_c_g_1_1_timer_a03172466ad606010a6a3656bec707e52}} 
+std\+::function$<$ void(time\+\_\+t)$>$ \mbox{\hyperlink{class_c_g_1_1_timer_a03172466ad606010a6a3656bec707e52}{process\+Timer\+Finish}}
+\begin{DoxyCompactList}\small\item\em when timer finish, call this function \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_timer_abfdeae7f34cf1b733164663f35a9fad6}\label{class_c_g_1_1_timer_abfdeae7f34cf1b733164663f35a9fad6}} 
+int \mbox{\hyperlink{class_c_g_1_1_timer_abfdeae7f34cf1b733164663f35a9fad6}{timer\+No}}
+\begin{DoxyCompactList}\small\item\em timer number \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_g_1_1_timer_a588bc101181b05cdbce6f1e337196576}\label{class_c_g_1_1_timer_a588bc101181b05cdbce6f1e337196576}} 
+long \mbox{\hyperlink{class_c_g_1_1_timer_a588bc101181b05cdbce6f1e337196576}{start\+Time}}
+\begin{DoxyCompactList}\small\item\em start time \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_g_1_1_timer_ab58548090a3a08718a4394a4b110e7b0}\label{class_c_g_1_1_timer_ab58548090a3a08718a4394a4b110e7b0}} 
+int \mbox{\hyperlink{class_c_g_1_1_timer_ab58548090a3a08718a4394a4b110e7b0}{interval}}
+\begin{DoxyCompactList}\small\item\em call interval \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_g_1_1_timer_a907a526179fdcc32c4e2201b482a9625}\label{class_c_g_1_1_timer_a907a526179fdcc32c4e2201b482a9625}} 
+int \mbox{\hyperlink{class_c_g_1_1_timer_a907a526179fdcc32c4e2201b482a9625}{finish\+Count}}
+\begin{DoxyCompactList}\small\item\em finish count (if 0, repeat forever) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_timer_a88b59289ffd793fecd040d32e397b1e9}\label{class_c_g_1_1_timer_a88b59289ffd793fecd040d32e397b1e9}} 
+class {\bfseries Network}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+if you want to regist timer, using this. 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_c_g_1_1_timer_a3c8fc20be8fd5a16dae6ef82894b4fa1}\label{class_c_g_1_1_timer_a3c8fc20be8fd5a16dae6ef82894b4fa1}} 
+\index{C\+G\+::\+Timer@{C\+G\+::\+Timer}!Timer@{Timer}}
+\index{Timer@{Timer}!C\+G\+::\+Timer@{C\+G\+::\+Timer}}
+\subsubsection{\texorpdfstring{Timer()}{Timer()}}
+{\footnotesize\ttfamily C\+G\+::\+Timer\+::\+Timer (\begin{DoxyParamCaption}\item[{int}]{\+\_\+timer\+No,  }\item[{int}]{\+\_\+interval,  }\item[{int}]{\+\_\+finish\+Count }\end{DoxyParamCaption})}
+
+
+
+set timer info 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em int} & \+\_\+timer\+No \+: timer number. when you want to find this, you can find by number \\
+\hline
+{\em int} & \+\_\+interval \+: set call interval \\
+\hline
+{\em int} & \+\_\+finish\+Count \+: set finish count \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+network/core/Timer.\+h\item 
+network/core/Timer.\+cpp\end{DoxyCompactItemize}

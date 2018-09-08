@@ -8,79 +8,52 @@
 
 namespace CG
 {
+	/**
+	* @author kim yong-chan
+	* @date 2018-09-08
+	* @brief convert file to use in cpp source
+	*/
 	class CGFileParser
 	{
 	public:
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief get file and convert to key/value
+		* @param const char* file : file path
+		* @return std::unordered_map<std::string, std::string> : return key/value
+		*/
 		std::unordered_map<std::string, std::string> parseSettingFile(const char* file);
 
 	private:
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief check it is annotation line
+		* @param std::string& line : one line in file
+		* @return bool : if annotation line, return ture. or not, return false
+		*/
 		bool isAnnotationLine(std::string& line);
+
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief remove all empty character(" ")
+		* @param std::string& line : one line in file
+		*/
 		void removeEmptySpace(std::string& line);
+
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief convert line to key/value
+		* @param std::string& line : one line in file
+		* @return std::pair<std::string, std::string> : key/value pair
+		* @todo if strange line??? think more
+		*/
 		std::pair<std::string, std::string> getKeyValue(std::string& line);
 
 	};
-
-	std::unordered_map<std::string, std::string> CGFileParser::parseSettingFile(const char* file)
-	{
-		std::unordered_map<std::string, std::string> settingMap;
-
-		//get file in stream
-		std::ifstream infile(file);
-
-		std::string line;
-		
-		//read line repeatily and save line if it is not annotation
-		while (std::getline(infile, line))
-		{
-			//if it is annotation, read next line
-			if (isAnnotationLine(line))
-			{
-				continue;
-			}
-
-			//remove all empty space
-			removeEmptySpace(line);
-
-			//save key, value in map;
-			std::pair<std::string, std::string> kv = getKeyValue(line);
-			settingMap.insert(kv);
-
-		}
-
-		return settingMap;
-	}
-
-	bool CGFileParser::isAnnotationLine(std::string& line)
-	{
-		if (line.at(0) == '#')
-			return true;
-
-		return false;
-	}
-
-	void CGFileParser::removeEmptySpace(std::string& line)
-	{
-		//change " " -> "" in line
-		size_t pos;
-		while ((pos = line.find(" ")) != std::string::npos)
-		{
-			line.replace(pos, 1, "");
-		}
-	}
-
-	std::pair<std::string, std::string> CGFileParser::getKeyValue(std::string& line)
-	{
-		//split 2 line by '='
-		size_t pos;
-		if ((pos = line.find("=")) == std::string::npos)
-		{
-			return std::pair<std::string, std::string>("", "");
-		}
-		else
-		{
-			return std::pair<std::string, std::string>(line.substr(0, pos), line.substr(pos + 1));
-		}
-	}
 }
 
 

@@ -1,0 +1,125 @@
+\hypertarget{class_c_g_1_1_network}{}\section{CG\+:\+:Network Class Reference}
+\label{class_c_g_1_1_network}\index{C\+G\+::\+Network@{C\+G\+::\+Network}}
+Inheritance diagram for CG\+:\+:Network\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_c_g_1_1_network}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_ad78402e19997627dfdc66acc8d692454}\label{class_c_g_1_1_network_ad78402e19997627dfdc66acc8d692454}} 
+long {\bfseries get\+Network\+Current\+Time} ()
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a8d3dc68aa1225515c64452fb6959ed4f}\label{class_c_g_1_1_network_a8d3dc68aa1225515c64452fb6959ed4f}} 
+bool {\bfseries init} ()
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a2ee44c8a4cc822642315e22e8c6752e3}\label{class_c_g_1_1_network_a2ee44c8a4cc822642315e22e8c6752e3}} 
+bool {\bfseries add\+Connector} (\mbox{\hyperlink{class_c_g_1_1_base_connector}{Base\+Connector}} $\ast$connect)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a9bfaa8c8baf2cabe501b03e425b9b95a}\label{class_c_g_1_1_network_a9bfaa8c8baf2cabe501b03e425b9b95a}} 
+bool {\bfseries add\+Server} (\mbox{\hyperlink{class_c_g_1_1_base_server}{Base\+Server}} $\ast$server)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_af1718e351ac7f026414854c082cac37c}\label{class_c_g_1_1_network_af1718e351ac7f026414854c082cac37c}} 
+bool {\bfseries add\+Client} (\mbox{\hyperlink{class_c_g_1_1_base_client}{Base\+Client}} $\ast$client)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a866f5d6275992de290a5e9754c526e6a}\label{class_c_g_1_1_network_a866f5d6275992de290a5e9754c526e6a}} 
+int {\bfseries Create\+T\+C\+P\+Server\+Socket} (const char $\ast$ip, unsigned short port)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a7caa058a41315430ba5dc051739bf3df}\label{class_c_g_1_1_network_a7caa058a41315430ba5dc051739bf3df}} 
+int {\bfseries Create\+T\+C\+P\+Client\+Socket} (const char $\ast$ip, unsigned short port)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_ab9d768fbb1ffe711c3bf7e1fa38c12ee}\label{class_c_g_1_1_network_ab9d768fbb1ffe711c3bf7e1fa38c12ee}} 
+bool {\bfseries add\+Timer} (\mbox{\hyperlink{class_c_g_1_1_timer}{Timer}} $\ast$timer)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a5db4a0eed7fa669c64ab1fdacb75a9de}\label{class_c_g_1_1_network_a5db4a0eed7fa669c64ab1fdacb75a9de}} 
+void {\bfseries send\+Data} (int fd, const char $\ast$data, int data\+Size)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_aac7198d5ba6e0add2257e0da3943f756}\label{class_c_g_1_1_network_aac7198d5ba6e0add2257e0da3943f756}} 
+void {\bfseries send\+Data} (\mbox{\hyperlink{class_c_g_1_1_base_connector}{Base\+Connector}} $\ast$connector, const char $\ast$data, int data\+Size)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_aeafac10483418b385c2e183c8516610e}\label{class_c_g_1_1_network_aeafac10483418b385c2e183c8516610e}} 
+void {\bfseries send\+Data} (\mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $\ast$connector\+Info, const char $\ast$data, int data\+Size)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_ac13d409479954945a69ae573ac89d639}\label{class_c_g_1_1_network_ac13d409479954945a69ae573ac89d639}} 
+bool {\bfseries process\+Receive\+Data} (\mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $\ast$connector\+Info)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a40e2c5ec8e896caa93fd5ca30fe8d837}\label{class_c_g_1_1_network_a40e2c5ec8e896caa93fd5ca30fe8d837}} 
+\mbox{\hyperlink{class_c_g_1_1_worker_thread}{Worker\+Thread}} $\ast$ {\bfseries get\+Worker\+Thread\+Using\+Hash} (int hash\+Key)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a5366aa30553b7e4f92fc936301448eec}\label{class_c_g_1_1_network_a5366aa30553b7e4f92fc936301448eec}} 
+void {\bfseries disconnect\+With\+Connector\+Info} (\mbox{\hyperlink{class_c_g_1_1_worker_thread}{Worker\+Thread}} $\ast$worker\+Thread, \mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $\ast$connector\+Info)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_add107d404897c8f29669fd1210ebec17}\label{class_c_g_1_1_network_add107d404897c8f29669fd1210ebec17}} 
+void {\bfseries start} ()
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a8ef3e5635ff4eb5a1e75d02e82b6bc3f}\label{class_c_g_1_1_network_a8ef3e5635ff4eb5a1e75d02e82b6bc3f}} 
+void {\bfseries windows\+Connector\+Info\+Thread} (\mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $\ast$connector\+Info)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a54d8280ebfdb0b0956a81b21f3ea30a4}\label{class_c_g_1_1_network_a54d8280ebfdb0b0956a81b21f3ea30a4}} 
+void {\bfseries windows\+Server\+Thread} (\mbox{\hyperlink{class_c_g_1_1_base_server}{Base\+Server}} $\ast$server)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_aad38df455a3c12db45492a1a1487ca87}\label{class_c_g_1_1_network_aad38df455a3c12db45492a1a1487ca87}} 
+static void $\ast$ {\bfseries start\+Unix\+Running\+Thread} (void $\ast$a)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a6130f231ce02cf35083675b1f08d941d}\label{class_c_g_1_1_network_a6130f231ce02cf35083675b1f08d941d}} 
+int {\bfseries worker\+Thread\+Count}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a7bbcc20e73d8ffd3cc5c1e9b5ca45653}\label{class_c_g_1_1_network_a7bbcc20e73d8ffd3cc5c1e9b5ca45653}} 
+\mbox{\hyperlink{class_c_g_1_1_worker_thread}{Worker\+Thread}} $\ast$$\ast$ {\bfseries worker\+Thread\+Array}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a12e773c9b3a524ba449baaae26465578}\label{class_c_g_1_1_network_a12e773c9b3a524ba449baaae26465578}} 
+\mbox{\hyperlink{class_util_1_1_list}{Util\+::\+List}}$<$ \mbox{\hyperlink{class_c_g_1_1_base_server}{Base\+Server}} $\ast$ $>$ $\ast$ {\bfseries server\+List}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_accc7187702968499740a9de2dca33d32}\label{class_c_g_1_1_network_accc7187702968499740a9de2dca33d32}} 
+\mbox{\hyperlink{class_util_1_1_list}{Util\+::\+List}}$<$ \mbox{\hyperlink{class_c_g_1_1_base_client}{Base\+Client}} $\ast$ $>$ $\ast$ {\bfseries client\+List}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a00a784ea618276fe54ab09dd4f57a301}\label{class_c_g_1_1_network_a00a784ea618276fe54ab09dd4f57a301}} 
+\mbox{\hyperlink{class_util_1_1_queue}{Util\+::\+Queue}}$<$ \mbox{\hyperlink{class_c_g_1_1_timer}{Timer}} $\ast$ $>$ $\ast$ {\bfseries timer\+Queue}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a0c66272858b3eb446fe80a0810dd7b8c}\label{class_c_g_1_1_network_a0c66272858b3eb446fe80a0810dd7b8c}} 
+int {\bfseries event\+Fd}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_aaa0677f4142005c8180d9d84d550e4c9}\label{class_c_g_1_1_network_aaa0677f4142005c8180d9d84d550e4c9}} 
+int {\bfseries clnt\+Fd}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a12d20e697fc95c76b907073666ea622b}\label{class_c_g_1_1_network_a12d20e697fc95c76b907073666ea622b}} 
+struct sockaddr\+\_\+in {\bfseries clntaddr}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_acb771586a3f23f2be7690042d9b15a65}\label{class_c_g_1_1_network_acb771586a3f23f2be7690042d9b15a65}} 
+int {\bfseries clntaddr\+Len}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a837eb0caccdff8c61fa0328ae1a6d8e4}\label{class_c_g_1_1_network_a837eb0caccdff8c61fa0328ae1a6d8e4}} 
+long {\bfseries current\+Time}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_acd01adbd56173cb7166962ef3048b26e}\label{class_c_g_1_1_network_acd01adbd56173cb7166962ef3048b26e}} 
+long {\bfseries last\+Loop\+Time}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_addf461a11555689ffd101b9432fa5f75}\label{class_c_g_1_1_network_addf461a11555689ffd101b9432fa5f75}} 
+long {\bfseries loop\+Dt}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a5493ef1349b446a6bf66ca5e1c71332a}\label{class_c_g_1_1_network_a5493ef1349b446a6bf66ca5e1c71332a}} 
+std\+::thread {\bfseries network\+Thread}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_ab5b9827e5c8f6f92061d1ed24815a376}\label{class_c_g_1_1_network_ab5b9827e5c8f6f92061d1ed24815a376}} 
+\mbox{\hyperlink{class_util_1_1_list}{Util\+::\+List}}$<$ std\+::thread $\ast$ $>$ $\ast$ {\bfseries server\+Thread\+List}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_adc43d39338d556987d0cf8c90851a7d4}\label{class_c_g_1_1_network_adc43d39338d556987d0cf8c90851a7d4}} 
+\mbox{\hyperlink{class_util_1_1_list}{Util\+::\+List}}$<$ std\+::thread $\ast$ $>$ $\ast$ {\bfseries client\+Thread\+List}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_network_a3d2ccbb2cab8bcaf45bf270d67b087bd}\label{class_c_g_1_1_network_a3d2ccbb2cab8bcaf45bf270d67b087bd}} 
+\mbox{\hyperlink{class_util_1_1_object_pool}{Util\+::\+Object\+Pool}}$<$ \mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $>$ $\ast$ {\bfseries connector\+Info\+Pool}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+network/core/Network.\+h\item 
+network/core/Network.\+cpp\end{DoxyCompactItemize}

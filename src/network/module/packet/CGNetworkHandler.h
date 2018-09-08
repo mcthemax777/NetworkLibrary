@@ -44,6 +44,5 @@ namespace CG
 		std::map<npType_t, PacketFunction*>::iterator itr;
 
 		friend class Network;
-		friend class ClientNetwork;
 	};
 }

@@ -1,0 +1,156 @@
+\hypertarget{class_c_g_1_1_connector_info}{}\section{CG\+:\+:Connector\+Info Class Reference}
+\label{class_c_g_1_1_connector_info}\index{C\+G\+::\+Connector\+Info@{C\+G\+::\+Connector\+Info}}
+
+
+if someone connect with me, create this. this class include connector info  
+
+
+
+
+{\ttfamily \#include $<$Connector\+Info.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_a52838c3667defe99bd17011a563e55a8}\label{class_c_g_1_1_connector_info_a52838c3667defe99bd17011a563e55a8}} 
+Host\+Id {\bfseries get\+Host\+Id} ()
+\item 
+void \mbox{\hyperlink{class_c_g_1_1_connector_info_a6d67b0192c2039eba12bf2ca1354a9d9}{send\+Data}} (const char $\ast$data, int data\+Size)
+\begin{DoxyCompactList}\small\item\em send data to server or client \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_c_g_1_1_connector_info_ae8e3cecb2e65164b357cab6ad7d60ba2}{init}} (\mbox{\hyperlink{class_c_g_1_1_base_connector}{Base\+Connector}} $\ast$\+\_\+connector, Host\+Id \+\_\+host\+Id)
+\begin{DoxyCompactList}\small\item\em set connector info and link with connector class \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_c_g_1_1_connector_info_af6b5c51df589176c6cb3dc093deabfae}{reset}} ()
+\begin{DoxyCompactList}\small\item\em reset all contents \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::list$<$ \mbox{\hyperlink{class_c_g_1_1_buffer}{Buffer}} $\ast$ $>$ \mbox{\hyperlink{class_c_g_1_1_connector_info_a29bcb8d076ad5909c38bc7b91d5468ea}{buffer\+List}}
+\begin{DoxyCompactList}\small\item\em storage receive data if the data came partially \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_aa15fb949f25d8fd7e69131027b98a27c}\label{class_c_g_1_1_connector_info_aa15fb949f25d8fd7e69131027b98a27c}} 
+char $\ast$ {\bfseries ip}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_a7c4139aaefc21256452638ec391db360}\label{class_c_g_1_1_connector_info_a7c4139aaefc21256452638ec391db360}} 
+unsigned short {\bfseries port}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_a216083f3e7048d7ec862edc3e428adfc}\label{class_c_g_1_1_connector_info_a216083f3e7048d7ec862edc3e428adfc}} 
+Host\+Id {\bfseries host\+Id}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_aea7f6fc27d99ebbce648ae3b541c326c}\label{class_c_g_1_1_connector_info_aea7f6fc27d99ebbce648ae3b541c326c}} 
+\mbox{\hyperlink{class_c_g_1_1_base_connector}{Base\+Connector}} $\ast$ \mbox{\hyperlink{class_c_g_1_1_connector_info_aea7f6fc27d99ebbce648ae3b541c326c}{connector}}
+\begin{DoxyCompactList}\small\item\em set this class who create me \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_aaf268bd7770540a17f9c30d88b2daf19}\label{class_c_g_1_1_connector_info_aaf268bd7770540a17f9c30d88b2daf19}} 
+class {\bfseries Base\+Connector}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_a88b59289ffd793fecd040d32e397b1e9}\label{class_c_g_1_1_connector_info_a88b59289ffd793fecd040d32e397b1e9}} 
+class {\bfseries Network}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_a5cd181bfe09cfad66e8f3d87feef1439}\label{class_c_g_1_1_connector_info_a5cd181bfe09cfad66e8f3d87feef1439}} 
+class {\bfseries Worker\+Thread}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+if someone connect with me, create this. this class include connector info 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_ae8e3cecb2e65164b357cab6ad7d60ba2}\label{class_c_g_1_1_connector_info_ae8e3cecb2e65164b357cab6ad7d60ba2}} 
+\index{C\+G\+::\+Connector\+Info@{C\+G\+::\+Connector\+Info}!init@{init}}
+\index{init@{init}!C\+G\+::\+Connector\+Info@{C\+G\+::\+Connector\+Info}}
+\subsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily void C\+G\+::\+Connector\+Info\+::init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c_g_1_1_base_connector}{Base\+Connector}} $\ast$}]{\+\_\+connector,  }\item[{Host\+Id}]{\+\_\+host\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+set connector info and link with connector class 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em Base\+Connector$\ast$} & \+\_\+connector \+: class that made me \\
+\hline
+{\em Host\+Id} & \+\_\+host\+Id \+: socket descripter \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_af6b5c51df589176c6cb3dc093deabfae}\label{class_c_g_1_1_connector_info_af6b5c51df589176c6cb3dc093deabfae}} 
+\index{C\+G\+::\+Connector\+Info@{C\+G\+::\+Connector\+Info}!reset@{reset}}
+\index{reset@{reset}!C\+G\+::\+Connector\+Info@{C\+G\+::\+Connector\+Info}}
+\subsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily void C\+G\+::\+Connector\+Info\+::reset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+reset all contents 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_a6d67b0192c2039eba12bf2ca1354a9d9}\label{class_c_g_1_1_connector_info_a6d67b0192c2039eba12bf2ca1354a9d9}} 
+\index{C\+G\+::\+Connector\+Info@{C\+G\+::\+Connector\+Info}!send\+Data@{send\+Data}}
+\index{send\+Data@{send\+Data}!C\+G\+::\+Connector\+Info@{C\+G\+::\+Connector\+Info}}
+\subsubsection{\texorpdfstring{send\+Data()}{sendData()}}
+{\footnotesize\ttfamily void C\+G\+::\+Connector\+Info\+::send\+Data (\begin{DoxyParamCaption}\item[{const char $\ast$}]{data,  }\item[{int}]{data\+Size }\end{DoxyParamCaption})}
+
+
+
+send data to server or client 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em char$\ast$} & data \+: receive data from other \\
+\hline
+{\em int} & data\+Size \+: receive data size \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_c_g_1_1_connector_info_a29bcb8d076ad5909c38bc7b91d5468ea}\label{class_c_g_1_1_connector_info_a29bcb8d076ad5909c38bc7b91d5468ea}} 
+\index{C\+G\+::\+Connector\+Info@{C\+G\+::\+Connector\+Info}!buffer\+List@{buffer\+List}}
+\index{buffer\+List@{buffer\+List}!C\+G\+::\+Connector\+Info@{C\+G\+::\+Connector\+Info}}
+\subsubsection{\texorpdfstring{buffer\+List}{bufferList}}
+{\footnotesize\ttfamily std\+::list$<$\mbox{\hyperlink{class_c_g_1_1_buffer}{Buffer}}$\ast$$>$ C\+G\+::\+Connector\+Info\+::buffer\+List\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+storage receive data if the data came partially 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+network/core/Connector\+Info.\+h\item 
+network/core/Connector\+Info.\+cpp\end{DoxyCompactItemize}

@@ -4,7 +4,7 @@
 #include <functional>
 #include <map>
 
-#include "network/core/Define.h"
+#include "network/core/NetworkDefine.h"
 #include "network/core/ConnectorInfo.h"
 
 namespace CG
@@ -19,7 +19,6 @@ namespace CG
 		void sendMessage(HostId hostId, const char* data, int dataSize);
 
 		friend class Network;
-		friend class ClientNetwork;
 
 		std::function<void(HostId, char*, int)>* onReceive;
 
