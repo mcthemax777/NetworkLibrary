@@ -176,6 +176,11 @@ client->stop();
 #### packet
 
 make packet class
+1. extend NetworkPacket
+2. set type(0 ~ 30000)
+3. regist member value call 'addMemberValue()' (set same order between server and client)
+4. regist CREATE_PACKET(class name)
+
 ~~~cpp
 class MessagePacket : public NetworkPacket
 {
