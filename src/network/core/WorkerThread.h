@@ -5,8 +5,8 @@
 #include "util/thread/Thread.h"
 #include <deque>
 #include <list>
-#include "Util/Queue/BQueue.h"
-#include "Util/ObjectPool.h"
+#include "util/Queue/BQueue.h"
+#include "util/objectPool/ObjectPool.h"
 
 
 namespace CG

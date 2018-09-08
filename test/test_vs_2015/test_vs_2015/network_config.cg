@@ -1,0 +1,4 @@
+#set worker thread cunt(not 0)
+worker_thread_count=4
+read_buffer_size=5
+allocate_buffer_count=10

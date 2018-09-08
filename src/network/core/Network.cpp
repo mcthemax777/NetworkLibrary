@@ -1,5 +1,6 @@
 #include "Network.h"
-
+#include <sstream>
+#include <chrono>
 #if OS_PLATFORM == PLATFORM_WINDOWS
 
 #ifndef _CRT_SECURE_NO_WARNINGS
@@ -31,68 +32,19 @@
 #endif
 
 #include "WorkerThread.h"
-#include "Log/Log.h"
+#include "log/Log.h"
 #include "BaseConnector.h"
 #include "ConnectorInfo.h"
 #include "Define.h"
 #include "BaseServer.h"
 #include "BaseClient.h"
 #include "Timer.h"
-#include "Util/FileParser.h"
+#include "CGFileParser.h"
 
 
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
-#include < time.h >
 #include <WinSock2.h>
-
-#if defined(_MSC_VER) || defined(_MSC_EXTENSIONS)
-#define DELTA_EPOCH_IN_MICROSECS  11644473600000000Ui64
-#else
-#define DELTA_EPOCH_IN_MICROSECS  11644473600000000ULL
-#endif
-
-struct timezone
-{
-	int  tz_minuteswest; /* minutes W of Greenwich */
-	int  tz_dsttime;     /* type of dst correction */
-};
-
-
-int gettimeofday(struct timeval *tv, struct timezone *tz)
-{
-	FILETIME ft;
-	unsigned __int64 tmpres = 0;
-	static int tzflag = 0;
-
-	if (NULL != tv)
-	{
-		GetSystemTimeAsFileTime(&ft);
-
-		tmpres |= ft.dwHighDateTime;
-		tmpres <<= 32;
-		tmpres |= ft.dwLowDateTime;
-
-		tmpres /= 10;  /*convert into microseconds*/
-					   /*converting file time to unix epoch*/
-		tmpres -= DELTA_EPOCH_IN_MICROSECS;
-		tv->tv_sec = (long)(tmpres / 1000000UL);
-		tv->tv_usec = (long)(tmpres % 1000000UL);
-	}
-
-	if (NULL != tz)
-	{
-		if (!tzflag)
-		{
-			_tzset();
-			tzflag++;
-
-		}
-		tz->tz_minuteswest = _timezone / 60;
-		tz->tz_dsttime = _daylight;
-	}
-	return 0;
-}
 
 #endif
 
@@ -246,24 +198,18 @@ namespace CG
 
 	Network::Network()
 	{
-		rapidjson::Document document = Util::FileParser::parseJson("cg_config.json");
+		CGFileParser fp;
+		std::unordered_map<std::string, std::string> kv = fp.parseSettingFile("network_config.cg");
 
-		if (document.HasMember("worker_thread_count"))
+		std::string workerThreadCountStr = kv["worker_thread_count"];
+
+		std::stringstream ss(workerThreadCountStr);
+
+		if ((ss >> workerThreadCount).fail())
 		{
-			if (document["worker_thread_count"].IsInt())
-			{
-				workerThreadCount = document["worker_thread_count"].GetInt();
-			}
-			else
-			{
-				ErrorLog("worker_thread_count is not int-type");
-			}
-		}
-		else
-		{
+			ErrorLog("worker_thread_count is not int-type");
 			ErrorLog("worker_thread_count do not exist");
 		}
-
 
 
 		if (workerThreadCount == 0) //single Thread
@@ -397,16 +343,17 @@ namespace CG
 
 		networkThread = std::thread(&Network::start, this);
 
+		DebugLog("NETWORK START");
+
 		return true;
 	}
 
 
 	long Network::getNetworkCurrentTime()
 	{
-		struct timeval tv;
-		gettimeofday(&tv, NULL);
+		std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
 
-		return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);    // milliseconds 단위로 변환
+		return ms.count();
 	}
 
 	bool Network::addConnector(BaseConnector* connector)
