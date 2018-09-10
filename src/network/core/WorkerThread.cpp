@@ -9,11 +9,10 @@ namespace CG
 {
 	WorkerThread::WorkerThread(bool isMultiThread)
 	{
-		//no single thread
-		/*if(isMultiThread)
+		if(isMultiThread)
 			dataPacketQueue = new Util::BQueue<DataPacket*>();
 		else
-			dataPacketQueue = new Util::NBQueue<DataPacket*>();*/
+			dataPacketQueue = new Util::NBQueue<DataPacket*>();
 
 		dataPacketQueue = new Util::BQueue<DataPacket*>();
 		dataPacketPool = new Util::ObjectPool<DataPacket>(100, true);
@@ -31,7 +30,7 @@ namespace CG
 		return true;
 	}
 
-
+	
 	void WorkerThread::run()
 	{
 		while (!isStop)
@@ -134,6 +133,7 @@ namespace CG
 			{
 				if (Network::GetInstance()->workerThreadCount != 0)
 				{
+					//never come here because multi thread wait when queue is empty
 					ErrorLog("not wait queue");
 				}
 				else
