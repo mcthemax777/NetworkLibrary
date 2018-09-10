@@ -30,7 +30,7 @@ namespace CG
 		return true;
 	}
 
-
+	
 	void WorkerThread::run()
 	{
 		while (!isStop)
@@ -133,6 +133,7 @@ namespace CG
 			{
 				if (Network::GetInstance()->workerThreadCount != 0)
 				{
+					//never come here because multi thread wait when queue is empty
 					ErrorLog("not wait queue");
 				}
 				else
