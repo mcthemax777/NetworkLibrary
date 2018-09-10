@@ -13,14 +13,12 @@ NetworkLibrary offer network function that is easy to use connecting with other.
 ### platform
  - linux (epoll)
  - mac (kqueue)
- - window (simple rcv, send) - just develop mode
+ - window (simple rcv, send) - just develop mode(develop iocp, later)
 
 ### language
  - c++ only
 
 ### exteral using
- - prebuilt
- - rapidJson
  - doxygen
 ***
 
@@ -34,16 +32,14 @@ To Use easily, we offer two modules
  - tcp snd/rcv transmission module
  - packet snd/rcv transmission module (Ofcourse, tcp)
 
-<br>
-### simple architacture
+#### simple architacture
 
-<img src="./doc/simple-architecture.png" width="100%"></img>
-<br>
-### simple class diagram
-<br>
-<img src="./doc/simple-class-diagram.png" width="100%"></img>
+<img src="https://user-images.githubusercontent.com/41141549/45155014-76fa3800-b214-11e8-80fe-a4971e4635cf.PNG" width="100%"></img>
 
-<br><br>
+#### simple class diagram
+
+<img src="https://user-images.githubusercontent.com/41141549/45155090-bfb1f100-b214-11e8-86d0-3f8f0559c7b1.PNG" width="100%"></img>
+
 
 
 ***
@@ -180,6 +176,11 @@ client->stop();
 #### packet
 
 make packet class
+1. extend NetworkPacket
+2. set type(0 ~ 30000)
+3. regist member value call 'addMemberValue()' (set same order between server and client)
+4. regist CREATE_PACKET(class name)
+
 ~~~cpp
 class MessagePacket : public NetworkPacket
 {

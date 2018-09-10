@@ -1,0 +1,21 @@
+change mode x64 -> x86
+
+Linker -> Input -> Additional Dependencies
+
+ws2_32.lib
+pthreadVC2.lib
+
+
+Linker -> General -> Additional Library Directories
+
+C:\CppProjects\Lib\src
+C:\CppProjects\Lib\3rd-party\prebuilt-dll-2-9-1-release\lib\x86
+C:\CppProjects\Lib\3rd-party\rapidjson\include
+
+C/C++ -> General -> Addtional Include Directories
+
+C:\CppProjects\Lib\src
+C:\CppProjects\Lib\3rd-party\prebuilt-dll-2-9-1-release\include
+C:\CppProjects\Lib\3rd-party\rapidjson\include
+
+set Target Platform Version and Platform Toolset

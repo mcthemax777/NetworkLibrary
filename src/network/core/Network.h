@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SystemDefine.h"
-
+#include "NetworkDefine.h"
 
 #if OS_PLATFORM == PLATFORM_LINUX
 #include <sys/epoll.h>
@@ -35,25 +35,15 @@
 #include <vector>
 #include <thread>
 #include <list>
-#include "Util/Singleton.h"
+#include "util/singleton/Singleton.h"
 #include "Define.h"
 #include "BaseServer.h"
 #include "BaseClient.h"
-#include "Util/ObjectPool.h"
-#include "Util/List/MTList.h"
-#include "Util/List/STList.h"
+#include "util/objectPool/ObjectPool.h"
+#include "util/List/MTList.h"
+#include "util/List/STList.h"
 #include "Buffer.h"
 
-
-#define MAX_IP_LEN 15
-#define EVENT_BUFFER_SIZE 50
-#define MAX_CONNECT_SIZE 100
-#define NETWORK_LOOP_DT 1000
-
-typedef int8_t dataType_t;
-typedef uint64_t dataSize_t;
-
-typedef int stringSize_t;
 
 namespace CG
 {
@@ -118,6 +108,7 @@ namespace CG
 		WorkerThread** workerThreadArray;
 
 	public:
+		Network();
 		~Network();
 
 		long getNetworkCurrentTime();
@@ -137,8 +128,6 @@ namespace CG
 		void disconnectWithConnectorInfo(WorkerThread* workerThread, ConnectorInfo* connectorInfo);
 		void start();
 		
-		Network();
-
 	public:		
 		//나의 Server 정보
 		Util::List<BaseServer*>* serverList;

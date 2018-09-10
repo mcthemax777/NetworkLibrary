@@ -1,8 +1,8 @@
 #pragma once
 
 #include "SystemDefine.h"
-#include "Util/Singleton.h"
-#include "Util/Lock/Lock.h"
+#include "util/singleton/Singleton.h"
+#include "util/lock/Lock.h"
 
 typedef int logtype;
 
