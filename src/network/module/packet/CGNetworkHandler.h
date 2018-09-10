@@ -37,14 +37,30 @@ namespace CG
 	/**
 	* @author kim yong-chan
 	* @date 2018-09-08
-	* @brief tie up packet and packet function to save together
+	* @brief process send and receive packet from client, server module
 	*/
 	class CGNetworkHandler
 	{
 	public:
 
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief Convert data to packet
+		* @param ConnectorInfo* connectorInfo : sender info
+		* @param char* data : received data
+		* @param int dataSize : received data size
+		* @return int result : see baseConnector(same function)
+		* @todo (***)serialize -> set npSize, deserialize -> do exception when dataSize small than deserializing packet
+		*/
 		int processData(ConnectorInfo* connectorInfo, char* data, int dataSize);
 
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief Convert data to packet
+		* @param std::function<void(HostId, NetworkPacket*)> onReceiveNPacket : when received packet, execute this function
+		*/
 		template<typename T, typename std::enable_if<std::is_base_of<CG::NetworkPacket, T>::value>::type* = nullptr>
 		void registerPacket(std::function<void(HostId, NetworkPacket*)> onReceiveNPacket)
 		{
@@ -59,9 +75,19 @@ namespace CG
 			}
 		}
 
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief use to send message
+		* @param const HostId hostId : user info to send
+		* @param NetworkPacket* packet : packet to send
+		*/
 		void sendPacket(HostId hostId, NetworkPacket* packet);
 
+		/// storage packet function
 		std::map<npType_t, PacketFunction*> npMap;
+		
+		/// using in functions
 		std::map<npType_t, PacketFunction*>::iterator itr;
 
 		friend class Network;

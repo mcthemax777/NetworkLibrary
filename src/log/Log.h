@@ -31,7 +31,7 @@ enum LogType {
 #define ErrorLog(fmt, ...)  Log::GetInstance()->print(LOG_TYPE_ERROR, "%s,%s,%d,ERROR," fmt, __FILE__, __FUNCTION__, __LINE__, ## __VA_ARGS__)
 #define CriticalLog(fmt, ...)  Log::GetInstance()->print(LOG_TYPE_CRITICAL, "%s,%s,%d,CRITICAL," fmt, __FILE__, __FUNCTION__, __LINE__, ## __VA_ARGS__)
 
-class Log : public Util::Singleton<Log>, public Util::Lock
+class Log : public Util::Singleton<Log>
 {
 public:
 	Log();
@@ -51,5 +51,5 @@ private:
 	char* writeBuffer;
 	char* buffer;
 
-protected:
+	Util::Lock lock;
 };

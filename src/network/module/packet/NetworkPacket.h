@@ -3,6 +3,7 @@
 #include <string>
 #include <list>
 #include <functional>
+#include <limits>
 #include "network/core/NetworkDefine.h"
 #include "Util/Serialize/Serialize.h"
 
@@ -17,9 +18,12 @@ namespace CG
 	typedef int16_t npType_t;
 	typedef int32_t npSize_t;
 
-	enum MESSAGE_TYPE
+	const uint16_t MAX_NETWORK_PACKET_TYPE = 30000;
+
+	enum NETWORK_PACKET_TYPE
 	{
-		MESSAGE_TYPE_MESSAGE = 1000,
+		NETWORK_PACKET_TYPE_MESSAGE,
+		NETWORK_PACKET_COUNT
 	};
 
 	typedef int16_t inpType_t;
@@ -59,6 +63,11 @@ namespace CG
 			return new NetworkPacket();
 		}
 
+		void setPacketSize()
+		{
+			header.npSize = size() - sizeof(npType_t) - sizeof(npSize_t);
+		}
+
 	public:
 		Header header;
 	};
@@ -69,7 +78,7 @@ namespace CG
 		MessagePacket()
 		{
 			//set type
-			header.npType = MESSAGE_TYPE_MESSAGE;
+			header.npType = NETWORK_PACKET_TYPE_MESSAGE;
 			
 			//init serial member value
 			addMemberValue(&str);
