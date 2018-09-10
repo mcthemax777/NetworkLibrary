@@ -162,14 +162,14 @@
     <ClInclude Include="..\..\..\src\util\list\STList.h" />
     <ClInclude Include="..\..\..\src\util\lock\Lock.h" />
     <ClInclude Include="..\..\..\src\util\lock\SpinLock.h" />
-    <ClInclude Include="..\..\..\src\util\ObjectPool.h" />
-    <ClInclude Include="..\..\..\src\util\Property.h" />
+    <ClInclude Include="..\..\..\src\util\objectPool\ObjectPool.h" />
+    <ClInclude Include="..\..\..\src\util\property\Property.h" />
     <ClInclude Include="..\..\..\src\util\queue\BQueue.h" />
     <ClInclude Include="..\..\..\src\util\queue\NBQueue.h" />
     <ClInclude Include="..\..\..\src\util\queue\Queue.h" />
     <ClInclude Include="..\..\..\src\util\queue\STQueue.h" />
     <ClInclude Include="..\..\..\src\util\serialize\Serialize.h" />
-    <ClInclude Include="..\..\..\src\util\Singleton.h" />
+    <ClInclude Include="..\..\..\src\util\singleton\Singleton.h" />
     <ClInclude Include="..\..\..\src\util\thread\Thread.h" />
     <ClInclude Include="..\..\basic\BCTest.hpp" />
     <ClInclude Include="..\..\basic\BSTest.hpp" />

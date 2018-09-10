@@ -13,7 +13,7 @@ namespace CG
 	/**
 	* @author kim yong-chan
 	* @date 2018-09-08
-	* @brief if someone connect with me, create this. this class include connector info
+	* @brief if someone connect with me, create this. this class include connector info(ip, port, ...)
 	*/
 	class ConnectorInfo
 	{

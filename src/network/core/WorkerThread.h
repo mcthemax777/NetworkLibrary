@@ -3,7 +3,7 @@
 #include "util/thread/Thread.h"
 #include <deque>
 #include <list>
-#include "util/Queue/BQueue.h"
+#include "util/queue/BQueue.h"
 #include "util/objectPool/ObjectPool.h"
 
 
@@ -33,5 +33,6 @@ namespace CG
 		Util::ObjectPool<Buffer>* bufferPool;
 
 		std::list<Buffer*>::iterator itr;
+
 	};
 }

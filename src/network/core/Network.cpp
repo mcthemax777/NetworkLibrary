@@ -39,12 +39,14 @@ namespace CG
 {
 	WorkerThread* Network::getWorkerThreadUsingHash(int hashKey)
 	{
+		//single thread
 		if (workerThreadCount == 0)
 		{
 			return (*workerThreadArray);
 		}
-		else
+		else //multi thread
 		{
+			//now just make by %
 			int hash = hashKey % workerThreadCount;
 
 			return workerThreadArray[hash];
@@ -53,43 +55,52 @@ namespace CG
 
 	bool Network::processReceiveData(ConnectorInfo* connectorInfo)
 	{
+		//receive processing worker thread
 		WorkerThread* workerThread = getWorkerThreadUsingHash(connectorInfo->hostId);
 
+		//receive buffer in buffer pool in worker thread
 		Buffer* buffer = workerThread->bufferPool->getObject();
 
-		buffer->dataSize = 0;
-
+		//receive data
 		int dataSize = recv(connectorInfo->getHostId(), buffer->data, RCV_BUF, 0);
 
-		if (dataSize > 0) //무언가 받은 데이터가 있을때(데이터 전송받은 상황)
+		if (dataSize > 0) //if received data
 		{
+			//set buffer member
+			buffer->startIndex = 0;
 			buffer->dataSize = dataSize;
 
+			//create data packet to deliver to worker thread
 			DataPacket* dp = workerThread->dataPacketPool->getObject();
 
 			dp->setDataPacket(RECEIVE_TYPE_DATA, connectorInfo, buffer);
 
+			//push data packet in queue and wake up worker thread
 			workerThread->pushDataPacket(dp);
 
 			return true;
 		}
-		else //disconnect 일 경우
+		else //if disconnect
 		{
+			//buffer return because not exist received data
 			workerThread->bufferPool->returnObject(buffer);
 
+			//send disconnecting packet to worker thread
 			disconnectWithConnectorInfo(workerThread, connectorInfo);
 
+			//ToDo. no disconnect, error, process error
 			if (dataSize != -1)
 			{
 				ErrorLog("receive count - %d", dataSize);
 			}
 
 			return false;
-		}//ToDo.무언가 문제가 있는 상황(-1)이 날라왔을 경우를 처리해야됨.
+		}
 	}
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
 
+	//remove when develop iocp
 	void Network::windowsConnectorInfoThread(ConnectorInfo* connectorInfo)
 	{
 		WorkerThread* workerThread = getWorkerThreadUsingHash(connectorInfo->hostId);
@@ -111,6 +122,7 @@ namespace CG
 		}
 	}
 
+	//remove when develop iocp
 	void Network::windowsServerThread(BaseServer* server)
 	{
 		struct sockaddr_in clntaddr;
@@ -164,28 +176,14 @@ namespace CG
 	}
 
 #endif
-	void* Network::startUnixRunningThread(void* a)
-	{
-		Network::GetInstance()->start();
-
-		return NULL;
-	}
-
-
-	void* workerThreadFunction(WorkerThread* wt)
-	{
-		DebugLog("run workerThread");
-
-		wt->run();
-
-		return NULL;
-	}
 
 	Network::Network()
 	{
+		//get network setting from file
 		CGFileParser fp;
 		std::unordered_map<std::string, std::string> kv = fp.parseSettingFile("network_config.cg");
 
+		//get worker thread count 
 		std::string workerThreadCountStr = kv["worker_thread_count"];
 
 		std::stringstream ss(workerThreadCountStr);
@@ -209,10 +207,11 @@ namespace CG
 				return;
 			}
 		}
-		else
+		else //multi thread
 		{
 			workerThreadArray = new WorkerThread*[workerThreadCount];
 
+			//create worker thread and init and run
 			for (int i = 0; i < workerThreadCount; i++)
 			{
 				workerThreadArray[i] = new WorkerThread(true);
@@ -234,6 +233,7 @@ namespace CG
 
 		connectorInfoPool = new Util::ObjectPool<ConnectorInfo>(100, true);
 
+		//init network function
 		init();
 	}
 
@@ -272,6 +272,7 @@ namespace CG
 
 #endif
 
+		//clean worker thread
 		for (int i = 0; i < workerThreadCount; i++)
 		{
 			workerThreadArray[i]->stop();
@@ -281,7 +282,6 @@ namespace CG
 		delete clientList;
 		delete serverList;
 		delete connectorInfoPool;
-		//delete eventFunctionList;
 		delete timerQueue;
 
 	}
@@ -326,6 +326,7 @@ namespace CG
 
 		lastLoopTime = 0;
 
+		//start network function
 		networkThread = std::thread(&Network::start, this);
 
 		DebugLog("NETWORK START");
@@ -336,6 +337,7 @@ namespace CG
 
 	long Network::getNetworkCurrentTime()
 	{
+		//get milliseconds
 		std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
 
 		return ms.count();
@@ -363,6 +365,7 @@ namespace CG
 
 	bool Network::addServer(BaseServer* server)
 	{
+		//create tcp socket and listen
 		server->connectorInfo->hostId = CreateTCPServerSocket(server->connectorInfo->ip, server->connectorInfo->port);
 		if (server->connectorInfo->hostId < 0)
 		{
@@ -398,9 +401,9 @@ namespace CG
 		return true;
 	}
 
-
 	bool Network::addClient(BaseClient* client)
 	{
+		//create tcp socket and connect
 		int hostId = CreateTCPClientSocket(client->connectorInfo->ip, client->connectorInfo->port);
 		if (hostId < 0)
 		{
@@ -408,6 +411,7 @@ namespace CG
 			return false;
 		}
 
+		//send worker thread connecting info
 		ConnectorInfo* connectorInfo = client->connectorInfo;
 
 		connectorInfo->hostId = hostId;
@@ -454,7 +458,6 @@ namespace CG
 		
 		return true;
 	}
-
 
 
 	int Network::CreateTCPServerSocket(const char* ip, unsigned short port)
@@ -513,39 +516,6 @@ namespace CG
 		return sock;
 	}
 
-	//EventFunction* Network::getEventFunction(HostId hostId)
-	//{
-	//	for (int i = 0; i < eventFunctionList->size(); i++)
-	//	{
-	//		EventFunction* eventFunction = eventFunctionList->at(i);
-	//		if (eventFunction->hostId == hostId)
-	//		{
-	//			return eventFunction;
-	//		}
-	//	}
-	//	
-	//	return nullptr;
-	//}
-
-	//bool Network::removeEventFunction(EventFunction* eventFuction)
-	//{
-	//	/*std::vector<EventFunction*>::iterator itr;
-	//	for (itr = eventFunctionList->begin(); itr != eventFunctionList->end(); itr++)
-	//	{
-	//		if ((*itr)->hostId == hostId)
-	//		{
-	//			EventFunction* eventFunction = *itr;
-	//			eventFunctionList->erase(itr);
-	//			return true;
-	//		}
-	//	}*/
-
-	//	if (eventFunctionList->remove(eventFuction))
-	//		return true;
-	//	else
-	//		return false;
-	//}
-
 	void Network::sendData(BaseConnector* connector, const char* data, int dataSize)
 	{
 		sendData(connector->connectorInfo->hostId, data, dataSize);
@@ -573,13 +543,14 @@ namespace CG
 	{
 		DebugLog("disconnectWithConnectorInfo - hostId : %d", connectorInfo->hostId);
 
+		//send disconnecting data packet
 		DataPacket* dp = workerThread->dataPacketPool->getObject();
 
 		dp->setDataPacket(RECEIVE_TYPE_DISCONNECT, connectorInfo);
 
 		workerThread->pushDataPacket(dp);
 
-		//connectorInfo 연결 끊기
+		//disconnect connectorInfo
 		int fd = connectorInfo->hostId;
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
@@ -608,6 +579,7 @@ namespace CG
 
 #endif
 
+		//disconnect with connector and connector info
 		if (connectorInfo->connector->getConnectorType() == CONNECTOR_TYPE_SERVER)
 		{
 			if (((BaseServer*)connectorInfo->connector)->connectorInfoMap.erase(connectorInfo->hostId) <= 0)
@@ -621,9 +593,11 @@ namespace CG
 
 		connectorInfo->reset();
 
+		//retun connectorInfo in pool
 		connectorInfoPool->returnObject(connectorInfo);
 	}
 
+	//start receiving loop
 	void Network::start()
 	{
 		int eventCnt;

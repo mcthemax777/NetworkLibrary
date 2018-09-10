@@ -7,7 +7,7 @@
 namespace Util
 {
 	template < typename T >
-	class MTList : public List<T> , public Lock
+	class MTList : public List<T>
 	{
 	public:
 		MTList()
@@ -20,25 +20,25 @@ namespace Util
 
 		T at(int index)
 		{
-			lock();
+			lock.lock();
 
 			if (index < 0 || index >= objectList.size())
 			{
-				unLock();
+				lock.unLock();
 
 				return nullptr;
 			}
 
 			T t = objectList.at(index);
 
-			unLock();
+			lock.unLock();
 
 			return t;
 		}
 
 		bool remove(T t)
 		{
-			lock();
+			lock.lock();
 
 			for (int i = 0; i < objectList.size(); i++)
 			{
@@ -46,54 +46,56 @@ namespace Util
 				{
 					objectList.erase(objectList.begin() + i);
 
-					unLock();
+					lock.unLock();
 
 					return true;
 				}
 			}
 
-			unLock();
+			lock.unLock();
 
 			return false;
 		}
 
 		bool remove(int index)
 		{
-			lock();
+			lock.lock();
 
 			if (index < 0 || index >= objectList.size())
 			{
-				unLock();
+				lock.unLock();
 
 				return false;
 			}
 
 			objectList.erase(objectList.begin() + index);
 
-			unLock();
+			lock.unLock();
 
 			return true;
 		}
 
 		void push_back(T t)
 		{
-			lock();
+			lock.lock();
 			objectList.push_back(t);
-			unLock();
+			lock.unLock();
 		}
 
 		int size()
 		{
-			lock();
+			lock.lock();
 
 			int size = objectList.size();
 
-			unLock();
+			lock.unLock();
 
 			return size;
 		}
 
 	protected:
 		std::vector<T> objectList;
+
+		Lock lock;
 	};
 }

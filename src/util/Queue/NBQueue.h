@@ -7,7 +7,7 @@
 namespace Util
 {
 	template < typename T >
-	class NBQueue : public Queue<T>, public SpinLock
+	class NBQueue : public Queue<T>
 	{
 	public:
 		NBQueue()
@@ -22,7 +22,7 @@ namespace Util
 		{
 			T t = 0;
 
-			lock();
+			lock.lock();
 
 			if (objectQueue.empty() == false)
 			{
@@ -30,31 +30,34 @@ namespace Util
 				objectQueue.pop();
 			}
 
-			unLock();
+			lock.unLock();
 
 			return t;
 		}
 
 		void push(T t)
 		{
-			lock();
+			lock.lock();
 
 			objectQueue.push(t);
 
-			unLock();
+			lock.unLock();
 		}
 
 		int size()
 		{
-			lock();
+			lock.lock();
 
 			int size = objectQueue.size();
 
-			unLock();
+			lock.unLock();
 
 			return size;
 		}
 
+	protected:
 		std::queue<T> objectQueue;
+
+		SpinLock lock;
 	};
 }

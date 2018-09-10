@@ -191,15 +191,6 @@
     <ClInclude Include="..\..\..\src\SystemDefine.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\util\Singleton.h">
-      <Filter>src\util\singleton</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\util\Property.h">
-      <Filter>src\util\property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\util\ObjectPool.h">
-      <Filter>src\util\objectPool</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\util\queue\NBQueue.h">
       <Filter>src\util\queue</Filter>
     </ClInclude>
@@ -247,6 +238,15 @@
     </ClInclude>
     <ClInclude Include="..\..\packet\PSTest.hpp">
       <Filter>test\packet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\util\objectPool\ObjectPool.h">
+      <Filter>src\util\objectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\util\property\Property.h">
+      <Filter>src\util\property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\util\singleton\Singleton.h">
+      <Filter>src\util\singleton</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
