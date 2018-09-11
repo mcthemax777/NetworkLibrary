@@ -43,9 +43,6 @@
     <Filter Include="src\util\list">
       <UniqueIdentifier>{40141f8e-2ca1-47f3-a08a-2fd4ac2843d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\util\lock">
-      <UniqueIdentifier>{4ea89ba3-6936-4545-bbd5-f26782eb71fd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\util\objectPool">
       <UniqueIdentifier>{82cd7cbd-67ac-4fba-8019-e2d270371670}</UniqueIdentifier>
     </Filter>
@@ -69,6 +66,9 @@
     </Filter>
     <Filter Include="test\packet">
       <UniqueIdentifier>{89f065c4-80bd-4ee5-8277-9f55a4a21356}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\lock">
+      <UniqueIdentifier>{4ea89ba3-6936-4545-bbd5-f26782eb71fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
