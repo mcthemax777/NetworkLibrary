@@ -1,25 +1,14 @@
 #pragma once
 
 #include <list>
+#include <typeinfo>
+#include <iostream>
+#include <string>
+
 
 namespace Util
 {
 	class Serialize;
-
-	template<typename T>
-	struct type_name
-	{
-		static const char* name() { static_assert(false, "You are missing a DECL_TYPE_NAME"); }
-	};
-
-	template<> struct type_name<bool> { static const char* name() { return "bool"; } };
-	template<> struct type_name<char> { static const char* name() { return "char"; } };
-	template<> struct type_name<short> { static const char* name() { return "short"; } };
-	template<> struct type_name<int8_t> { static const char* name() { return "int8_t"; } };
-	template<> struct type_name<int32_t> { static const char* name() { return "int32_t"; } };
-	template<> struct type_name<int64_t> { static const char* name() { return "int64_t"; } };
-	template<> struct type_name<std::string> { static const char* name() { return "string"; } };
-	template<> struct type_name<Serialize*> { static const char* name() { return "Serialize"; } };
 
 	/**
 	*
@@ -32,10 +21,10 @@ namespace Util
 	public:
 		/**
 		*
-		*        @brief 메서드 간략 설명
-		*        @param string a 파라미터 번
-		*        @param string b
-		*        @return mixed|boolean
+		* @brief 메서드 간략 설명
+		* @param string a 파라미터 번
+		* @param string b
+		* @return mixed|boolean
 		*/
 		virtual int serialize(char* data, int dataSize) = 0;
 		virtual int deserialize(const char* data, int dataSize) = 0;
@@ -57,20 +46,6 @@ namespace Util
 		int deserialize(const char* data, int dataSize);
 		int size();
 	};
-
-	class SerializeString : public BaseSerialize
-	{
-	private:
-		std::string * pValue;
-	public:
-		SerializeString(std::string* pValue) : pValue(pValue) {}
-
-	public:
-		int serialize(char* data, int dataSize);
-		int deserialize(const char* data, int dataSize);
-		int size();
-	};
-
 
 	template <typename T>
 	int SerializePrimitiveType<T>::serialize(char* data, int dataSize)
@@ -96,24 +71,58 @@ namespace Util
 		return sizeof(T);
 	}
 
-	int SerializeString::serialize(char* data, int dataSize)
+
+	class SerializeString : public BaseSerialize
+	{
+	private:
+		std::string * pValue;
+	public:
+		SerializeString(std::string* pValue) : pValue(pValue) {}
+
+	public:
+		int serialize(char* data, int dataSize);
+		int deserialize(const char* data, int dataSize);
+		int size();
+	};
+
+
+	template <typename T>
+	class SerializePrimitiveTypeList : public BaseSerialize
+	{
+	private:
+		std::list<T>* pValueList;
+	public:
+		SerializePrimitiveTypeList(std::list<T>* pValueList) : pValueList(pValueList) {}
+
+	public:
+		int serialize(char* data, int dataSize);
+		int deserialize(const char* data, int dataSize);
+		int size();
+	};
+
+	template <typename T>
+	int SerializePrimitiveTypeList<T>::serialize(char* data, int dataSize)
 	{
 		int startIndex = 0;
 
-		int32_t size = pValue->size();
+		int32_t size = pValueList->size();
 
 		memcpy(data + startIndex, &size, sizeof(int32_t));
 
 		startIndex += sizeof(int32_t);
 
-		memcpy(data + startIndex, pValue->c_str(), size);
+		for (T pValue : *pValueList)
+		{
+			memcpy(data + startIndex, &pValue, sizeof(T));
 
-		startIndex += size;
+			startIndex += sizeof(T);
+		}
 
 		return startIndex;
 	}
 
-	int SerializeString::deserialize(const char* data, int dataSize)
+	template <typename T>
+	int SerializePrimitiveTypeList<T>::deserialize(const char* data, int dataSize)
 	{
 		int startIndex = 0;
 
@@ -123,26 +132,32 @@ namespace Util
 
 		startIndex += sizeof(int32_t);
 
-		pValue->assign(data + startIndex, size);
+		for (int i = 0; i < size; i++)
+		{
+			T value = 0;
 
-		startIndex += size;
+			memcpy(&value, data + startIndex, sizeof(T));
+
+			pValueList->push_back(value);
+
+			startIndex += sizeof(T);
+		}
 
 		return startIndex;
 	}
 
-	int SerializeString::size()
+	template <typename T>
+	int SerializePrimitiveTypeList<T>::size()
 	{
-		return sizeof(int32_t) + pValue->size();
+		return sizeof(int32_t) + pValueList->size() * sizeof(T);
 	}
 
-
-	template <typename T>
-	class SerializeList : public BaseSerialize
+	class SerializeStringList : public BaseSerialize
 	{
 	private:
-		std::list<T>* pValueList;
+		std::list<std::string>* pValueList;
 	public:
-		SerializeList(std::list<T>* pValueList) : pValueList(pValueList) {}
+		SerializeStringList(std::list<std::string>* pValueList) : pValueList(pValueList) {}
 
 	public:
 		int serialize(char* data, int dataSize);
@@ -150,7 +165,23 @@ namespace Util
 		int size();
 	};
 
-	template <typename T>
+
+	template<typename T>
+	class SerializeList : public BaseSerialize
+	{
+	private:
+		std::list<T*>* pValueList;
+	public:
+		SerializeList(std::list<T*>* pValueList) : pValueList(pValueList) {}
+
+	public:
+		int serialize(char* data, int dataSize);
+		int deserialize(const char* data, int dataSize);
+		int size();
+	};
+
+
+	template<typename T>
 	int SerializeList<T>::serialize(char* data, int dataSize)
 	{
 		int startIndex = 0;
@@ -161,45 +192,17 @@ namespace Util
 
 		startIndex += sizeof(int32_t);
 
-
-		//get T's type
-		std::string name = typeid(T).name();
-
-		//T = std::string
-		if (name.compare(typeid(std::string).name()) == 0)
+		for (T* pValue : *pValueList)
 		{
-			for (T pValue : *pValueList)
-			{
-				SerializeString ss(pValue);
-				ss.serialize(data + startIndex, data - startIndex);
+			pValue->serialize(data + startIndex, dataSize - startIndex);
 
-				startIndex += ss.size();
-			}
-		}
-		else if (name.compare(typeid(Serialize*).name()) == 0) //T = Serialize*
-		{
-			for (T pValue : *pValueList)
-			{
-				Serialize* s = pValue;
-				s->serialize(data + startIndex, data - startIndex);
-
-				startIndex += s.size();
-			}
-		}
-		else //T = primitive type
-		{
-			for (T pValue : *pValueList)
-			{
-				memcpy(data + startIndex, &pValue, sizeof(T));
-
-				startIndex += sizeof(T);
-			}
+			startIndex += pValue->size();
 		}
 
 		return startIndex;
 	}
 
-	template <typename T>
+	template<typename T>
 	int SerializeList<T>::deserialize(const char* data, int dataSize)
 	{
 		int startIndex = 0;
@@ -210,95 +213,33 @@ namespace Util
 
 		startIndex += sizeof(int32_t);
 
-
-
-		//get T's type
-		std::string name = typeid(T).name();
-
-		//T = std::string
-		if (name.compare(typeid(std::string).name()) == 0)
+		for (int i = 0; i < size; i++)
 		{
-			for (int i = 0; i < size; i++)
-			{
-				T value = 0;
+			T* s = new T();
+			s->deserialize(data + startIndex, dataSize - startIndex);
 
-				SerializeString ss(value);
-				ss.deserialize(data + startIndex, data - startIndex);
+			pValueList->push_back(s);
 
-				pValueList->push_back(value);
-
-				startIndex += ss.size();
-			}
-		}
-		else if (name.compare(typeid(Serialize*).name()) == 0) //T = Serialize*
-		{
-			for (int i = 0; i < size; i++)
-			{
-				T value = 0;
-
-				Serialize* s = value;
-				s->deserialize(data + startIndex, data - startIndex);
-
-				pValueList->push_back(s);
-
-				startIndex += s.size();
-			}
-		}
-		else //T = primitive type
-		{
-			for (int i = 0; i < size; i++)
-			{
-				T value = 0;
-				memcpy(&value, data + startIndex, sizeof(T));
-
-				pValueList->push_back(value);
-
-				startIndex += sizeof(T);
-			}
+			startIndex += s->size();
 		}
 
 		return startIndex;
 	}
 
-	template <typename T>
+	template<typename T>
 	int SerializeList<T>::size()
 	{
-		//get T's type
-		std::string name = typeid(T).name();
+		int size = sizeof(int32_t);
 
-		//T = std::string
-		if (name.compare(typeid(std::string).name()) == 0)
+		for (Serialize* pValue : *pValueList)
 		{
-			int size = sizeof(int32_t);
-
-			for (T pValue : *pValueList)
-			{
-				SerializeString ss(pValue);
-
-				size += ss->size();
-			}
-
-			return size;
+			size += pValue->size();
 		}
-		else if (name.compare(typeid(Serialize*).name()) == 0) //T = Serialize*
-		{
-			int size = sizeof(int32_t);
 
-			for (T pValue : *pValueList)
-			{
-				Serialize* s = pValue;
-
-				size += s->size();
-			}
-
-			return size;
-		}
-		else //T = primitive type
-		{
-			return sizeof(int32_t) + pValueList->size() * sizeof(T);
-		}
-		
+		return size;
 	}
+
+
 
 
 	class Serialize : public BaseSerialize
@@ -306,8 +247,8 @@ namespace Util
 	private:
 		std::list<BaseSerialize*> serializeList;
 	public:
-		Serialize();
-		~Serialize();
+		Serialize() {};
+		~Serialize() {};
 
 		void addMemberValue(bool* value);
 		void addMemberValue(char* value);
@@ -319,7 +260,10 @@ namespace Util
 		void addMemberValue(Serialize* value);
 
 		void addMemberValue(std::list<int32_t>* value);
-		void addMemberValue(std::list<Serialize*>* value);
+		void addMemberValue(std::list<std::string>* value);
+
+		template<typename T, typename std::enable_if<std::is_base_of<Util::Serialize, T>::value>::type* = nullptr>
+		void addMemberValue(std::list<T*>* value);
 
 	public:
 		int serialize(char* data, int dataSize);
@@ -327,6 +271,14 @@ namespace Util
 		int size();
 
 	};
+
+	template<typename T, typename std::enable_if<std::is_base_of<Util::Serialize, T>::value>::type* = nullptr>
+	void Serialize::addMemberValue(std::list<T*>* value)
+	{
+		SerializeList<T>* sl = new SerializeList<T>(value);
+		serializeList.push_back(sl);
+	}
+
 
 
 	///////////////////////////////test
@@ -346,20 +298,20 @@ namespace Util
 	{
 	public:
 		int32_t id1;
-		int32_t id2;
+		std::string str;
 		IntPacket intPacket;
 		std::list<int32_t> testList;
-		std::list<Serialize*> testList1;
-		std::string str;
+		std::list<std::string> testList1;
+		std::list<IntPacket*> testList2;
 
 		TestPacket()
 		{
 			addMemberValue(&id1);
-			addMemberValue(&id2);
+			addMemberValue(&str);
 			addMemberValue(&intPacket);
 			addMemberValue(&testList);
 			addMemberValue(&testList1);
-			addMemberValue(&str);
+			addMemberValue(&testList2);
 		}
 	};
 }

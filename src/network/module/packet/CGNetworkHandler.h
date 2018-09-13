@@ -5,12 +5,19 @@
 
 namespace CG
 {
+	class BaseReceivedNPHandler
+	{
+	public:
+		virtual int process(HostId hostId, char* data, int dataSize) = 0;
+	};
+
 	/**
 	* @author kim yong-chan
 	* @date 2018-09-08
 	* @brief tie up packet and packet function to save together
 	*/
-	class PacketFunction
+	template <typename T>
+	class ReceivedNPHandler : public BaseReceivedNPHandler
 	{
 	public:
 
@@ -21,17 +28,53 @@ namespace CG
 		* @param NetworkPacket* _packet : received packet
 		* @param std::function<void(HostId, NetworkPacket*)> _packetFunction : received packet function
 		*/
-		PacketFunction(NetworkPacket* _packet, std::function<void(HostId, NetworkPacket*)> _packetFunction)
+		ReceivedNPHandler(std::function<void(HostId, T*)> _packetFunction)
 		{
-			packet = _packet;
 			packetFunction = _packetFunction;
 		}
 
-		///network packet
-		NetworkPacket* packet;
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief create network packet
+		*/
+		T* createPacket()
+		{
+			return new T();
+		}
+
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief deserialize packet and call developer's function
+		* @param HostId hostId : sender id
+		* @param char* data : received data
+		* @param int dataSize : received data size
+		* @param int result : converting data size
+		*/
+		int process(HostId hostId, char* data, int dataSize)
+		{
+			T* np = new T();
+
+			//deserialize data to packet
+			int deserializeSize = np->deserialize(data, dataSize);
+
+			if (deserializeSize != dataSize)
+			{
+				ErrorLog("deserialize is incorrect size");
+			}
+
+			//call packet function that is created by developer
+			packetFunction(hostId, np);
+
+			//delete packet
+			delete np;
+
+			return dataSize;
+		}
 
 		///network packet function
-		std::function<void(HostId, NetworkPacket*)> packetFunction;
+		std::function<void(HostId, T*)> packetFunction;
 	};
 
 	/**
@@ -62,14 +105,12 @@ namespace CG
 		* @param std::function<void(HostId, NetworkPacket*)> onReceiveNPacket : when received packet, execute this function
 		*/
 		template<typename T, typename std::enable_if<std::is_base_of<CG::NetworkPacket, T>::value>::type* = nullptr>
-		void registerPacket(std::function<void(HostId, NetworkPacket*)> onReceiveNPacket)
+		void registerPacket(std::function<void(HostId, T*)> onReceiveNPacket)
 		{
-			T* t = new T();
-			NetworkPacket* packet = (NetworkPacket*)t;
+			T t;
+			ReceivedNPHandler<T>* handler = new ReceivedNPHandler<T>(onReceiveNPacket);
 
-			PacketFunction* pf = new PacketFunction(packet, onReceiveNPacket);
-
-			if (npMap.insert(std::pair<npType_t, PacketFunction*>(packet->header.npType, pf)).second == false)
+			if (npMap.insert(std::pair<npType_t, ReceivedNPHandler<T>*>(t.header.npType, handler)).second == false)
 			{
 				ErrorLog("???");
 			}
@@ -84,11 +125,11 @@ namespace CG
 		*/
 		void sendPacket(HostId hostId, NetworkPacket* packet);
 
-		/// storage packet function
-		std::map<npType_t, PacketFunction*> npMap;
+		/// storage BaseReceivedNPHandler
+		std::map<npType_t, BaseReceivedNPHandler*> npMap;
 		
 		/// using in functions
-		std::map<npType_t, PacketFunction*>::iterator itr;
+		std::map<npType_t, BaseReceivedNPHandler*>::iterator itr;
 
 		friend class Network;
 	};

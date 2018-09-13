@@ -26,18 +26,17 @@ int BSTest(void)
 	server->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
 	{
 		//print receive message
-		char* receiveData = new char[dataSize];
-		
-		memcpy(receiveData, data, dataSize);
-		receiveData[dataSize] = 0;
-
-		std::cout << "receive data from client " << receiveData;
-
 		std::string str(data, dataSize);
-		server->sendMessage(hostId, str);
+
+		std::cout << "receive data from client " << str;
+
+		
 	};
 	
 	/*
+	std::string str(data, dataSize);
+	server->sendMessage(hostId, str);
+
 	char* strt = "hellohello";
 	server->sendMessage(hostId, strt, 10);
 	*/

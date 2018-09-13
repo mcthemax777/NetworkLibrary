@@ -173,6 +173,7 @@
     <ClInclude Include="..\..\..\src\util\thread\Thread.h" />
     <ClInclude Include="..\..\basic\BCTest.hpp" />
     <ClInclude Include="..\..\basic\BSTest.hpp" />
+    <ClInclude Include="..\..\packet\Packet.hpp" />
     <ClInclude Include="..\..\packet\PCTest.hpp" />
     <ClInclude Include="..\..\packet\PSTest.hpp" />
   </ItemGroup>

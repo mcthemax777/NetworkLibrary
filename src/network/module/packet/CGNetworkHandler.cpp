@@ -63,27 +63,10 @@ namespace CG
 					return -1;
 				}
 
-				NetworkPacket* np = itr->second->packet;
-
-				//create packet
-				auto newPacket = np->create();
-
-				//deserialize data to packet
-				int deserializeSize = newPacket->deserialize(data, *npSize);
-
-				if (deserializeSize != *npSize)
-				{
-					ErrorLog("deserialize is incorrect size");
-				}
-
-				//call packet function that is created by developer
-				((itr->second->packetFunction))(connectorInfo->getHostId(), newPacket);
-
-				//delete packet
-				delete newPacket;
+				int resultSize = itr->second->process(connectorInfo->getHostId(), data, *npSize);
 
 				// return dataSize
-				return sizeof(npType_t) + sizeof(npSize_t) + *npSize;
+				return sizeof(npType_t) + sizeof(npSize_t) + resultSize;
 			}
 			else //if (pDataSize < *npSize)
 			{

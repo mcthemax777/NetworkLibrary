@@ -1,4 +1,14 @@
+
+
+#file : network_config.cg
+#brief : set network config
+
 #set worker thread cunt(not 0)
 worker_thread_count=4
+
+#set read buffer size
 read_buffer_size=5
+
+#init first buffer pool size
 allocate_buffer_count=10
+

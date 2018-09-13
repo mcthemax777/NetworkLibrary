@@ -1,12 +1,11 @@
 #pragma once
 
 #include "network/core/BaseServer.h"
+#include "CGNetworkHandler.h"
+#include "NetworkPacket.h"
 
 namespace CG
 {
-	class CGNetworkHandler;
-	class NetworkPacket;
-
 	/**
 	* @author kim yong-chan
 	* @date 2018-09-08
@@ -24,10 +23,10 @@ namespace CG
 		* @author kim yong-chan
 		* @date 2018-09-08
 		* @brief regist function that developer created
-		* @param std::function<void(HostId, NetworkPacket*)> onReceiveNPacket : set extend NetworkPacket and function
+		* @param std::function<void(HostId, T*)> onReceiveNPacket : set extend T(extends NetworkPacket) and function
 		*/
 		template<typename T, typename std::enable_if<std::is_base_of<CG::NetworkPacket, T>::value>::type* = nullptr>
-		void registerPacket(std::function<void(HostId, NetworkPacket*)> onReceiveNPacket)
+		void registerPacket(std::function<void(HostId, T*)> onReceiveNPacket)
 		{
 			networkHandler->registerPacket<T>(onReceiveNPacket);
 		}
@@ -48,4 +47,5 @@ namespace CG
 		*/
 		void sendPacket(HostId hostId, NetworkPacket* packet);
 	};
+
 }

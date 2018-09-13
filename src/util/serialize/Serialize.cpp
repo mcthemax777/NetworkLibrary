@@ -2,22 +2,116 @@
 
 namespace Util
 {
-
-	////////////////////////////////////////////////////////SerializeString
-
-
-
-
-	Serialize::Serialize()
+	int SerializeString::serialize(char* data, int dataSize)
 	{
+		int startIndex = 0;
+
+		int32_t size = pValue->size();
+
+		memcpy(data + startIndex, &size, sizeof(int32_t));
+
+		startIndex += sizeof(int32_t);
+
+		memcpy(data + startIndex, pValue->c_str(), size);
+
+		startIndex += size;
+
+		return startIndex;
+	}
+
+	int SerializeString::deserialize(const char* data, int dataSize)
+	{
+		int startIndex = 0;
+
+		int32_t size = 0;
+
+		memcpy(&size, data + startIndex, sizeof(int32_t));
+
+		startIndex += sizeof(int32_t);
+
+		pValue->assign(data + startIndex, size);
+
+		startIndex += size;
+
+		return startIndex;
+	}
+
+	int SerializeString::size()
+	{
+		return sizeof(int32_t) + pValue->size();
+	}
+
+
+
+
+
+
+
+	int SerializeStringList::serialize(char* data, int dataSize)
+	{
+		int startIndex = 0;
+
+		int32_t size = pValueList->size();
+
+		memcpy(data + startIndex, &size, sizeof(int32_t));
+
+		startIndex += sizeof(int32_t);
+
+
+		for (auto pValue : *pValueList)
+		{
+			SerializeString ss(&pValue);
+			ss.serialize(data + startIndex, dataSize - startIndex);
+
+			startIndex += ss.size();
+		}
+
+		return startIndex;
+	}
+
+	int SerializeStringList::deserialize(const char* data, int dataSize)
+	{
+		int startIndex = 0;
+
+		int32_t size = 0;
+
+		memcpy(&size, data + startIndex, sizeof(int32_t));
+
+		startIndex += sizeof(int32_t);
+
+		for (int i = 0; i < size; i++)
+		{
+			std::string value;
+
+			SerializeString ss(&value);
+			ss.deserialize(data + startIndex, dataSize - startIndex);
+
+			pValueList->push_back(value);
+
+			startIndex += ss.size();
+		}
+
+		return startIndex;
+	}
+
+	int SerializeStringList::size()
+	{
+
+		int size = sizeof(int32_t);
+
+		for (std::string pValue : *pValueList)
+		{
+			SerializeString ss(&pValue);
+
+			size += ss.size();
+		}
+
+		return size;
 
 	}
 
 
-	Serialize::~Serialize()
-	{
 
-	}
 
 	void Serialize::addMemberValue(bool* value)
 	{
@@ -69,15 +163,16 @@ namespace Util
 
 	void Serialize::addMemberValue(std::list<int32_t>* value)
 	{
-		SerializeList<int32_t>* sptl = new SerializeList<int32_t>(value);
-		serializeList.push_back(sptl);
+		SerializePrimitiveTypeList<int32_t>* sl = new SerializePrimitiveTypeList<int32_t>(value);
+		serializeList.push_back(sl);
 	}
 
-	void Serialize::addMemberValue(std::list<Serialize*>* value)
+	void Serialize::addMemberValue(std::list<std::string>* value)
 	{
-		SerializeList<Serialize*>* sptl = new SerializeList<Serialize*>(value);
-		serializeList.push_back(sptl);
+		SerializeStringList* sl = new SerializeStringList(value);
+		serializeList.push_back(sl);
 	}
+
 
 
 	int Serialize::serialize(char* data, int dataSize)
@@ -86,28 +181,21 @@ namespace Util
 
 		for (BaseSerialize *sc : serializeList)
 		{
-			int serializeSize = sc->serialize(data + startIndex, dataSize - startIndex);
+			startIndex += sc->serialize(data + startIndex, dataSize - startIndex);
 
-			if (serializeSize > 0)
-				startIndex += serializeSize;
-			else
-				return -1;
 		}
 
 		return startIndex;
 	}
+
 	int Serialize::deserialize(const char* data, int dataSize)
 	{
 		int startIndex = 0;
 
 		for (BaseSerialize *sc : serializeList)
 		{
-			int deserializeSize = sc->deserialize(data + startIndex, dataSize - startIndex);
+			startIndex += sc->deserialize(data + startIndex, dataSize - startIndex);
 
-			if (deserializeSize > 0)
-				startIndex += deserializeSize;
-			else
-				return -1;
 		}
 
 		return startIndex;

@@ -70,7 +70,7 @@ namespace CG
 	class DataPacket
 	{
 	private:
-		///enum type
+		///request type
 		int receiveType;
 		
 		/// requesting user info
