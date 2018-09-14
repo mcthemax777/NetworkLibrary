@@ -61,13 +61,13 @@
     <Filter Include="src\util\thread">
       <UniqueIdentifier>{2b83d460-2a8f-4500-9f61-3c70630fce08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="test">
+    <Filter Include="Source Files\test">
       <UniqueIdentifier>{9b9dc1c8-147d-4ce9-9429-dc1ebad1770f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="test\basic">
+    <Filter Include="Source Files\test\basic">
       <UniqueIdentifier>{19b9332e-b74f-4b7c-ab18-f15e7e69d4a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="test\packet">
+    <Filter Include="Source Files\test\packet">
       <UniqueIdentifier>{89f065c4-80bd-4ee5-8277-9f55a4a21356}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -228,16 +228,16 @@
       <Filter>src\log</Filter>
     </ClInclude>
     <ClInclude Include="..\..\basic\BCTest.hpp">
-      <Filter>test\basic</Filter>
+      <Filter>Source Files\test\basic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\basic\BSTest.hpp">
-      <Filter>test\basic</Filter>
+      <Filter>Source Files\test\basic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\packet\PCTest.hpp">
-      <Filter>test\packet</Filter>
+      <Filter>Source Files\test\packet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\packet\PSTest.hpp">
-      <Filter>test\packet</Filter>
+      <Filter>Source Files\test\packet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\util\objectPool\ObjectPool.h">
       <Filter>src\util\objectPool</Filter>
@@ -249,7 +249,7 @@
       <Filter>src\util\singleton</Filter>
     </ClInclude>
     <ClInclude Include="..\..\packet\Packet.hpp">
-      <Filter>test\packet</Filter>
+      <Filter>Source Files\test\packet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

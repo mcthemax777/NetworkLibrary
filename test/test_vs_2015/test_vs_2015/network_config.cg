@@ -1,9 +1,7 @@
-
-
 #file : network_config.cg
 #brief : set network config
 
-#set worker thread cunt(not 0)
+#set worker thread count(not 0)
 worker_thread_count=4
 
 #set read buffer size

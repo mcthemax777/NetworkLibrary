@@ -5,7 +5,7 @@
 
 namespace CG
 {
-	NetworkHandler::NetworkHandler(std::function<void(HostId, char*, int)> _onReceive)
+	NetworkHandler::NetworkHandler(std::function<void(HostId, char*, int)>* _onReceive)
 	{
 		onReceive = _onReceive;
 	}
@@ -13,7 +13,7 @@ namespace CG
 	int NetworkHandler::processData(ConnectorInfo* connectorInfo, char* data, int dataSize)
 	{
 		//no converting. just toss
-		onReceive(connectorInfo->getHostId(), data, dataSize);
+		(*onReceive)(connectorInfo->getHostId(), data, dataSize);
 
 		return dataSize;
 	}

@@ -6,7 +6,7 @@ namespace CG
 	Server::Server()
 	{
 		//create handler
-		networkHandler = new NetworkHandler(onReceive);
+		networkHandler = new NetworkHandler(&onReceive);
 	}
 
 	int Server::processData(ConnectorInfo* connectorInfo, char* data, int dataSize)

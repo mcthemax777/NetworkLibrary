@@ -23,14 +23,12 @@ int BSTest(void)
 		std::cout << "disconnected with client";
 	};
 
-	server->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
+	server->onReceive = [server](CG::HostId hostId, char* data, int dataSize)
 	{
 		//print receive message
 		std::string str(data, dataSize);
 
 		std::cout << "receive data from client " << str;
-
-		
 	};
 	
 	/*

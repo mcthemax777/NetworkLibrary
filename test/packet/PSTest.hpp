@@ -38,7 +38,7 @@ int PSTest()
 			packet->testList2.back()->value);
 	});
 
-	server->registerPacket<MessagePacket>([&](CG::HostId hostId, MessagePacket* packet) {
+	server->registerPacket<MessagePacket>([server](CG::HostId hostId, MessagePacket* packet) {
 		//print receive message
 		std::cout << "receive data from client " << packet->str;
 

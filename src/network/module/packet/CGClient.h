@@ -24,13 +24,12 @@ namespace CG
 		* @author kim yong-chan
 		* @date 2018-09-08
 		* @brief regist function that developer created
-		* @param std::function<void(HostId, NetworkPacket*)> onReceiveNPacket : set extend NetworkPacket and function
+		* @param std::function<void(HostId, T*)> onReceiveNPacket : set extend T(extends NetworkPacket) and function
 		*/
 		template<typename T, typename std::enable_if<std::is_base_of<CG::NetworkPacket, T>::value>::type* = nullptr>
-		void registerPacket(std::function<void(HostId, NetworkPacket*)> onReceive)
+		void registerPacket(std::function<void(HostId, T*)> onReceiveNPacket)
 		{
-			//delegate to networkHandler 
-			networkHandler->registerPacket<T>(onReceive);
+			networkHandler->registerPacket<T>(onReceiveNPacket);
 		}
 
 		/**

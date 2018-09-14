@@ -8,12 +8,12 @@ int BCTest(void)
 {
 	CG::Client* client = new CG::Client();
 
-	CG::ClientConfig clientConfig;
+	CG::ServerConfig clientConfig;
 
 	clientConfig.ip = "127.0.0.1";
 	clientConfig.port = 8080;
 
-	client->onConnect = [&](CG::HostId hostId)
+	client->onConnect = [client](CG::HostId hostId)
 	{
 		std::cout << "connected with client";
 
@@ -26,7 +26,7 @@ int BCTest(void)
 		std::cout << "disconnected with client";
 	};
 
-	client->onReceive = [&](CG::HostId hostId, char* data, int dataSize)
+	client->onReceive = [client](CG::HostId hostId, char* data, int dataSize)
 	{
 		//print receive message
 		char* receiveData = new char[dataSize];
