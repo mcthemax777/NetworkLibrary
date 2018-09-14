@@ -1,11 +1,11 @@
 #pragma once
 
 #include "network/core/BaseClient.h"
+#include "NetworkPacket.h"
 
 namespace CG
 {
 	class CGNetworkHandler;
-	class NetworkPacket;
 
 	/**
 	* @author kim yong-chan

@@ -1,13 +1,9 @@
 #pragma once
 
-
 #include "network/module/packet/CGServer.h"
-#include "network/module/packet/NetworkPacket.h"
 #include "Packet.hpp"
-#include <iostream>
-#include <memory>
+#include "log/Log.h"
 
-using namespace CG;
 int PSTest()
 {
 	CG::CGServer* server = new CG::CGServer();
@@ -19,17 +15,19 @@ int PSTest()
 
 	server->onConnect = [](CG::HostId hostId)
 	{
-		std::cout << "connected with client";
+		//std::cout << "connected with client";
+		DebugLog("connected with client");
 	};
 
 	server->onDisconnect = [](CG::HostId hostId)
 	{
-		std::cout << "disconnected with client";
+		//std::cout << "disconnected with client";
+		DebugLog("disconnected with client");
 	};
 
 	server->registerPacket<TestPacket>([](CG::HostId hostId, TestPacket* packet) {
 		//print receive message
-		printf("receive data from client = %d %s %d %d %s %d\n",
+		DebugLog("receive data from client = %d %s %d %d %s %d\n",
 			packet->id1,
 			packet->str.c_str(),
 			packet->intPacket.value,
@@ -40,16 +38,14 @@ int PSTest()
 
 	server->registerPacket<MessagePacket>([server](CG::HostId hostId, MessagePacket* packet) {
 		//print receive message
-		std::cout << "receive data from client " << packet->str;
+		//std::cout << "receive data from client " << packet->str;
+		DebugLog("receive data from client - %s", packet->str.c_str());
 
+		//send packet
 		MessagePacket sendPacket;
+		sendPacket.str = "message packet!!!";
 		server->sendPacket(hostId, &sendPacket);
 	});
-
-	/*
-	char* strt = "hellohello";
-	server->sendMessage(hostId, strt, 10);
-	*/
 
 	server->start(&serverConfig);
 

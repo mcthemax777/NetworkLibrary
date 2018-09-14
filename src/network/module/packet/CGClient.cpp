@@ -1,6 +1,5 @@
 #include "CGClient.h"
 #include "network/core/Network.h"
-#include "NetworkPacket.h"
 #include "CGNetworkHandler.h"
 
 namespace CG

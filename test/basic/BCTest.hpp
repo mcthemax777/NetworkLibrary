@@ -1,8 +1,7 @@
 #pragma once
 
 #include "network/module/basic/Client.h"
-#include <iostream>
-#include <memory>
+#include "log/Log.h"
 
 int BCTest(void)
 {
@@ -15,7 +14,8 @@ int BCTest(void)
 
 	client->onConnect = [client](CG::HostId hostId)
 	{
-		std::cout << "connected with client";
+		//std::cout << "connected with server";
+		DebugLog("connected with server");
 
 		char* strt = "hellohello";
 		client->sendMessage(strt, 10);
@@ -23,23 +23,23 @@ int BCTest(void)
 
 	client->onDisconnect = [](CG::HostId hostId)
 	{
-		std::cout << "disconnected with client";
+		//std::cout << "disconnected with server";
+		DebugLog("disconnected with server");
+
 	};
 
 	client->onReceive = [client](CG::HostId hostId, char* data, int dataSize)
 	{
 		//print receive message
-		char* receiveData = new char[dataSize];
+		std::string str(data, dataSize);
 
-		memcpy(receiveData, data, dataSize);
-		receiveData[dataSize] = 0;
-
-		std::cout << "receive data from client " << receiveData;
+		//std::cout << "receive data from client " << str;
+		DebugLog("receive data from server - %s", str.c_str());
 	};
 
 	/*
 	char* strt = "hellohello";
-	client->sendMessage(hostId, strt, 10);
+	client->sendMessage(strt, 10);
 	*/
 
 	client->start(&clientConfig);
