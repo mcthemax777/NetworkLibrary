@@ -14,8 +14,8 @@ namespace CG
 		//read line repeatily and save line if it is not annotation
 		while (std::getline(infile, line))
 		{
-			//if it is annotation, read next line
-			if (isAnnotationLine(line))
+			//if it is empty line or annotation linue, read next line
+			if (line.compare("") == 0 || isAnnotationLine(line))
 			{
 				continue;
 			}

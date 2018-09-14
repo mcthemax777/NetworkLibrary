@@ -4,8 +4,6 @@
 
 namespace CG
 {
-
-
 	int CGNetworkHandler::processData(ConnectorInfo* connectorInfo, char* data, int dataSize)
 	{
 		char* pData = data;
@@ -50,7 +48,7 @@ namespace CG
 
 		if (*npType < NETWORK_PACKET_COUNT)
 		{
-			if (pDataSize >= *npSize)
+			if (dataSize >= *npSize)
 			{
 				//패킷 번호에 맞는 functional 함수 호출
 

@@ -283,7 +283,7 @@ namespace Util
 
 	///////////////////////////////test
 
-	class IntPacket : public Serialize
+	/*class IntPacket : public Serialize
 	{
 	public:
 		int32_t value;
@@ -313,5 +313,5 @@ namespace Util
 			addMemberValue(&testList1);
 			addMemberValue(&testList2);
 		}
-	};
+	};*/
 }

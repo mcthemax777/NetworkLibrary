@@ -7,7 +7,7 @@ namespace CG
 	Client::Client()
 	{
 		//create handler
-		networkHandler = new NetworkHandler(onReceive);
+		networkHandler = new NetworkHandler(&onReceive);
 	}
 
 	int Client::processData(ConnectorInfo* connectorInfo, char* data, int dataSize)

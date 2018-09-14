@@ -16,7 +16,6 @@ namespace CG
 
 	enum NETWORK_PACKET_TYPE
 	{
-		NETWORK_PACKET_TYPE_MESSAGE = 29999,
 		NETWORK_PACKET_COUNT = 30000
 	};
 
@@ -52,26 +51,10 @@ namespace CG
 
 		void setPacketSize()
 		{
-			header.npSize = size() - sizeof(npType_t) - sizeof(npSize_t);
+			header.npSize = size();
 		}
 
 	public:
 		Header header;
-	};
-
-	class MessagePacket : public NetworkPacket
-	{
-	public:
-		MessagePacket()
-		{
-			//set type
-			setType(NETWORK_PACKET_TYPE_MESSAGE);
-			
-			//init serial member value
-			addMemberValue(&str);
-		}
-
-	public:
-		std::string str;
 	};
 }
