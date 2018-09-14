@@ -4,6 +4,11 @@
 
 namespace Util
 {
+	/**
+	* @author kim yong-chan
+	* @date 2018-09-08
+	* @brief singleton
+	*/
 	template < typename T >
 	class Singleton
 	{
@@ -18,8 +23,15 @@ namespace Util
 		}
 
 	public:
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief get static instance
+		* @return T* t : static instance
+		*/
 		static T * GetInstance()
 		{
+			//call once(create just one)
 			std::call_once(m_flag,
 				[]() { m_pInstance = new T; });
 			if (m_pInstance == NULL)
@@ -27,6 +39,11 @@ namespace Util
 			return m_pInstance;
 		};
 
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief destroy instance
+		*/
 		static void DestroyInstance()
 		{
 			if (m_pInstance)

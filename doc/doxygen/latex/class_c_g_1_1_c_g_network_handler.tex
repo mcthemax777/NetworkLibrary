@@ -1,0 +1,35 @@
+\hypertarget{class_c_g_1_1_c_g_network_handler}{}\section{CG\+:\+:C\+G\+Network\+Handler Class Reference}
+\label{class_c_g_1_1_c_g_network_handler}\index{C\+G\+::\+C\+G\+Network\+Handler@{C\+G\+::\+C\+G\+Network\+Handler}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_c_g_network_handler_a597cfc31218fb6ee2e06eb626917b0c4}\label{class_c_g_1_1_c_g_network_handler_a597cfc31218fb6ee2e06eb626917b0c4}} 
+int {\bfseries process\+Data} (\mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $\ast$connector\+Info, char $\ast$data, int data\+Size)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_c_g_network_handler_a1bcbb6de607fec8664ace5427ae0f911}\label{class_c_g_1_1_c_g_network_handler_a1bcbb6de607fec8664ace5427ae0f911}} 
+{\footnotesize template$<$typename T , typename std\+::enable\+\_\+if$<$ std\+::is\+\_\+base\+\_\+of$<$ C\+G\+::\+Network\+Packet, T $>$\+::value $>$\+::type $\ast$  = nullptr$>$ }\\void {\bfseries register\+Packet} (std\+::function$<$ void(Host\+Id, \mbox{\hyperlink{class_c_g_1_1_network_packet}{Network\+Packet}} $\ast$)$>$ on\+Receive\+N\+Packet)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_c_g_network_handler_af007aa7b64add10eb269e445db6800d2}\label{class_c_g_1_1_c_g_network_handler_af007aa7b64add10eb269e445db6800d2}} 
+void {\bfseries send\+Packet} (Host\+Id host\+Id, \mbox{\hyperlink{class_c_g_1_1_network_packet}{Network\+Packet}} $\ast$packet)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_c_g_network_handler_af8c3950b916ed65461534d14185f059d}\label{class_c_g_1_1_c_g_network_handler_af8c3950b916ed65461534d14185f059d}} 
+std\+::map$<$ np\+Type\+\_\+t, \mbox{\hyperlink{class_c_g_1_1_packet_function}{Packet\+Function}} $\ast$ $>$ {\bfseries np\+Map}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_c_g_network_handler_a146e1a5895d3c91cdef43890fcc65a68}\label{class_c_g_1_1_c_g_network_handler_a146e1a5895d3c91cdef43890fcc65a68}} 
+std\+::map$<$ np\+Type\+\_\+t, \mbox{\hyperlink{class_c_g_1_1_packet_function}{Packet\+Function}} $\ast$ $>$\+::iterator {\bfseries itr}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_c_g_network_handler_a88b59289ffd793fecd040d32e397b1e9}\label{class_c_g_1_1_c_g_network_handler_a88b59289ffd793fecd040d32e397b1e9}} 
+class {\bfseries Network}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+network/module/packet/C\+G\+Network\+Handler.\+h\item 
+network/module/packet/C\+G\+Network\+Handler.\+cpp\end{DoxyCompactItemize}

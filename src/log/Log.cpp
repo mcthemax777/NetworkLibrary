@@ -1,5 +1,4 @@
 #define _CRT_SECURE_NO_WARNINGS
-#define HAVE_STRUCT_TIMESPEC
 
 
 #include <string.h>
@@ -7,6 +6,7 @@
 #include <time.h>
 #include <iostream>
 #include <thread>
+#include <sstream>
 
 #include "Log.h"
 
@@ -87,7 +87,7 @@ void Log::print(logtype type, const char* fmt, ...)
 	time_t curtime = time(nullptr);
 	struct tm* timeinfo = localtime(&curtime);
 
-	lock();
+	lock.lock();
 
 	if (createdday != timeinfo->tm_mday ||
 		createdhour != timeinfo->tm_hour)
@@ -105,15 +105,14 @@ void Log::print(logtype type, const char* fmt, ...)
 	vsprintf(writeBuffer, fmt, list);
 	va_end(list);
 
-	std::thread::id tid;
-	tid = std::this_thread::get_id();
-
-	std::cout << tid << std::endl;
+	std::stringstream ss;
+	ss << std::this_thread::get_id();
+	uint64_t id = std::stoull(ss.str());
 
 #if OS_PLATFORM == PLATFORM_WINDOWS
-	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread TESTING]%s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, writeBuffer);
+	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread %lld]%s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, id, writeBuffer);
 #else
-	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread TESTING]%s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, writeBuffer);
+	sprintf(buffer, "[%d-%02d-%02d %02d:%02d:%02d][thread %lld]%s", timeinfo->tm_year + 1900, timeinfo->tm_mon + 1, timeinfo->tm_mday, timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, id, writeBuffer);
 #endif
 	puts(buffer);
 
@@ -123,5 +122,5 @@ void Log::print(logtype type, const char* fmt, ...)
 		fflush(fp);
 	}
 
-	unLock();
+	lock.unLock();
 }

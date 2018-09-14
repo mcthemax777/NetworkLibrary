@@ -1,0 +1,67 @@
+\hypertarget{class_c_g_1_1_c_g_client}{}\section{CG\+:\+:C\+G\+Client Class Reference}
+\label{class_c_g_1_1_c_g_client}\index{C\+G\+::\+C\+G\+Client@{C\+G\+::\+C\+G\+Client}}
+Inheritance diagram for CG\+:\+:C\+G\+Client\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_c_g_1_1_c_g_client}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_c_g_client_a30a46e32bff3f67e1c7c23b70ca39963}\label{class_c_g_1_1_c_g_client_a30a46e32bff3f67e1c7c23b70ca39963}} 
+{\footnotesize template$<$typename T , typename std\+::enable\+\_\+if$<$ std\+::is\+\_\+base\+\_\+of$<$ C\+G\+::\+Network\+Packet, T $>$\+::value $>$\+::type $\ast$  = nullptr$>$ }\\void {\bfseries register\+Packet} (std\+::function$<$ void(Host\+Id, \mbox{\hyperlink{class_c_g_1_1_network_packet}{Network\+Packet}} $\ast$)$>$ on\+Receive\+N\+Packet)
+\item 
+int \mbox{\hyperlink{class_c_g_1_1_c_g_client_a88087f4fdc6e07c8a252d9abe67d9f8b}{process\+Data}} (\mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $\ast$\mbox{\hyperlink{class_c_g_1_1_base_connector_ae68321ba56404549f2e655238035ed8d}{connector\+Info}}, char $\ast$data, int data\+Size)
+\begin{DoxyCompactList}\small\item\em network call this function when came receiving data from others \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_g_1_1_c_g_client_a6a550e4c1d5143655d54e4acece405f2}\label{class_c_g_1_1_c_g_client_a6a550e4c1d5143655d54e4acece405f2}} 
+void {\bfseries send\+Packet} (\mbox{\hyperlink{class_c_g_1_1_network_packet}{Network\+Packet}} $\ast$packet)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_c_g_client_ab3946b15ed83de702a29a7b16de2c9de}\label{class_c_g_1_1_c_g_client_ab3946b15ed83de702a29a7b16de2c9de}} 
+\mbox{\hyperlink{class_c_g_1_1_c_g_network_handler}{C\+G\+Network\+Handler}} $\ast$ {\bfseries network\+Handler}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_g_1_1_c_g_client_a88087f4fdc6e07c8a252d9abe67d9f8b}\label{class_c_g_1_1_c_g_client_a88087f4fdc6e07c8a252d9abe67d9f8b}} 
+\index{C\+G\+::\+C\+G\+Client@{C\+G\+::\+C\+G\+Client}!process\+Data@{process\+Data}}
+\index{process\+Data@{process\+Data}!C\+G\+::\+C\+G\+Client@{C\+G\+::\+C\+G\+Client}}
+\subsubsection{\texorpdfstring{process\+Data()}{processData()}}
+{\footnotesize\ttfamily int C\+G\+::\+C\+G\+Client\+::process\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $\ast$}]{connector\+Info,  }\item[{char $\ast$}]{data,  }\item[{int}]{data\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+network call this function when came receiving data from others 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em Connector\+Info$\ast$} & connector\+Info \+: infomation who send data \\
+\hline
+{\em char$\ast$} & data \+: receive data from other \\
+\hline
+{\em int} & data\+Size \+: receive data size \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int index \+: if data doesn\textquotesingle{}t come all, return 0. if data is not correct, return nagative number. if data come perfect, return data size 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_c_g_1_1_base_connector_adf8eae41d668ead0f14e7f86b3cea825}{C\+G\+::\+Base\+Connector}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+network/module/packet/C\+G\+Client.\+h\item 
+network/module/packet/C\+G\+Client.\+cpp\end{DoxyCompactItemize}

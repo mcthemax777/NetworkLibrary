@@ -12,6 +12,7 @@ namespace CG
 		int pDataSize = dataSize;
 		int recvCnt = dataSize;
 
+		//if dataSize small than packet type
 		if (pDataSize < sizeof(npType_t))
 		{
 			return 0;
@@ -19,6 +20,7 @@ namespace CG
 
 		npType_t* npType = (npType_t*)pData;
 
+		//if not correct type
 		if (*npType < 0)
 		{
 			ErrorLog("npType is not correct");
@@ -28,7 +30,7 @@ namespace CG
 		pData += sizeof(npType_t);
 		pDataSize -= sizeof(npType_t);
 
-
+		//if dataSize small than packet size
 		if (pDataSize < sizeof(npSize_t))
 		{
 			return 0;
@@ -36,6 +38,7 @@ namespace CG
 
 		npSize_t* npSize = (npSize_t*)pData;
 
+		//if incorrect size
 		if (*npSize < 0)
 		{
 			ErrorLog("dataType is not correct");
@@ -45,7 +48,7 @@ namespace CG
 		pData += sizeof(npSize_t);
 		pDataSize -= sizeof(npSize_t);
 
-		if (*npType <= MESSAGE_TYPE_MESSAGE)
+		if (*npType < NETWORK_PACKET_COUNT)
 		{
 			if (pDataSize >= *npSize)
 			{
@@ -60,15 +63,10 @@ namespace CG
 					return -1;
 				}
 
-				NetworkPacket* np = itr->second->packet;
+				int resultSize = itr->second->process(connectorInfo->getHostId(), data, *npSize);
 
-				auto newPacket = np->create();
-
-				newPacket->deserialize(data);
-
-				((itr->second->packetFunction))(connectorInfo->getHostId(), newPacket);
-
-				return sizeof(npType_t) + sizeof(npSize_t) + *npSize;
+				// return dataSize
+				return sizeof(npType_t) + sizeof(npSize_t) + resultSize;
 			}
 			else //if (pDataSize < *npSize)
 			{
@@ -81,18 +79,24 @@ namespace CG
 			ErrorLog("npType is not correct");
 			return -1;
 		}
-
-		return dataSize;
 	}
 
 	void CGNetworkHandler::sendPacket(HostId hostId, NetworkPacket* packet)
 	{
-		int bufferSize = packet->size();
-		char* buffer = new char[bufferSize];
-		packet->serialize(buffer);
+		//set packet size excepted header size in npSize
+		packet->setPacketSize();
 
-		Network::GetInstance()->sendData(hostId, buffer, bufferSize);
+		//new data
+		int dataSize = packet->size();
+		char* data = new char[dataSize];
 
-		delete buffer;
+		//serialize packet
+		packet->serialize(data, dataSize);
+
+		//send to network
+		Network::GetInstance()->sendData(hostId, data, dataSize);
+
+		//delete data
+		delete data;
 	}
 }

@@ -1,0 +1,48 @@
+\hypertarget{class_c_g_1_1_worker_thread}{}\section{CG\+:\+:Worker\+Thread Class Reference}
+\label{class_c_g_1_1_worker_thread}\index{C\+G\+::\+Worker\+Thread@{C\+G\+::\+Worker\+Thread}}
+Inheritance diagram for CG\+:\+:Worker\+Thread\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_c_g_1_1_worker_thread}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_worker_thread_a879675e8ca067dd8f4c86cd11323ec44}\label{class_c_g_1_1_worker_thread_a879675e8ca067dd8f4c86cd11323ec44}} 
+{\bfseries Worker\+Thread} (bool is\+Multi\+Thread)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_worker_thread_a1af8c7be338769312b8ea32a7426dca2}\label{class_c_g_1_1_worker_thread_a1af8c7be338769312b8ea32a7426dca2}} 
+bool {\bfseries initialize} ()
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_worker_thread_a86a02f86edb87d8816ecf06560e0ecf0}\label{class_c_g_1_1_worker_thread_a86a02f86edb87d8816ecf06560e0ecf0}} 
+void {\bfseries run} ()
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_worker_thread_a82afd48da88b66a6d2a3082654302c9d}\label{class_c_g_1_1_worker_thread_a82afd48da88b66a6d2a3082654302c9d}} 
+void {\bfseries push\+Data\+Packet} (\mbox{\hyperlink{class_c_g_1_1_data_packet}{Data\+Packet}} $\ast$data\+Packet)
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_worker_thread_aae6cf77cf618a4513fea85a043fa381f}\label{class_c_g_1_1_worker_thread_aae6cf77cf618a4513fea85a043fa381f}} 
+int {\bfseries get\+Data\+Packet\+Count} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_worker_thread_a8e0c8febb197e68709d1c64e378159b1}\label{class_c_g_1_1_worker_thread_a8e0c8febb197e68709d1c64e378159b1}} 
+\mbox{\hyperlink{class_util_1_1_queue}{Util\+::\+Queue}}$<$ \mbox{\hyperlink{class_c_g_1_1_data_packet}{Data\+Packet}} $\ast$ $>$ $\ast$ {\bfseries data\+Packet\+Queue}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_worker_thread_ae4b3ca99dc32ffe3670eace662ed8539}\label{class_c_g_1_1_worker_thread_ae4b3ca99dc32ffe3670eace662ed8539}} 
+\mbox{\hyperlink{class_util_1_1_object_pool}{Util\+::\+Object\+Pool}}$<$ \mbox{\hyperlink{class_c_g_1_1_data_packet}{Data\+Packet}} $>$ $\ast$ {\bfseries data\+Packet\+Pool}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_worker_thread_a5634d8d0c007b15965b953034a9c015d}\label{class_c_g_1_1_worker_thread_a5634d8d0c007b15965b953034a9c015d}} 
+\mbox{\hyperlink{class_util_1_1_object_pool}{Util\+::\+Object\+Pool}}$<$ \mbox{\hyperlink{class_c_g_1_1_buffer}{Buffer}} $>$ $\ast$ {\bfseries buffer\+Pool}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_worker_thread_abb23e83f2bd73c067cd5e4c6b25a910c}\label{class_c_g_1_1_worker_thread_abb23e83f2bd73c067cd5e4c6b25a910c}} 
+std\+::list$<$ \mbox{\hyperlink{class_c_g_1_1_buffer}{Buffer}} $\ast$ $>$\+::iterator {\bfseries itr}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+network/core/Worker\+Thread.\+h\item 
+network/core/Worker\+Thread.\+cpp\end{DoxyCompactItemize}

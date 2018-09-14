@@ -1,0 +1,180 @@
+\hypertarget{class_c_g_1_1_base_connector}{}\section{CG\+:\+:Base\+Connector Class Reference}
+\label{class_c_g_1_1_base_connector}\index{C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}}
+
+
+This is a base class to make child class that can use developers.  
+
+
+
+
+{\ttfamily \#include $<$Base\+Connector.\+h$>$}
+
+Inheritance diagram for CG\+:\+:Base\+Connector\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.564885cm]{class_c_g_1_1_base_connector}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_c_g_1_1_base_connector_a16247e8292b28ba8a3017d86dfc30d15}{start}} (\mbox{\hyperlink{class_c_g_1_1_connect_config}{Connect\+Config}} $\ast$config)
+\begin{DoxyCompactList}\small\item\em This is a base class to make child class that can use developers. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_c_g_1_1_base_connector_abd3e4f816a311c41418d5e090de2de15}{stop}} ()
+\begin{DoxyCompactList}\small\item\em stop all action (listen, connect... etc) \end{DoxyCompactList}\item 
+virtual int \mbox{\hyperlink{class_c_g_1_1_base_connector_adf8eae41d668ead0f14e7f86b3cea825}{process\+Data}} (\mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $\ast$\mbox{\hyperlink{class_c_g_1_1_base_connector_ae68321ba56404549f2e655238035ed8d}{connector\+Info}}, char $\ast$data, int data\+Size)=0
+\begin{DoxyCompactList}\small\item\em network call this function when came receiving data from others \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_g_1_1_base_connector_a92b1055389fbe5720d6671c29b80b110}\label{class_c_g_1_1_base_connector_a92b1055389fbe5720d6671c29b80b110}} 
+Connector\+Type {\bfseries get\+Connector\+Type} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::function$<$ void(Host\+Id)$>$ \mbox{\hyperlink{class_c_g_1_1_base_connector_a458c5e8376f9961d03a37624ad8f3ed6}{on\+Connect}}
+\begin{DoxyCompactList}\small\item\em execute function when came requesting connection \end{DoxyCompactList}\item 
+std\+::function$<$ void(Host\+Id)$>$ \mbox{\hyperlink{class_c_g_1_1_base_connector_ac33259324e8654e0e89762a723fddbb0}{on\+Disconnect}}
+\begin{DoxyCompactList}\small\item\em execute function when came requesting disconnection \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_base_connector_a58b97c8c461511d26d9305c5d09c2816}\label{class_c_g_1_1_base_connector_a58b97c8c461511d26d9305c5d09c2816}} 
+Connector\+Type {\bfseries type}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_base_connector_ae68321ba56404549f2e655238035ed8d}\label{class_c_g_1_1_base_connector_ae68321ba56404549f2e655238035ed8d}} 
+\mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $\ast$ \mbox{\hyperlink{class_c_g_1_1_base_connector_ae68321ba56404549f2e655238035ed8d}{connector\+Info}}
+\begin{DoxyCompactList}\small\item\em own connector info \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_c_g_1_1_base_connector_af13a9d2d208f81d46dc6d5b9c3b77e33}\label{class_c_g_1_1_base_connector_af13a9d2d208f81d46dc6d5b9c3b77e33}} 
+bool \mbox{\hyperlink{class_c_g_1_1_base_connector_af13a9d2d208f81d46dc6d5b9c3b77e33}{is\+Connected}}
+\begin{DoxyCompactList}\small\item\em when start success, set true. if not, set false \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_c_g_1_1_base_connector_a88b59289ffd793fecd040d32e397b1e9}\label{class_c_g_1_1_base_connector_a88b59289ffd793fecd040d32e397b1e9}} 
+class {\bfseries Network}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is a base class to make child class that can use developers. 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_g_1_1_base_connector_adf8eae41d668ead0f14e7f86b3cea825}\label{class_c_g_1_1_base_connector_adf8eae41d668ead0f14e7f86b3cea825}} 
+\index{C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}!process\+Data@{process\+Data}}
+\index{process\+Data@{process\+Data}!C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}}
+\subsubsection{\texorpdfstring{process\+Data()}{processData()}}
+{\footnotesize\ttfamily virtual int C\+G\+::\+Base\+Connector\+::process\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c_g_1_1_connector_info}{Connector\+Info}} $\ast$}]{connector\+Info,  }\item[{char $\ast$}]{data,  }\item[{int}]{data\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+network call this function when came receiving data from others 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em Connector\+Info$\ast$} & connector\+Info \+: infomation who send data \\
+\hline
+{\em char$\ast$} & data \+: receive data from other \\
+\hline
+{\em int} & data\+Size \+: receive data size \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int index \+: if data doesn\textquotesingle{}t come all, return 0. if data is not correct, return nagative number. if data come perfect, return data size 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_c_g_1_1_c_g_server_a12598a365b61be0b9d7169a7d1aded49}{C\+G\+::\+C\+G\+Server}}, \mbox{\hyperlink{class_c_g_1_1_c_g_client_a88087f4fdc6e07c8a252d9abe67d9f8b}{C\+G\+::\+C\+G\+Client}}, \mbox{\hyperlink{class_c_g_1_1_server_a846ff65e508699775c54a81091ec76a3}{C\+G\+::\+Server}}, and \mbox{\hyperlink{class_c_g_1_1_client_ad56b8a63eea5c2fea2a0b254758468dd}{C\+G\+::\+Client}}.
+
+\mbox{\Hypertarget{class_c_g_1_1_base_connector_a16247e8292b28ba8a3017d86dfc30d15}\label{class_c_g_1_1_base_connector_a16247e8292b28ba8a3017d86dfc30d15}} 
+\index{C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}!start@{start}}
+\index{start@{start}!C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}}
+\subsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void C\+G\+::\+Base\+Connector\+::start (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_c_g_1_1_connect_config}{Connect\+Config}} $\ast$}]{config }\end{DoxyParamCaption})}
+
+
+
+This is a base class to make child class that can use developers. 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em \mbox{\hyperlink{class_c_g_1_1_connect_config}{Connect\+Config}}} & set ip, port \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_g_1_1_base_connector_abd3e4f816a311c41418d5e090de2de15}\label{class_c_g_1_1_base_connector_abd3e4f816a311c41418d5e090de2de15}} 
+\index{C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}!stop@{stop}}
+\index{stop@{stop}!C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}}
+\subsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily void C\+G\+::\+Base\+Connector\+::stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+stop all action (listen, connect... etc) 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000003}{Todo}}]clean memory \end{DoxyRefDesc}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_c_g_1_1_base_connector_a458c5e8376f9961d03a37624ad8f3ed6}\label{class_c_g_1_1_base_connector_a458c5e8376f9961d03a37624ad8f3ed6}} 
+\index{C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}!on\+Connect@{on\+Connect}}
+\index{on\+Connect@{on\+Connect}!C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}}
+\subsubsection{\texorpdfstring{on\+Connect}{onConnect}}
+{\footnotesize\ttfamily std\+::function$<$void(Host\+Id)$>$ C\+G\+::\+Base\+Connector\+::on\+Connect}
+
+
+
+execute function when came requesting connection 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+\mbox{\Hypertarget{class_c_g_1_1_base_connector_ac33259324e8654e0e89762a723fddbb0}\label{class_c_g_1_1_base_connector_ac33259324e8654e0e89762a723fddbb0}} 
+\index{C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}!on\+Disconnect@{on\+Disconnect}}
+\index{on\+Disconnect@{on\+Disconnect}!C\+G\+::\+Base\+Connector@{C\+G\+::\+Base\+Connector}}
+\subsubsection{\texorpdfstring{on\+Disconnect}{onDisconnect}}
+{\footnotesize\ttfamily std\+::function$<$void(Host\+Id)$>$ C\+G\+::\+Base\+Connector\+::on\+Disconnect}
+
+
+
+execute function when came requesting disconnection 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+network/core/Base\+Connector.\+h\item 
+network/core/Base\+Connector.\+cpp\end{DoxyCompactItemize}

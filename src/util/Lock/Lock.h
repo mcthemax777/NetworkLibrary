@@ -8,7 +8,7 @@ namespace Util
 {
 	class Lock
 	{
-	protected:
+	public:
 
 		~Lock()
 		{

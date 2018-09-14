@@ -6,8 +6,13 @@
 #include "Util/Lock/Lock.h"
 namespace Util
 {
+	/**
+	* @author kim yong-chan
+	* @date 2018-09-08
+	* @brief custom thread-safe list
+	*/
 	template < typename T >
-	class MTList : public List<T> , public Lock
+	class MTList : public List<T>
 	{
 	public:
 		MTList()
@@ -18,82 +23,125 @@ namespace Util
 		{
 		}
 
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief see class 'List'
+		*/
 		T at(int index)
 		{
-			lock();
+			lock.lock();
 
+			//not exist item or invalid index
 			if (index < 0 || index >= objectList.size())
 			{
-				unLock();
+				lock.unLock();
 
+				// return null
 				return nullptr;
 			}
 
+			//get item by index
 			T t = objectList.at(index);
 
-			unLock();
+			lock.unLock();
 
+			//return item
 			return t;
 		}
 
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief see class 'List'
+		*/
 		bool remove(T t)
 		{
-			lock();
+			lock.lock();
 
+			//run loop to find t
 			for (int i = 0; i < objectList.size(); i++)
 			{
+				//if find item
 				if (t == objectList.at(i))
 				{
+					//remove item
 					objectList.erase(objectList.begin() + i);
 
-					unLock();
+					lock.unLock();
 
 					return true;
 				}
 			}
 
-			unLock();
+			lock.unLock();
 
 			return false;
 		}
 
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief see class 'List'
+		*/
 		bool remove(int index)
 		{
-			lock();
+			lock.lock();
 
+			//not exist item or invalid index
 			if (index < 0 || index >= objectList.size())
 			{
-				unLock();
+				lock.unLock();
 
+				//return null
 				return false;
 			}
 
+			//remove item
 			objectList.erase(objectList.begin() + index);
 
-			unLock();
+			lock.unLock();
 
 			return true;
 		}
 
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief see class 'List'
+		*/
 		void push_back(T t)
 		{
-			lock();
+			lock.lock();
+
+			//push item
 			objectList.push_back(t);
-			unLock();
+			
+			lock.unLock();
 		}
 
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief see class 'List'
+		*/
 		int size()
 		{
-			lock();
+			lock.lock();
 
+			//get list size
 			int size = objectList.size();
 
-			unLock();
+			lock.unLock();
 
 			return size;
 		}
 
 	protected:
+		///storage item
 		std::vector<T> objectList;
+
+		///lock
+		Lock lock;
 	};
 }

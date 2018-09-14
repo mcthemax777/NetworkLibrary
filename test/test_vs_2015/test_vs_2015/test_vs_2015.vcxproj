@@ -119,6 +119,7 @@
     <ClCompile Include="..\..\..\src\network\core\BaseClient.cpp" />
     <ClCompile Include="..\..\..\src\network\core\BaseConnector.cpp" />
     <ClCompile Include="..\..\..\src\network\core\BaseServer.cpp" />
+    <ClCompile Include="..\..\..\src\network\core\CGFileParser.cpp" />
     <ClCompile Include="..\..\..\src\network\core\ConnectorInfo.cpp" />
     <ClCompile Include="..\..\..\src\network\core\Network.cpp" />
     <ClCompile Include="..\..\..\src\network\core\Peer.cpp" />
@@ -143,7 +144,6 @@
     <ClInclude Include="..\..\..\src\network\core\Buffer.h" />
     <ClInclude Include="..\..\..\src\network\core\CGFileParser.h" />
     <ClInclude Include="..\..\..\src\network\core\ConnectorInfo.h" />
-    <ClInclude Include="..\..\..\src\network\core\Define.h" />
     <ClInclude Include="..\..\..\src\network\core\Network.h" />
     <ClInclude Include="..\..\..\src\network\core\NetworkDefine.h" />
     <ClInclude Include="..\..\..\src\network\core\Peer.h" />
@@ -162,17 +162,18 @@
     <ClInclude Include="..\..\..\src\util\list\STList.h" />
     <ClInclude Include="..\..\..\src\util\lock\Lock.h" />
     <ClInclude Include="..\..\..\src\util\lock\SpinLock.h" />
-    <ClInclude Include="..\..\..\src\util\ObjectPool.h" />
-    <ClInclude Include="..\..\..\src\util\Property.h" />
+    <ClInclude Include="..\..\..\src\util\objectPool\ObjectPool.h" />
+    <ClInclude Include="..\..\..\src\util\property\Property.h" />
     <ClInclude Include="..\..\..\src\util\queue\BQueue.h" />
     <ClInclude Include="..\..\..\src\util\queue\NBQueue.h" />
     <ClInclude Include="..\..\..\src\util\queue\Queue.h" />
     <ClInclude Include="..\..\..\src\util\queue\STQueue.h" />
     <ClInclude Include="..\..\..\src\util\serialize\Serialize.h" />
-    <ClInclude Include="..\..\..\src\util\Singleton.h" />
+    <ClInclude Include="..\..\..\src\util\singleton\Singleton.h" />
     <ClInclude Include="..\..\..\src\util\thread\Thread.h" />
     <ClInclude Include="..\..\basic\BCTest.hpp" />
     <ClInclude Include="..\..\basic\BSTest.hpp" />
+    <ClInclude Include="..\..\packet\Packet.hpp" />
     <ClInclude Include="..\..\packet\PCTest.hpp" />
     <ClInclude Include="..\..\packet\PSTest.hpp" />
   </ItemGroup>

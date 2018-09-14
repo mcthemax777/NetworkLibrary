@@ -1,0 +1,65 @@
+\hypertarget{_base_connector_8h}{}\section{network/core/\+Base\+Connector.h File Reference}
+\label{_base_connector_8h}\index{network/core/\+Base\+Connector.\+h@{network/core/\+Base\+Connector.\+h}}
+
+
+base class to offer child class to developer  
+
+
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include \char`\"{}Define.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Connector\+Info.\+h\char`\"{}}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_c_g_1_1_connect_config}{C\+G\+::\+Connect\+Config}}
+\begin{DoxyCompactList}\small\item\em Set ip, port to connect with other. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_c_g_1_1_base_connector}{C\+G\+::\+Base\+Connector}}
+\begin{DoxyCompactList}\small\item\em This is a base class to make child class that can use developers. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_base_connector_8h_aba7098f71486536f7c88ee91f3cbc391}\label{_base_connector_8h_aba7098f71486536f7c88ee91f3cbc391}} 
+typedef int8\+\_\+t {\bfseries C\+G\+::\+Connector\+Type}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{_base_connector_8h_a1837e269a1674ef75107b18ab6da8d92}{C\+G\+::\+C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+PE}} \{ {\bfseries C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+P\+E\+\_\+\+S\+E\+R\+V\+ER} = 0, 
+{\bfseries C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+P\+E\+\_\+\+C\+L\+I\+E\+NT}, 
+\mbox{\hyperlink{_base_connector_8h_a1837e269a1674ef75107b18ab6da8d92af4f214a54f1c3521ae39f8017f8f8696}{C\+G\+::\+C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+P\+E\+\_\+\+P\+E\+ER}}
+ \}
+\begin{DoxyCompactList}\small\item\em connector type that regist to connector \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+base class to offer child class to developer 
+
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{_base_connector_8h_file_a1837e269a1674ef75107b18ab6da8d92}\label{_base_connector_8h_file_a1837e269a1674ef75107b18ab6da8d92}} 
+\index{Base\+Connector.\+h@{Base\+Connector.\+h}!C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+PE@{C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+PE}}
+\index{C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+PE@{C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+PE}!Base\+Connector.\+h@{Base\+Connector.\+h}}
+\subsubsection{\texorpdfstring{C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+PE}{CONNECTOR\_TYPE}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{_base_connector_8h_a1837e269a1674ef75107b18ab6da8d92}{C\+G\+::\+C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+PE}}}
+
+
+
+connector type that regist to connector 
+
+\begin{DoxyAuthor}{Author}
+kim yong-\/chan 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2018-\/09-\/08 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000001}{Todo}}]none \end{DoxyRefDesc}
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+P\+E\+\_\+\+P\+E\+ER@{C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+P\+E\+\_\+\+P\+E\+ER}!Base\+Connector.\+h@{Base\+Connector.\+h}}\index{Base\+Connector.\+h@{Base\+Connector.\+h}!C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+P\+E\+\_\+\+P\+E\+ER@{C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+P\+E\+\_\+\+P\+E\+ER}}}\mbox{\Hypertarget{_base_connector_8h_a1837e269a1674ef75107b18ab6da8d92af4f214a54f1c3521ae39f8017f8f8696}\label{_base_connector_8h_a1837e269a1674ef75107b18ab6da8d92af4f214a54f1c3521ae39f8017f8f8696}} 
+C\+O\+N\+N\+E\+C\+T\+O\+R\+\_\+\+T\+Y\+P\+E\+\_\+\+P\+E\+ER&P2P connector. \\
+\hline
+
+\end{DoxyEnumFields}

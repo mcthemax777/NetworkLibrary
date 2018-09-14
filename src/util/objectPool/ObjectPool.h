@@ -7,18 +7,33 @@
 
 namespace Util
 {
+	/**
+	* @author kim yong-chan
+	* @date 2018-09-08
+	* @brief pre allocate, so reduce cpu calculation
+	*/
 	template < typename T >
 	class ObjectPool
 	{
 	public:
+		/**
+		* @author kim yong-chan
+		* @date 2018-09-08
+		* @brief init member value
+		* @param unsigned int capacity : create object count
+		* @param bool isUsingMultiThread : if multi-thread, using lock
+		*/
 		ObjectPool(unsigned int capacity, bool isUsingMultiThread)
 		{
+			//set member value
 			this->capacity = capacity;
 			this->isUsingMultiThread = isUsingMultiThread;
 
+			//set queue
 			if (isUsingMultiThread) objectList = new NBQueue<T*>();
 			else objectList = new STQueue<T*>();
 
+			//create object as much as capacity
 			for (int i = 0; i < capacity; i++)
 				objectList->push(new T());
 

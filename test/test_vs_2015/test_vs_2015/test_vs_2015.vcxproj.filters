@@ -129,6 +129,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\network\core\CGFileParser.cpp">
+      <Filter>src\network\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\network\core\BaseClient.h">
@@ -147,9 +150,6 @@
       <Filter>src\network\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\network\core\ConnectorInfo.h">
-      <Filter>src\network\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\network\core\Define.h">
       <Filter>src\network\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\network\core\Network.h">
@@ -190,15 +190,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\SystemDefine.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\util\Singleton.h">
-      <Filter>src\util\singleton</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\util\Property.h">
-      <Filter>src\util\property</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\util\ObjectPool.h">
-      <Filter>src\util\objectPool</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\util\queue\NBQueue.h">
       <Filter>src\util\queue</Filter>
@@ -246,6 +237,18 @@
       <Filter>test\packet</Filter>
     </ClInclude>
     <ClInclude Include="..\..\packet\PSTest.hpp">
+      <Filter>test\packet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\util\objectPool\ObjectPool.h">
+      <Filter>src\util\objectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\util\property\Property.h">
+      <Filter>src\util\property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\util\singleton\Singleton.h">
+      <Filter>src\util\singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\packet\Packet.hpp">
       <Filter>test\packet</Filter>
     </ClInclude>
   </ItemGroup>
