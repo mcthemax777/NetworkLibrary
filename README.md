@@ -226,7 +226,7 @@ disconnect with client
 ~~~cpp
 server->onDisconnect = [](CG::HostId hostId)
 {
-  DebugLog("disconnected with client");
+  std::cout << "disconnected with client";
 };
 ~~~
 
