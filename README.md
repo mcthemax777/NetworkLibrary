@@ -177,9 +177,8 @@ client->stop();
 
 make packet class
 1. extend NetworkPacket
-2. set type(0 ~ 30000)
+2. set type call setType()(0 ~ 30000)
 3. regist member value call 'addMemberValue()' (set same order between server and client)
-4. regist CREATE_PACKET(class name)
 
 ~~~cpp
 class MessagePacket : public NetworkPacket
@@ -188,14 +187,12 @@ public:
   MessagePacket()
   {
     //set type
-    header.npType = MESSAGE_TYPE_MESSAGE;
+    setType(MESSAGE_TYPE_MESSAGE);
 
     //init serial member value
     addMemberValue(&str);
   }
-
-  CREATE_PACKET(CG::MessagePacket)
-
+  
 public:
   std::string str;
 };
@@ -229,25 +226,24 @@ disconnect with client
 ~~~cpp
 server->onDisconnect = [](CG::HostId hostId)
 {
-  DebugLog("disconnected with client");
+  std::cout << "disconnected with client";
 };
 ~~~
 
 receive packet from client
 ~~~cpp
-server->registerPacket<CG::MessagePacket>([&](CG::HostId hostId, CG::NetworkPacket* packet)
+server->registerPacket<CG::MessagePacket>([&](CG::HostId hostId, CG::MessagePacket* packet)
 {
-  CG::MessagePacket* p = (CG::MessagePacket*)packet;
-  std::cout << "receive packet - str : " << p->str.c_str();
+  std::cout << "receive packet - str : " << packet->str.c_str();
 });
 ~~~
 
 send packet to client
 ~~~cpp
-MessagePacket* p = new MessagePacket();
-p->str = "hello";
+MessagePacket p;
+p.str = "hello";
 
-server->sendPacket(hostId, p);
+server->sendPacket(hostId, &p);
 ~~~
 
 start server
@@ -294,20 +290,18 @@ client->onDisconnect = [](CG::HostId hostId)
 
 receive packet from server
 ~~~cpp
-client->registerPacket<CG::MessagePacket>([](CG::HostId hostId, CG::NetworkPacket* packet)
+client->registerPacket<CG::MessagePacket>([&](CG::HostId hostId, CG::MessagePacket* packet)
 {
-  CG::MessagePacket* p = (CG::MessagePacket*)packet;
-  std::cout << "receive packet - str : " << p->str.c_str();
-
+  std::cout << "receive packet - str : " << packet->str.c_str();
 });
 ~~~
 
 send packet to server
 ~~~cpp
-MessagePacket* p = new MessagePacket();
-p->str = "hello";
+MessagePacket p;
+p.str = "hello";
 
-server->sendPacket(hostId, p);
+client->sendPacket(&p);
 ~~~
 
 start client
