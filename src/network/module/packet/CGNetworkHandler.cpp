@@ -10,77 +10,97 @@ namespace CG
 		int pDataSize = dataSize;
 		int recvCnt = dataSize;
 
-		//if dataSize small than packet type
-		if (pDataSize < sizeof(npType_t))
+		int wholeProcessingDataSize = 0;
+		//if coming more than one network packet, process all network packet
+		while (true)
 		{
-			DebugLog("coming data is not complete - coming data size : %d", dataSize);
 
-			return 0;
-		}
-
-		npType_t* npType = (npType_t*)pData;
-
-		//if not correct type
-		if (*npType < 0)
-		{
-			ErrorLog("npType is not correct");
-			return -1;
-		}
-
-		pData += sizeof(npType_t);
-		pDataSize -= sizeof(npType_t);
-
-		//if dataSize small than packet size
-		if (pDataSize < sizeof(npSize_t))
-		{
-			DebugLog("coming data is not complete - coming data size : %d", dataSize);
-
-			return 0;
-		}
-
-		npSize_t* npSize = (npSize_t*)pData;
-
-		//if incorrect size
-		if (*npSize < 0)
-		{
-			ErrorLog("dataType is not correct");
-			return -1;
-		}
-
-		pData += sizeof(npSize_t);
-		pDataSize -= sizeof(npSize_t);
-
-		if (*npType < NETWORK_PACKET_COUNT)
-		{
-			if (dataSize >= *npSize)
+			//if dataSize small than packet type
+			if (pDataSize < sizeof(npType_t))
 			{
-				//패킷 번호에 맞는 functional 함수 호출
+				DebugLog("coming data is not complete - coming data size : %d", dataSize);
 
-				itr = npMap.find(*npType);
+				return wholeProcessingDataSize;
+			}
 
-				if (itr == npMap.end())
+			npType_t* npType = (npType_t*)pData;
+
+			//if not correct type
+			if (*npType < 0)
+			{
+				ErrorLog("npType is not correct");
+				return -1;
+			}
+
+			pData += sizeof(npType_t);
+			pDataSize -= sizeof(npType_t);
+
+			//if dataSize small than packet size
+			if (pDataSize < sizeof(npSize_t))
+			{
+				DebugLog("coming data is not complete - coming data size : %d", dataSize);
+
+				return wholeProcessingDataSize;
+			}
+
+			npSize_t* npSize = (npSize_t*)pData;
+
+			//if incorrect size
+			if (*npSize < 0)
+			{
+				ErrorLog("dataType is not correct");
+				return -1;
+			}
+
+			pData += sizeof(npSize_t);
+			pDataSize -= sizeof(npSize_t);
+
+			if (*npType < NETWORK_PACKET_COUNT)
+			{
+				if (pDataSize + sizeof(npSize_t) + sizeof(npType_t) >= *npSize)
 				{
-					ErrorLog("npType error %d\n", *npType);
+					//패킷 번호에 맞는 functional 함수 호출
 
-					return -1;
+					itr = npMap.find(*npType);
+
+					if (itr == npMap.end())
+					{
+						ErrorLog("npType error %d\n", *npType);
+
+						return -1;
+					}
+
+					int resultSize = itr->second->process(connectorInfo->getHostId(), data, *npSize);
+
+					wholeProcessingDataSize += *npSize;
+
+					//if all received data doesnt process, process next data
+					if (*npSize < pDataSize + sizeof(npSize_t) + sizeof(npType_t))
+					{
+						pData += (*npSize - sizeof(npSize_t) - sizeof(npType_t));
+						pDataSize -= (*npSize - sizeof(npSize_t) - sizeof(npType_t));
+
+						DebugLog("processing next data");
+
+						continue;
+					}
+
+
+					// return dataSize
+					return wholeProcessingDataSize;
 				}
-
-				int resultSize = itr->second->process(connectorInfo->getHostId(), data, *npSize);
-
-				// return dataSize
-				return *npSize;
+				else //if (pDataSize < *npSize)
+				{
+					DebugLog("data do not come complete - whole data size : %d, coming data size : %d", *npSize, dataSize);
+					return wholeProcessingDataSize;
+				}
 			}
-			else //if (pDataSize < *npSize)
+			else
 			{
-				DebugLog("data do not come complete - whole data size : %d, coming data size : %d", *npSize, pDataSize);
-				return 0;
+				ErrorLog("npType is not correct");
+				return -1;
 			}
-		}
-		else
-		{
-			ErrorLog("npType is not correct");
-			return -1;
-		}
+		} //while
 	}
 
 	void CGNetworkHandler::sendPacket(HostId hostId, NetworkPacket* packet)
@@ -96,8 +116,7 @@ namespace CG
 		packet->serialize(data, dataSize);
 
 		//send to network
-		Network::GetInstance()->sendData(hostId, data, 5);
-		Network::GetInstance()->sendData(hostId, data + 5, dataSize - 5);
+		Network::GetInstance()->sendData(hostId, data, dataSize);
 
 		//delete data
 		delete data;

@@ -67,9 +67,6 @@
     <Filter Include="Source Files\test\packet">
       <UniqueIdentifier>{89f065c4-80bd-4ee5-8277-9f55a4a21356}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\cgParser">
-      <UniqueIdentifier>{b5d52830-d452-4a87-bbbd-05379ed44aef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\util\parser">
       <UniqueIdentifier>{66425388-27f5-4569-804d-a5dc08032f49}</UniqueIdentifier>
     </Filter>
