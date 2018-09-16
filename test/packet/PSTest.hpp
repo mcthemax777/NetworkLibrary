@@ -2,7 +2,7 @@
 
 #include "network/module/packet/CGServer.h"
 #include "Packet.hpp"
-#include "log/Log.h"
+#include "util/log/Log.h"
 
 int PSTest()
 {
@@ -16,18 +16,18 @@ int PSTest()
 	server->onConnect = [](CG::HostId hostId)
 	{
 		//std::cout << "connected with client";
-		DebugLog("connected with client");
+		InfoLog("connected with client");
 	};
 
 	server->onDisconnect = [](CG::HostId hostId)
 	{
 		//std::cout << "disconnected with client";
-		DebugLog("disconnected with client");
+		InfoLog("disconnected with client");
 	};
 
 	server->registerPacket<TestPacket>([](CG::HostId hostId, TestPacket* packet) {
 		//print receive message
-		DebugLog("receive data from client = %d %s %d %d %s %d\n",
+		InfoLog("receive data from client = %d %s %d %d %s %d\n",
 			packet->id1,
 			packet->str.c_str(),
 			packet->intPacket.value,
@@ -39,7 +39,7 @@ int PSTest()
 	server->registerPacket<MessagePacket>([server](CG::HostId hostId, MessagePacket* packet) {
 		//print receive message
 		//std::cout << "receive data from client " << packet->str;
-		DebugLog("receive data from client - %s", packet->str.c_str());
+		InfoLog("receive data from client - %s", packet->str.c_str());
 
 		//send packet
 		MessagePacket sendPacket;

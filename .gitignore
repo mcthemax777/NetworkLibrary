@@ -3,6 +3,7 @@ test/test_vs_2015/test_vs_2015/Debug/*
 test/test_vs_2015/test_vs_2015.VC.db
 test/test_vs_2015/test_vs_2015.VC.VC.opendb
 test/test_vs_2015/.vs/*
+test/test_vs_2015/log/*
 
 tools/compile/windows/vs_2015/vs_2015/Debug/*
 tools/compile/windows/vs_2015/vs_2015.VC.db

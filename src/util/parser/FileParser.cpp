@@ -1,8 +1,8 @@
-#include "CGFileParser.h"
+#include "FileParser.h"
 
-namespace CG
+namespace Util
 {
-	std::unordered_map<std::string, std::string> CGFileParser::parseSettingFile(const char* file)
+	std::unordered_map<std::string, std::string> FileParser::parseSettingFile(const char* file)
 	{
 		std::unordered_map<std::string, std::string> settingMap;
 
@@ -32,7 +32,7 @@ namespace CG
 		return settingMap;
 	}
 
-	bool CGFileParser::isAnnotationLine(std::string& line)
+	bool FileParser::isAnnotationLine(std::string& line)
 	{
 		if (line.at(0) == '#')
 			return true;
@@ -40,7 +40,7 @@ namespace CG
 		return false;
 	}
 
-	void CGFileParser::removeEmptySpace(std::string& line)
+	void FileParser::removeEmptySpace(std::string& line)
 	{
 		//change " " -> "" in line
 		size_t pos;
@@ -50,7 +50,7 @@ namespace CG
 		}
 	}
 
-	std::pair<std::string, std::string> CGFileParser::getKeyValue(std::string& line)
+	std::pair<std::string, std::string> FileParser::getKeyValue(std::string& line)
 	{
 		//split 2 line by '='
 		size_t pos;

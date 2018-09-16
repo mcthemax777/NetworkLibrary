@@ -2,7 +2,7 @@
 
 #include "network/module/packet/CGClient.h"
 #include "Packet.hpp"
-#include "log/Log.h"
+#include "util/log/Log.h"
 
 int PCTest()
 {

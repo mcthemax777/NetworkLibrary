@@ -1,6 +1,6 @@
 #include "Peer.h"
 #include "Network.h"
-#include "Log/Log.h"
+#include "util/log/Log.h"
 
 namespace CG
 {

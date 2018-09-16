@@ -2,7 +2,7 @@
 #include "Network.h"
 #include "BaseConnector.h"
 
-#include "Log/Log.h"
+#include "util/log/Log.h"
 #include <cstdlib>
 
 namespace CG
@@ -38,12 +38,16 @@ namespace CG
 			DataPacket* dp = dataPacketQueue->pop();
 			if (dp != NULL)
 			{
+				DebugLog("received data packet - data packet address : %p", dp);
+
 				ConnectorInfo* connectorInfo = dp->connectorInfo;
 				BaseConnector* connector = connectorInfo->connector;
 				std::list<Buffer*>* bufferList = &(connectorInfo->bufferList);
 				
 				if (dp->receiveType == RECEIVE_TYPE_DATA)
 				{
+					DebugLog("current buffer size - %d", bufferList->size());
+
 					//받은 버퍼를 아직 처리되지 않은 버퍼리스트에 추가
 					connectorInfo->bufferList.push_back(dp->buffer);
 
@@ -68,6 +72,8 @@ namespace CG
 					//받은 데이터를 사용자가 등록한대로 변환하여 전송
 					int usingDataSize = connector->processData(connectorInfo, data, dataSize);
 
+					DebugLog("processing data size - %d", usingDataSize);
+
 					//동적할당한 data를 삭제
 					delete data;
 
@@ -85,8 +91,12 @@ namespace CG
 						{
 							Buffer* buffer = *itr;
 
-							if (buffer->dataSize = finishDataSize)
+							DebugLog("buffer info - buffer address : %p, %d, %d", buffer, buffer->startIndex, buffer->dataSize);
+
+							if (buffer->dataSize == finishDataSize)
 							{
+								DebugLog("finish to process buffer");
+
 								bufferList->erase(itr++);
 
 								bufferPool->returnObject(buffer);
@@ -95,16 +105,20 @@ namespace CG
 							}
 							else if (buffer->dataSize < finishDataSize)
 							{
+								DebugLog("finish to process buffer - processing data size : %d, buffer data size : %d", usingDataSize, buffer->dataSize);
+
+								finishDataSize -= buffer->dataSize;
+
 								bufferList->erase(itr++);
 
 								bufferPool->returnObject(buffer);
-
-								finishDataSize -= buffer->dataSize;
 
 								continue;
 							}
 							else //마지막 데이터가 짤린채로 올 경우
 							{
+								DebugLog("not finish to process buffer");
+
 								//버퍼를 지우지 않고 데이터 시작위치와 데이터사이즈만 조절해줌
 								buffer->startIndex += finishDataSize;
 								buffer->dataSize -= finishDataSize;

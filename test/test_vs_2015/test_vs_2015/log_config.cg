@@ -1,0 +1,8 @@
+#file : log_config.cg
+#brief : set log config
+
+#set log path
+log_path=../log/log_
+
+#set log level(DEBUG, INFO, WARNING, ERROR, CRITICAL)
+log_level=INFO

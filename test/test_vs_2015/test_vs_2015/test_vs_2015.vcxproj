@@ -115,11 +115,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\log\Log.cpp" />
     <ClCompile Include="..\..\..\src\network\core\BaseClient.cpp" />
     <ClCompile Include="..\..\..\src\network\core\BaseConnector.cpp" />
     <ClCompile Include="..\..\..\src\network\core\BaseServer.cpp" />
-    <ClCompile Include="..\..\..\src\network\core\CGFileParser.cpp" />
     <ClCompile Include="..\..\..\src\network\core\ConnectorInfo.cpp" />
     <ClCompile Include="..\..\..\src\network\core\Network.cpp" />
     <ClCompile Include="..\..\..\src\network\core\Peer.cpp" />
@@ -132,17 +130,17 @@
     <ClCompile Include="..\..\..\src\network\module\packet\CGNetworkHandler.cpp" />
     <ClCompile Include="..\..\..\src\network\module\packet\CGServer.cpp" />
     <ClCompile Include="..\..\..\src\network\module\packet\NetworkPacket.cpp" />
+    <ClCompile Include="..\..\..\src\util\log\Log.cpp" />
+    <ClCompile Include="..\..\..\src\util\parser\FileParser.cpp" />
     <ClCompile Include="..\..\..\src\util\serialize\Serialize.cpp" />
     <ClCompile Include="..\..\..\src\util\thread\Thread.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\log\Log.h" />
     <ClInclude Include="..\..\..\src\network\core\BaseClient.h" />
     <ClInclude Include="..\..\..\src\network\core\BaseConnector.h" />
     <ClInclude Include="..\..\..\src\network\core\BaseServer.h" />
     <ClInclude Include="..\..\..\src\network\core\Buffer.h" />
-    <ClInclude Include="..\..\..\src\network\core\CGFileParser.h" />
     <ClInclude Include="..\..\..\src\network\core\ConnectorInfo.h" />
     <ClInclude Include="..\..\..\src\network\core\Network.h" />
     <ClInclude Include="..\..\..\src\network\core\NetworkDefine.h" />
@@ -162,7 +160,9 @@
     <ClInclude Include="..\..\..\src\util\list\STList.h" />
     <ClInclude Include="..\..\..\src\util\lock\Lock.h" />
     <ClInclude Include="..\..\..\src\util\lock\SpinLock.h" />
+    <ClInclude Include="..\..\..\src\util\log\Log.h" />
     <ClInclude Include="..\..\..\src\util\objectPool\ObjectPool.h" />
+    <ClInclude Include="..\..\..\src\util\parser\FileParser.h" />
     <ClInclude Include="..\..\..\src\util\property\Property.h" />
     <ClInclude Include="..\..\..\src\util\queue\BQueue.h" />
     <ClInclude Include="..\..\..\src\util\queue\NBQueue.h" />
@@ -176,6 +176,10 @@
     <ClInclude Include="..\..\packet\Packet.hpp" />
     <ClInclude Include="..\..\packet\PCTest.hpp" />
     <ClInclude Include="..\..\packet\PSTest.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="log_config.cg" />
+    <None Include="network_config.cg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

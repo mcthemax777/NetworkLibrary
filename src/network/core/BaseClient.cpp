@@ -1,6 +1,6 @@
 #include "BaseClient.h"
 #include "Network.h"
-#include "Log/Log.h"
+#include "util/log/Log.h"
 #include "WorkerThread.h"
 
 namespace CG

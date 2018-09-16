@@ -6,14 +6,14 @@
 #include <istream>
 #include <unordered_map>
 
-namespace CG
+namespace Util
 {
 	/**
 	* @author kim yong-chan
 	* @date 2018-09-08
 	* @brief convert file to use in cpp source
 	*/
-	class CGFileParser
+	class FileParser
 	{
 	public:
 		/**

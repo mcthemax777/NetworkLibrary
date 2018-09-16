@@ -1,7 +1,7 @@
 #pragma once
 
 #include "network/module/basic/Client.h"
-#include "log/Log.h"
+#include "util/log/Log.h"
 
 int BCTest(void)
 {

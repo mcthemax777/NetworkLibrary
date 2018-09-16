@@ -24,14 +24,14 @@
 #endif
 
 #include "WorkerThread.h"
-#include "log/Log.h"
+#include "util/log/Log.h"
 #include "BaseConnector.h"
 #include "ConnectorInfo.h"
 #include "NetworkDefine.h"
 #include "BaseServer.h"
 #include "BaseClient.h"
 #include "Timer.h"
-#include "CGFileParser.h"
+#include "util/parser/FileParser.h"
 
 
 
@@ -66,6 +66,8 @@ namespace CG
 
 		if (dataSize > 0) //if received data
 		{
+			DebugLog("received data size - %d", dataSize);
+
 			//set buffer member
 			buffer->startIndex = 0;
 			buffer->dataSize = dataSize;
@@ -180,7 +182,7 @@ namespace CG
 	Network::Network()
 	{
 		//get network setting from file
-		CGFileParser fp;
+		Util::FileParser fp;
 		std::unordered_map<std::string, std::string> kv = fp.parseSettingFile("network_config.cg");
 
 		//get worker thread count 

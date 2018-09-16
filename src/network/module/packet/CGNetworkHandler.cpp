@@ -13,6 +13,8 @@ namespace CG
 		//if dataSize small than packet type
 		if (pDataSize < sizeof(npType_t))
 		{
+			DebugLog("coming data is not complete - coming data size : %d", dataSize);
+
 			return 0;
 		}
 
@@ -31,6 +33,8 @@ namespace CG
 		//if dataSize small than packet size
 		if (pDataSize < sizeof(npSize_t))
 		{
+			DebugLog("coming data is not complete - coming data size : %d", dataSize);
+
 			return 0;
 		}
 
@@ -64,11 +68,11 @@ namespace CG
 				int resultSize = itr->second->process(connectorInfo->getHostId(), data, *npSize);
 
 				// return dataSize
-				return sizeof(npType_t) + sizeof(npSize_t) + resultSize;
+				return *npSize;
 			}
 			else //if (pDataSize < *npSize)
 			{
-				DebugLog("data do not come complete");
+				DebugLog("data do not come complete - whole data size : %d, coming data size : %d", *npSize, pDataSize);
 				return 0;
 			}
 		}
@@ -92,7 +96,8 @@ namespace CG
 		packet->serialize(data, dataSize);
 
 		//send to network
-		Network::GetInstance()->sendData(hostId, data, dataSize);
+		Network::GetInstance()->sendData(hostId, data, 5);
+		Network::GetInstance()->sendData(hostId, data + 5, dataSize - 5);
 
 		//delete data
 		delete data;

@@ -16,9 +16,6 @@
     <Filter Include="src">
       <UniqueIdentifier>{28f69925-ea51-4eb4-9978-8c25f9764fc2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\log">
-      <UniqueIdentifier>{d2d16ee1-d8d6-456a-8f66-c0155b8de6cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\network">
       <UniqueIdentifier>{66e44863-b3e4-4106-af0c-f18631bac7d6}</UniqueIdentifier>
     </Filter>
@@ -69,6 +66,15 @@
     </Filter>
     <Filter Include="Source Files\test\packet">
       <UniqueIdentifier>{89f065c4-80bd-4ee5-8277-9f55a4a21356}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cgParser">
+      <UniqueIdentifier>{b5d52830-d452-4a87-bbbd-05379ed44aef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\parser">
+      <UniqueIdentifier>{66425388-27f5-4569-804d-a5dc08032f49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util\log">
+      <UniqueIdentifier>{9dfc4f02-7e73-43d1-b061-0f4aa2027e87}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -123,14 +129,14 @@
     <ClCompile Include="..\..\..\src\util\thread\Thread.cpp">
       <Filter>src\util\thread</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\log\Log.cpp">
-      <Filter>src\log</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\network\core\CGFileParser.cpp">
-      <Filter>src\network\core</Filter>
+    <ClCompile Include="..\..\..\src\util\log\Log.cpp">
+      <Filter>src\util\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\util\parser\FileParser.cpp">
+      <Filter>src\util\parser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -144,9 +150,6 @@
       <Filter>src\network\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\network\core\Buffer.h">
-      <Filter>src\network\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\network\core\CGFileParser.h">
       <Filter>src\network\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\network\core\ConnectorInfo.h">
@@ -224,9 +227,6 @@
     <ClInclude Include="..\..\..\src\util\list\List.h">
       <Filter>src\util\list</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\log\Log.h">
-      <Filter>src\log</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\basic\BCTest.hpp">
       <Filter>Source Files\test\basic</Filter>
     </ClInclude>
@@ -251,5 +251,19 @@
     <ClInclude Include="..\..\packet\Packet.hpp">
       <Filter>Source Files\test\packet</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\util\log\Log.h">
+      <Filter>src\util\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\util\parser\FileParser.h">
+      <Filter>src\util\parser</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="log_config.cg">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="network_config.cg">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
