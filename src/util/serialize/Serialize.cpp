@@ -8,10 +8,12 @@ namespace Util
 
 		int32_t size = pValue->size();
 
+		//copy string length
 		memcpy(data + startIndex, &size, sizeof(int32_t));
 
 		startIndex += sizeof(int32_t);
 
+		//copy string
 		memcpy(data + startIndex, pValue->c_str(), size);
 
 		startIndex += size;
@@ -25,10 +27,12 @@ namespace Util
 
 		int32_t size = 0;
 
+		//copy string
 		memcpy(&size, data + startIndex, sizeof(int32_t));
 
 		startIndex += sizeof(int32_t);
 
+		///make string
 		pValue->assign(data + startIndex, size);
 
 		startIndex += size;
@@ -53,6 +57,7 @@ namespace Util
 
 		int32_t size = pValueList->size();
 
+		///copy list size
 		memcpy(data + startIndex, &size, sizeof(int32_t));
 
 		startIndex += sizeof(int32_t);
@@ -75,6 +80,7 @@ namespace Util
 
 		int32_t size = 0;
 
+		///copy list size
 		memcpy(&size, data + startIndex, sizeof(int32_t));
 
 		startIndex += sizeof(int32_t);

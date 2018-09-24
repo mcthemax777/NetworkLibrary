@@ -25,5 +25,6 @@ namespace CG
 		BaseClient() { type = CONNECTOR_TYPE::CONNECTOR_TYPE_CLIENT; }
 
 		//void processMessage();
+		
 	};
 }

@@ -33,5 +33,6 @@ namespace CG
 
 	public:
 		friend class Network;
+		friend class WorkerThread;
 	};
 }

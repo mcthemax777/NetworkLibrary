@@ -135,6 +135,23 @@ namespace CG
 				else if (dp->receiveType == RECEIVE_TYPE_DISCONNECT)
 				{
 					connector->onDisconnect(connectorInfo->hostId);
+
+					//disconnect with connector and connector info
+					if (connector->getConnectorType() == CONNECTOR_TYPE_SERVER)
+					{
+						if (((BaseServer*)connector)->connectorInfoMap.erase(connectorInfo->hostId) <= 0)
+							ErrorLog("already remove connectorInfo");
+					}
+					else
+					{
+						BaseClient* client = ((BaseClient*)connectorInfo->connector);
+						client->connectorInfo = nullptr;
+					}
+
+					connectorInfo->reset();
+
+					//retun connectorInfo in pool
+					Network::GetInstance()->connectorInfoPool->returnObject(connectorInfo);
 				}
 				else
 				{

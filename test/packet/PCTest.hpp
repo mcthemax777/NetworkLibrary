@@ -16,7 +16,7 @@ int PCTest()
 	client->onConnect = [client](CG::HostId hostId)
 	{
 		//std::cout << "connected with server";
-		DebugLog("connected with server");
+		InfoLog("connected with server");
 
 
 		MessagePacket sendPacket;
@@ -27,12 +27,12 @@ int PCTest()
 	client->onDisconnect = [](CG::HostId hostId)
 	{
 		//std::cout << "disconnected with server";
-		DebugLog("disconnected with server");
+		InfoLog("disconnected with server");
 	};
 
 	client->registerPacket<TestPacket>([](CG::HostId hostId, TestPacket* packet) {
 		//print receive packet
-		DebugLog("receive data from client = %d %s %d %d %s %d\n",
+		InfoLog("receive data from client = %d %s %d %d %s %d\n",
 			packet->id1,
 			packet->str.c_str(),
 			packet->intPacket.value,
@@ -44,7 +44,7 @@ int PCTest()
 	client->registerPacket<MessagePacket>([client](CG::HostId hostId, MessagePacket* packet) {
 		//print receive packet
 		//std::cout << "receive data from server " << packet->str;
-		DebugLog("receive data from server - %s", packet->str.c_str());
+		InfoLog("receive data from server - %s", packet->str.c_str());
 
 		//send test packet
 		TestPacket p;
@@ -71,6 +71,8 @@ int PCTest()
 	client->start(&serverConfig);
 
 	//server->stop();
+
+	getchar();
 
 	return 0;
 }

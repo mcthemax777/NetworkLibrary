@@ -545,13 +545,6 @@ namespace CG
 	{
 		DebugLog("disconnectWithConnectorInfo - hostId : %d", connectorInfo->hostId);
 
-		//send disconnecting data packet
-		DataPacket* dp = workerThread->dataPacketPool->getObject();
-
-		dp->setDataPacket(RECEIVE_TYPE_DISCONNECT, connectorInfo);
-
-		workerThread->pushDataPacket(dp);
-
 		//disconnect connectorInfo
 		int fd = connectorInfo->hostId;
 
@@ -581,22 +574,12 @@ namespace CG
 
 #endif
 
-		//disconnect with connector and connector info
-		if (connectorInfo->connector->getConnectorType() == CONNECTOR_TYPE_SERVER)
-		{
-			if (((BaseServer*)connectorInfo->connector)->connectorInfoMap.erase(connectorInfo->hostId) <= 0)
-				ErrorLog("already remove connectorInfo");
-		}
-		else
-		{
-			BaseClient* client = ((BaseClient*)connectorInfo->connector);
-			client->connectorInfo = nullptr;
-		}
+		//send disconnecting data packet
+		DataPacket* dp = workerThread->dataPacketPool->getObject();
 
-		connectorInfo->reset();
+		dp->setDataPacket(RECEIVE_TYPE_DISCONNECT, connectorInfo);
 
-		//retun connectorInfo in pool
-		connectorInfoPool->returnObject(connectorInfo);
+		workerThread->pushDataPacket(dp);
 	}
 
 	//start receiving loop

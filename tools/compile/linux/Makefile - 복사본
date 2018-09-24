@@ -1,0 +1,32 @@
+Exefile : MainClass.o Timer.o Log.o ConnectorInfo.o Connector.o Client.o Server.o WorkerThread.o Network.o
+	g++ -lm -o Exefile MainClass.o Timer.o Log.o ConnectorInfo.o Connector.o Client.o Server.o WorkerThread.o Network.o -std=c++11 -lpthread
+
+MainClass.o : MainClass.cpp ../Lib/Log/Log.h ../Lib/Util/ObjectPool.h ../Lib/Util/Property.h ../Lib/Util/Singleton.h ../Lib/SystemDefine.h ../Lib/Network/ConnectorInfo.h ../Lib/Network/Connector.h ../Lib/Network/Client.h ../Lib/Network/Server.h ../Lib/Network/DataConvertor.h ../Lib/Network/WorkerThread.h ../Lib/Network/Network.h ../Lib/Network/Define.h ../Lib/Network/Timer.h
+	g++ -c MainClass.cpp -std=c++11 -lpthread
+
+Network.o : ../Lib/Network/Network.cpp ../Lib/Network/Network.h
+	g++ -c ../Lib/Network/Network.cpp -std=c++11 -lpthread
+
+WorkerThread.o : ../Lib/Network/WorkerThread.cpp ../Lib/Network/WorkerThread.h
+	g++ -c ../Lib/Network/WorkerThread.cpp -std=c++11 -lpthread
+
+Connector.o : ../Lib/Network/Connector.cpp ../Lib/Network/Connector.h
+	g++ -c ../Lib/Network/Connector.cpp -std=c++11 -lpthread
+
+ConnectorInfo.o : ../Lib/Network/ConnectorInfo.cpp ../Lib/Network/ConnectorInfo.h
+	g++ -c ../Lib/Network/ConnectorInfo.cpp -std=c++11 -lpthread
+
+Client.o : ../Lib/Network/Client.cpp ../Lib/Network/Client.h
+	g++ -c ../Lib/Network/Client.cpp -std=c++11 -lpthread
+
+Server.o : ../Lib/Network/Server.cpp ../Lib/Network/Server.h
+	g++ -c ../Lib/Network/Server.cpp -std=c++11 -lpthread
+
+Timer.o : ../Lib/Network/Timer.cpp ../Lib/Network/Timer.h
+	g++ -c ../Lib/Network/Timer.cpp -std=c++11 -lpthread
+
+Log.o : ../Lib/Log/Log.cpp ../Lib/Log/Log.h
+	g++ -c ../Lib/Log/Log.cpp -std=c++11 -lpthread
+
+clean:
+	rm -rf *.o 
